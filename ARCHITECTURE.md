@@ -47,6 +47,8 @@ A separação entre `components/` (sem conhecimento de domínio) e `sections/` (
 
 Cada componente possui responsabilidade única e é dimensionado para caber em uma tela sem rolagem excessiva. Quando um componente cresce além disso, é sinal de que uma subcomposição está implícita e deve ser extraída. Props são tipadas explicitamente (sem `any`), e componentes visuais puros são mantidos livres de lógica de busca de dados ou efeitos colaterais — essa lógica vive em hooks.
 
+Componentes primitivos com múltiplas variantes visuais (`Button`, `Badge`, `IconButton`) usam [`class-variance-authority`](https://cva.style) para declarar variantes como dados tipados em vez de cadeias de `if`/ternários em `className`. Isso torna as combinações de `variant`/`size` exaustivas e autocompletáveis pelo TypeScript. Quando um componente exporta tanto variantes (`buttonVariants`) quanto o componente em si, as variantes são movidas para um módulo próprio (ex.: `button-variants.ts`) — Fast Refresh do Vite exige que um arquivo que exporta um componente React exporte *apenas* componentes. Conflitos entre classes Tailwind vindas de variantes e de um `className` externo são resolvidos por um utilitário `cn()` (`clsx` + `tailwind-merge`) em `src/lib/cn.ts`, usado em todo componente que aceita `className`.
+
 ## Estratégia de Hooks
 
 Hooks customizados encapsulam lógica reutilizável que não pertence a um componente específico (ex.: `useScrollProgress`, `useMediaQuery`, `useReducedMotionSafe`). Regra de extração: se a mesma lógica de estado/efeito aparece em dois componentes, ou se um componente mistura lógica de UI com lógica de comportamento, a lógica de comportamento migra para um hook.

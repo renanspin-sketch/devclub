@@ -6,6 +6,20 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.3.0] — 2026-07-23
+
+### Adicionado
+
+- Componentes primitivos do design system: `Button` (variants primary/secondary/ghost, tamanhos sm/md/lg, estado de loading sem layout shift), `IconButton`, `Badge`, `Card` (com variante interativa) e `Input` (label, estado de erro com `aria-describedby`, foco customizado)
+- Componentes de layout: `Container`, `Section`, `Header` (nav orientada a dados via `NavItem[]`) e `Footer`
+- Utilitário `cn()` (`clsx` + `tailwind-merge`) para composição segura de classes Tailwind em `src/lib`
+- `class-variance-authority` adotado para variantes de componentes tipadas e autocompletáveis
+
+### Documentação
+
+- `ARCHITECTURE.md` atualizado com a justificativa do uso de `cva` e do utilitário `cn()`
+- `ROADMAP.md`: Fase 02 marcada como concluída; Storybook avaliado e descartado (verificação feita via showcase temporário + Playwright)
+
 ## [0.2.0] — 2026-07-23
 
 ### Adicionado

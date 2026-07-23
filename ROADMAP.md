@@ -23,10 +23,10 @@ Legenda: ☐ pendente · ☑ concluído
 
 ## Fase 02 — Sistema Visual
 
-- [ ] Componentes primitivos (`Button`, `Card`, `Badge`, `Input`, `IconButton`)
-- [ ] Componentes de layout (`Container`, `Section`, `Header`, `Footer`)
-- [ ] Todos os estados documentados no `DESIGN-SYSTEM.md` implementados (hover/focus/active/disabled)
-- [ ] Storybook ou página de preview isolada dos componentes _(avaliar necessidade)_
+- [x] Componentes primitivos (`Button`, `Card`, `Badge`, `Input`, `IconButton`)
+- [x] Componentes de layout (`Container`, `Section`, `Header`, `Footer`)
+- [x] Todos os estados documentados no `DESIGN-SYSTEM.md` implementados (hover/focus/active/disabled)
+- [x] Storybook avaliado e descartado — projeto pequeno, com um único consumidor dos componentes; verificação visual feita via showcase temporário + Playwright, sem manter ferramenta extra no repositório
 
 ## Fase 03 — Seção Hero
 
