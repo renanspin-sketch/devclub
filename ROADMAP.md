@@ -14,12 +14,12 @@ Legenda: ☐ pendente · ☑ concluído
 
 ## Fase 01 — Estrutura Inicial
 
-- [ ] Scaffold Vite + React + TypeScript
-- [ ] Tailwind CSS configurado com os tokens de `DESIGN-SYSTEM.md`
-- [ ] Framer Motion instalado
-- [ ] ESLint + Prettier + TypeScript strict configurados
-- [ ] Estrutura de pastas conforme `ARCHITECTURE.md#organização-de-pastas`
-- [ ] `npm run dev/build/lint/typecheck` funcionando sem erros
+- [x] Scaffold Vite + React + TypeScript
+- [x] Tailwind CSS configurado com os tokens de `DESIGN-SYSTEM.md`
+- [x] Framer Motion instalado
+- [x] ESLint + Prettier + TypeScript strict configurados
+- [x] Estrutura de pastas conforme `ARCHITECTURE.md#organização-de-pastas`
+- [x] `npm run dev/build/lint/typecheck` funcionando sem erros
 
 ## Fase 02 — Sistema Visual
 
