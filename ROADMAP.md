@@ -42,9 +42,9 @@ Legenda: ☐ pendente · ☑ concluído
 
 ## Fase 05 — Seção Projetos
 
-- [ ] Modelo de dados tipado em `src/data` (placeholder, ver `ARCHITECTURE.md`)
-- [ ] Card de projeto reutilizando o design system
-- [ ] Estado vazio e estado de carregamento (se dados vierem assíncronos no futuro)
+- [x] Modelo de dados tipado em `src/data` (placeholder, ver `ARCHITECTURE.md`) — `src/data/projects.ts`, conteúdo fictício
+- [x] Card de projeto reutilizando o design system (`Card`, `Badge`)
+- [x] Estado vazio implementado e verificado (array de projetos vazio → mensagem, sem grid quebrado). Estado de carregamento **adiado intencionalmente**: hoje os dados são importados de forma síncrona de um módulo local — não existe nenhuma chamada assíncrona no projeto, então uma UI de loading não teria como ser exercitada e viraria código morto. Fica planejado para quando uma fonte de dados assíncrona (ex.: CMS headless) for introduzida, conforme já previsto em `ARCHITECTURE.md#escalabilidade-futura`
 
 ## Fase 06 — Seção Skills
 

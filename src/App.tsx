@@ -2,6 +2,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/sections/Hero";
 import { About } from "@/sections/About";
+import { Projects } from "@/sections/Projects";
 
 const navItems = [
   { label: "Sobre", href: "#sobre" },
@@ -16,6 +17,7 @@ function App() {
       <main id="top">
         <Hero />
         <About />
+        <Projects />
       </main>
       <Footer />
     </>
