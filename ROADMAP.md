@@ -60,9 +60,9 @@ Legenda: ☐ pendente · ☑ concluído
 
 ## Fase 08 — Motion & Scroll Reveal
 
-- [ ] Scroll reveal aplicado de forma consistente entre seções
-- [ ] Parallax pontual no Hero
-- [ ] Respeito a `prefers-reduced-motion` validado em todos os componentes de motion
+- [x] Scroll reveal aplicado de forma consistente entre seções (auditado: todas usam o primitivo `Reveal`, mesmo padrão de delay escalonado)
+- [x] Parallax pontual no Hero — glow decorativo desloca até 40px via `useScroll`/`useTransform`, atrás do conteúdo
+- [x] Respeito a `prefers-reduced-motion` validado em todos os componentes de motion — auditoria encontrou e corrigiu um caso faltante: o menu mobile do `Header` não checava a preferência
 
 ## Fase 09 — Acessibilidade
 

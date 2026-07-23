@@ -6,6 +6,20 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.9.0] — 2026-07-23
+
+### Adicionado
+
+- Parallax pontual no `Hero`: glow decorativo (gradiente `accent-gradient` desfocado) se desloca até 40px conforme o scroll, via `useScroll`/`useTransform` do Framer Motion, atrás do conteúdo (`-z-10`)
+
+### Corrigido
+
+- Auditoria de `prefers-reduced-motion` (Fase 08) encontrou o menu mobile do `Header` animando com duração fixa, sem checar a preferência do usuário. Corrigido para usar `useReducedMotion` como os demais componentes de motion (`Reveal`, parallax do Hero)
+
+### Verificado
+
+- Parallax confirmado via medição real de posição do elemento antes/depois do scroll (motion normal desloca menos que o scroll da página; com `reducedMotion: reduce`, desloca exatamente o mesmo tanto — ou seja, o parallax é efetivamente desativado)
+
 ## [0.8.0] — 2026-07-23
 
 ### Adicionado

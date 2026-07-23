@@ -1,5 +1,5 @@
 import { useEffect, useId, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import type { NavItem } from "@/types/nav";
 import { IconButton } from "@/components/ui/IconButton";
 
@@ -34,6 +34,7 @@ function MenuIcon({ open }: { open: boolean }) {
 export function Header({ navItems = [] }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuId = useId();
+  const shouldReduceMotion = useReducedMotion();
 
   // Fecha com Esc — padrão esperado para menus tipo disclosure.
   useEffect(() => {
@@ -95,7 +96,10 @@ export function Header({ navItems = [] }: HeaderProps) {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+              transition={{
+                duration: shouldReduceMotion ? 0.01 : 0.25,
+                ease: [0.4, 0, 0.2, 1],
+              }}
               className="overflow-hidden border-b border-border md:hidden"
             >
               <Container>
