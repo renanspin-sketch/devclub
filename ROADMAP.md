@@ -48,8 +48,9 @@ Legenda: ☐ pendente · ☑ concluído
 
 ## Fase 06 — Seção Skills
 
-- [ ] Agrupamento por categoria (linguagens, frameworks, ferramentas)
-- [ ] Representação visual sem depender de ícones de terceiros não otimizados
+- [x] Agrupamento por categoria (linguagens, frameworks, ferramentas)
+- [x] Representação visual sem depender de ícones de terceiros não otimizados (badges tipográficos, reaproveitando `Badge`/`Card` do design system)
+- [x] Correção não planejada: `Header` não tinha navegação mobile — com o 4º item (Skills) o menu colidia com a logo em telas pequenas. Adicionado menu mobile acessível (disclosure pattern: `aria-expanded`, `aria-controls`, fecha com Esc e ao navegar)
 
 ## Fase 07 — Seção Contato
 
