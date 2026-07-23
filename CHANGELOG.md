@@ -6,6 +6,18 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.8.0] — 2026-07-23
+
+### Adicionado
+
+- Seção `Contact` (`src/sections/Contact.tsx`): botão de copiar e-mail com feedback visual (ícone + texto alternando, live region acessível, reset automático em 2s), CTA `mailto:` e links sociais (GitHub/LinkedIn)
+- `useCopyToClipboard` (`src/hooks/useCopyToClipboard.ts`): hook genérico de copiar-para-área-de-transferência, reutilizável em qualquer botão de "copiar" futuro
+- `src/data/contact.ts`: conteúdo fictício tipado; `socialLinks` reaproveitado tanto na seção Contato quanto no `Footer`, evitando duplicar os mesmos links em dois lugares
+
+### Corrigido
+
+- `Header` e `Footer` usavam `href` como `key` nas listas de navegação/links. Como os social links de placeholder usam `"#"` para ambos (GitHub e LinkedIn), isso causava colisão de key e um warning do React em runtime (descoberto verificando a seção Contato no navegador). Trocado para `key={item.label}`, que é garantidamente único no conteúdo atual
+
 ## [0.7.0] — 2026-07-23
 
 ### Adicionado

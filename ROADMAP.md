@@ -54,8 +54,9 @@ Legenda: ☐ pendente · ☑ concluído
 
 ## Fase 07 — Seção Contato
 
-- [ ] Links diretos (e-mail, GitHub, LinkedIn)
-- [ ] Feedback visual de cópia/envio quando aplicável
+- [x] Links diretos (e-mail via `mailto:`, GitHub, LinkedIn — placeholders fictícios)
+- [x] Feedback visual de cópia (botão "copiar e-mail" com ícone + texto que alternam, live region para leitores de tela, reset automático)
+- [x] Correção não planejada: `Footer`/`Header` usavam `href` como `key` das listas — com dois social links de placeholder (`"#"`), isso colidia e disparava warning do React de key duplicada. Trocado para `key={item.label}`
 
 ## Fase 08 — Motion & Scroll Reveal
 

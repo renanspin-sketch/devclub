@@ -16,7 +16,7 @@ export function Footer({ links = [] }: FooterProps) {
         {links.length > 0 && (
           <ul className="flex items-center gap-4">
             {links.map((link) => (
-              <li key={link.href}>
+              <li key={link.label}>
                 <a
                   href={link.href}
                   className="transition duration-fast ease-standard hover:text-text-primary"

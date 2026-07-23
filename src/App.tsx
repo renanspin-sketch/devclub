@@ -4,6 +4,8 @@ import { Hero } from "@/sections/Hero";
 import { About } from "@/sections/About";
 import { Projects } from "@/sections/Projects";
 import { Skills } from "@/sections/Skills";
+import { Contact } from "@/sections/Contact";
+import { contactContent } from "@/data/contact";
 
 const navItems = [
   { label: "Sobre", href: "#sobre" },
@@ -21,8 +23,9 @@ function App() {
         <About />
         <Projects />
         <Skills />
+        <Contact />
       </main>
-      <Footer />
+      <Footer links={contactContent.socialLinks} />
     </>
   );
 }

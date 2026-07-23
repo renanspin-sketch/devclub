@@ -61,7 +61,7 @@ export function Header({ navItems = [] }: HeaderProps) {
             <nav aria-label="Navegação principal" className="hidden md:block">
               <ul className="flex items-center gap-6">
                 {navItems.map((item) => (
-                  <li key={item.href}>
+                  <li key={item.label}>
                     <a
                       href={item.href}
                       className="text-sm text-text-secondary transition duration-fast ease-standard hover:text-text-primary"
@@ -101,7 +101,7 @@ export function Header({ navItems = [] }: HeaderProps) {
               <Container>
                 <ul className="flex flex-col gap-1 py-4">
                   {navItems.map((item) => (
-                    <li key={item.href}>
+                    <li key={item.label}>
                       <a
                         href={item.href}
                         onClick={() => setIsMenuOpen(false)}
