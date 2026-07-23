@@ -6,6 +6,27 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.10.0] — 2026-07-23
+
+### Adicionado
+
+- `SkipLink` (`src/components/layout/SkipLink.tsx`): bypass block (WCAG 2.4.1), primeiro elemento focável da página, oculto até receber foco por teclado
+- `aria-label` dinâmico no botão de copiar e-mail (`Contact`), comunicando a ação antes do clique para quem usa leitor de tela, não só depois via live region
+- Token `accent-violet-light` (`#A78BFA`): variante clara de `accent-violet` para uso como texto sobre fundo tingido (`Badge` variante `accent`), onde a cor original não atingia contraste AA
+
+### Corrigido
+
+- `text-muted` estava definido como `#6B7280` (4.08:1 sobre `bg-canvas`), abaixo do mínimo AA de 4.5:1 — o valor documentado em `DESIGN-SYSTEM.md` (4.6:1) estava incorreto, calculado manualmente sem verificação. Corrigido para `#7E8794` (5.4:1), agora medido por ferramenta
+- `Badge` variante `accent` e o destaque `const` em `About`: `accent-violet` como texto sobre fundo `accent-violet/15` media 3.96–4.22:1 dependendo do fundo composto — trocado para `accent-violet-light`
+- `Header`: fechar o menu mobile com Esc não devolvia o foco ao botão que o abriu quando o usuário já havia tabulado para dentro do menu (ou além dele) — o foco ficava "perdido" onde estava. Corrigido para sempre devolver o foco ao botão de menu, padrão esperado para menus tipo disclosure
+
+### Verificado
+
+- Auditoria de contraste WCAG AA automatizada com axe-core em toda a página (todas as seções reveladas), em desktop e com o menu mobile aberto — 0 violações após as correções
+- Navegação por teclado mapeada ponta a ponta: 19 paradas de Tab em ordem lógica, todas visíveis, todas com indicador de foco; skip link, mobile menu (abrir/Tab/Esc) testados
+- Landmarks e hierarquia de headings revisados via árvore de acessibilidade: 1 banner, 1 navigation, 1 main, 5 regions nomeadas, 1 contentinfo, h1→h2→h3 sem saltos
+- **Limitação registrada**: o "teste com leitor de tela" desta fase usou Chromium/Playwright + axe-core como proxy, não NVDA/VoiceOver reais (indisponíveis neste ambiente). Teste manual real fica pendente, adicionado à Fase 12
+
 ## [0.9.0] — 2026-07-23
 
 ### Adicionado

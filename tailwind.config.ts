@@ -29,10 +29,11 @@ export default {
         text: {
           primary: "#F5F5F7",
           secondary: "#A1A1AA",
-          muted: "#6B7280",
+          muted: "#7E8794",
         },
         accent: {
           violet: "#7C5CFC",
+          "violet-light": "#A78BFA",
           cyan: "#22D3EE",
         },
         state: {

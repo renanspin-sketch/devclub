@@ -82,6 +82,8 @@ Meta tags semânticas (`title`, `description`, Open Graph) por seção relevante
 
 Ver detalhamento de tokens e estados em [DESIGN-SYSTEM.md](./DESIGN-SYSTEM.md). Como princípio arquitetural: acessibilidade é validada por componente no momento em que ele é criado (contraste, foco visível, navegação por teclado, `aria-label` quando o texto visível não é suficiente) — nunca como auditoria isolada ao final do projeto.
 
+Isso não elimina a necessidade de uma auditoria de conjunto: a Fase 09 rodou uma passada dedicada com [axe-core](https://github.com/dequelabs/axe-core) sobre a página inteira, mapeamento de tab order e revisão de landmarks — e mesmo com a disciplina por componente, encontrou problemas reais (dois tokens de cor fora do contraste mínimo, foco não devolvido ao fechar o menu mobile). A lição prática: contraste calculado manualmente deve ser tratado como estimativa até ser confirmado por ferramenta; `DESIGN-SYSTEM.md` documenta os valores já corrigidos e medidos. `SkipLink` (`src/components/layout/SkipLink.tsx`) é o primeiro elemento focável da página, permitindo pular a navegação do `Header` e ir direto ao `<main>`.
+
 ## Escalabilidade futura
 
 A separação `components/ui` vs `sections` permite extrair o design system para um pacote independente sem reescrita, caso o projeto evolua para múltiplas superfícies (ex.: um blog técnico complementar). `data/` tipado como camada de conteúdo prepara o terreno para, no futuro, ser substituído por um CMS headless sem alterar a camada de apresentação.

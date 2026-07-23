@@ -22,15 +22,16 @@ Direção visual: **dark-first premium**. Fundo quase-preto com leve matiz azula
 |---|---|---|---|
 | `text-primary` | `#F5F5F7` | 17.9:1 | Headings, corpo principal |
 | `text-secondary` | `#A1A1AA` | 8.4:1 | Corpo secundário, descrições |
-| `text-muted` | `#6B7280` | 4.6:1 | Metadados, timestamps, legendas |
+| `text-muted` | `#7E8794` | 5.4:1 | Metadados, timestamps, legendas |
 
-Todos os pares atendem WCAG AA (mínimo 4.5:1 para texto normal, 3:1 para texto grande) — validado na Fase 09.
+Todos os pares atendem WCAG AA (mínimo 4.5:1 para texto normal, 3:1 para texto grande). Validado na Fase 09 com auditoria automatizada (axe-core) — o valor original de `text-muted` (`#6B7280`) media apenas 4.08:1 sobre `bg-canvas`, abaixo do mínimo; o cálculo manual deste documento estava incorreto. Corrigido para `#7E8794`, medido e reconfirmado por ferramenta.
 
 ### Acento
 
 | Token | Valor | Uso |
 |---|---|---|
 | `accent-violet` | `#7C5CFC` | Cor primária de ação — CTAs, links, foco |
+| `accent-violet-light` | `#A78BFA` | Texto sobre fundo `accent-violet/15` (ex.: `Badge` variante `accent`) — `accent-violet` sozinho mede 3.96:1 nesse fundo, abaixo do mínimo AA; esta variante mais clara mede 6.4:1 |
 | `accent-cyan` | `#22D3EE` | Par do gradiente, destaques secundários |
 | `accent-gradient` | `linear-gradient(135deg, #7C5CFC 0%, #22D3EE 100%)` | CTAs de destaque, texto de hero, bordas de glow |
 

@@ -46,7 +46,7 @@ export function About() {
           <Card className="font-mono text-sm leading-relaxed text-text-secondary">
             <p className="text-text-muted">{"// about.ts"}</p>
             <p>
-              <span className="text-accent-violet">const</span> developer = {"{"}
+              <span className="text-accent-violet-light">const</span> developer = {"{"}
             </p>
             {aboutContent.codeSnippet.map((line) => (
               <p key={line.key} className="pl-4">

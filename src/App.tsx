@@ -1,5 +1,6 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { SkipLink } from "@/components/layout/SkipLink";
 import { Hero } from "@/sections/Hero";
 import { About } from "@/sections/About";
 import { Projects } from "@/sections/Projects";
@@ -17,8 +18,9 @@ const navItems = [
 function App() {
   return (
     <>
+      <SkipLink />
       <Header navItems={navItems} />
-      <main id="top">
+      <main id="top" tabIndex={-1} className="outline-none">
         <Hero />
         <About />
         <Projects />

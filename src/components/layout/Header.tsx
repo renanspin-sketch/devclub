@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import type { NavItem } from "@/types/nav";
 import { IconButton } from "@/components/ui/IconButton";
@@ -35,12 +35,18 @@ export function Header({ navItems = [] }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuId = useId();
   const shouldReduceMotion = useReducedMotion();
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Fecha com Esc — padrão esperado para menus tipo disclosure.
+  // Fecha com Esc e devolve o foco ao botão que abriu o menu — padrão
+  // esperado para menus tipo disclosure, inclusive quando o usuário já
+  // tabulou para dentro do menu (ou além dele) antes de pressionar Esc.
   useEffect(() => {
     if (!isMenuOpen) return;
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") setIsMenuOpen(false);
+      if (event.key === "Escape") {
+        setIsMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
     }
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
@@ -75,6 +81,7 @@ export function Header({ navItems = [] }: HeaderProps) {
             </nav>
 
             <IconButton
+              ref={menuButtonRef}
               className="md:hidden"
               aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}
               aria-expanded={isMenuOpen}

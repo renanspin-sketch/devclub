@@ -66,10 +66,10 @@ Legenda: ☐ pendente · ☑ concluído
 
 ## Fase 09 — Acessibilidade
 
-- [ ] Auditoria de contraste (WCAG AA) em todos os pares texto/fundo
-- [ ] Navegação completa por teclado (tab order, focus trap onde aplicável)
-- [ ] `aria-label`/landmarks revisados
-- [ ] Teste com leitor de tela (NVDA ou VoiceOver)
+- [x] Auditoria de contraste (WCAG AA) em todos os pares texto/fundo — automatizada com axe-core, cobrindo a página inteira (todas as seções reveladas) em desktop e com o menu mobile aberto. Encontrou e corrigiu 2 problemas reais: `text-muted` (`#6B7280`, 4.08:1) e `accent-violet` como texto sobre fundo tingido (3.96–4.22:1) — ambos abaixo do mínimo. Zero violações após a correção
+- [x] Navegação completa por teclado — todas as 19 paradas de Tab da página mapeadas em ordem, todas visíveis e com indicador de foco; menu mobile testado com Enter/Esc, incluindo devolução de foco ao botão ao fechar (bug real encontrado e corrigido)
+- [x] `aria-label`/landmarks revisados — 1 banner, 1 navigation, 1 main, 5 regions nomeadas (uma por seção), 1 contentinfo, hierarquia de headings h1→h2→h3 sem saltos. Adicionado skip link ("Pular para o conteúdo principal"), ausente até então
+- [x] Teste com leitor de tela — **feito por proxy**, não com NVDA/VoiceOver reais (indisponíveis neste ambiente de execução): árvore de acessibilidade inspecionada via Chromium/Playwright + auditoria axe-core. Recomenda-se um teste manual com leitor de tela real antes do deploy final
 
 ## Fase 10 — Performance
 
@@ -89,3 +89,5 @@ Legenda: ☐ pendente · ☑ concluído
 - [ ] Escolha de plataforma (Vercel/Netlify)
 - [ ] Domínio e SEO final (meta tags, Open Graph, sitemap)
 - [ ] Link de demonstração adicionado ao `README.md`
+- [ ] Teste manual com leitor de tela real (NVDA ou VoiceOver) — pendente da Fase 09, que usou apenas auditoria automatizada como proxy
+- [ ] Substituir conteúdo fictício pelos dados reais (bio, projetos — **lembrar de pedir as ~3 imagens de projeto ao usuário**, skills, e-mail/links de contato)

@@ -58,6 +58,11 @@ export function Contact() {
               variant="primary"
               size="lg"
               onClick={() => copy(contactContent.email)}
+              aria-label={
+                isCopied
+                  ? "E-mail copiado para a área de transferência"
+                  : `Copiar e-mail: ${contactContent.email}`
+              }
             >
               {isCopied ? "Copiado!" : contactContent.email}
               <CopyIcon copied={isCopied} />
