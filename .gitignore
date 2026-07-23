@@ -3,6 +3,7 @@ dist
 dist-ssr
 *.local
 *.tsbuildinfo
+lighthouse-reports
 
 # Editor / OS
 .DS_Store

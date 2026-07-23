@@ -51,6 +51,8 @@ npm run preview
 | `preview` | Serve o build de produção localmente |
 | `lint` | Executa o ESLint sobre todo o projeto |
 | `typecheck` | Valida os tipos sem emitir arquivos |
+| `build:analyze` | Gera o build com relatório visual do bundle (`dist/stats.html`) |
+| `lighthouse` | Builda produção e roda Lighthouse (mobile + desktop) contra ela |
 
 ## Estrutura de pastas
 
@@ -62,7 +64,7 @@ Decisões estruturais, estratégias de componentização, hooks, performance e a
 
 ## Performance
 
-Meta: Lighthouse ≥ 95 em todas as categorias, com lazy loading, code splitting por rota/seção e assets otimizados. Estratégias detalhadas em [ARCHITECTURE.md](./ARCHITECTURE.md#estratégias-de-performance).
+Lighthouse (build de produção, mobile + desktop): **mobile 95-96 · desktop 100 · accessibility 100 · best-practices 100 · SEO 100**. Reproduza com `npm run lighthouse`. Estratégias (code splitting por seção, `LazyMotion`, subsetting de fontes) detalhadas em [ARCHITECTURE.md](./ARCHITECTURE.md#estratégias-de-performance).
 
 ## Responsividade
 

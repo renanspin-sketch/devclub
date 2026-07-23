@@ -67,12 +67,15 @@ Tailwind é a camada primária de estilo, configurada a partir dos tokens do [DE
 
 ## Estratégias de performance
 
-- **Lazy loading**: seções abaixo da dobra (`sections/*`) e imagens usam carregamento sob demanda (`React.lazy` + `Suspense` para código, `loading="lazy"` + dimensões explícitas para imagens, evitando layout shift).
-- **Code splitting**: divisão por seção de página, não apenas por rota — cada seção pesada (ex.: uma galeria de projetos com muitas imagens) é seu próprio chunk.
+- **Lazy loading**: seções abaixo da dobra (`About`, `Projects`, `Skills`, `Contact`) usam `React.lazy` + `Suspense`; `Hero` fica fora do split por ser conteúdo do LCP — atrasá-lo pioraria a primeira renderização em vez de ajudar. Imagens (quando existirem) devem usar `loading="lazy"` + dimensões explícitas para não causar layout shift.
+- **Code splitting**: por seção de página, não apenas por rota (site é uma página só). Cada seção lazy vira seu próprio chunk (ver `npm run build:analyze`).
+- **Bundle de animação**: Framer Motion importado via `LazyMotion` + `m.*` (não `motion.*`) com o feature set `domAnimation`, que exclui drag e layout projection — código que o projeto não usa e que, medido via `rollup-plugin-visualizer`, respondia pela maior fatia do bundle. `strict` no `LazyMotion` barra o uso acidental de `motion.*` no futuro.
 - **Memoização**: aplicada de forma seletiva — `useMemo`/`useCallback`/`memo` apenas onde um profiling real (React DevTools Profiler) mostra re-render custoso, não como prática padrão em todo componente.
-- **Otimizações de render**: listas usam `key` estável, animações usam apenas propriedades compostas na GPU (`transform`, `opacity`) para manter 60fps sem forçar reflow.
-- **Otimização de assets**: imagens em formatos modernos (WebP/AVIF) com fallback, fontes com `font-display: swap` e subsetting quando aplicável.
-- **Bundle size**: dependências avaliadas por custo antes da adoção; análise de bundle via `rollup-plugin-visualizer` antes de cada release relevante.
+- **Otimizações de render**: listas usam `key` estável (nunca `href`/valores que podem se repetir em conteúdo placeholder — ver Fase 07 no CHANGELOG), animações usam apenas propriedades compostas na GPU (`transform`, `opacity`) para manter 60fps sem forçar reflow.
+- **Otimização de fontes**: cada família importa só o subconjunto Unicode `latin` (cobre todo o português, incluindo acentuação — os caracteres do PT-BR estão em Latin-1 Supplement, dentro do subconjunto `latin`). Os arquivos por subconjunto do `@fontsource` não têm `unicode-range`, então cada import baixa incondicionalmente: importar subconjuntos a mais (ex.: `latin-ext`, que não é usado por nenhum idioma deste site) baixa fontes desnecessárias e piora o LCP — isso foi medido, não é só teoria (ver CHANGELOG v0.11.0).
+- **Otimização de imagens**: ainda não há imagens raster no site (seção Projetos é só texto/badge por enquanto). Quando entrarem fotos reais de projeto, aplicar formatos modernos (WebP/AVIF) com fallback, `loading="lazy"` e dimensões explícitas — combinação já usada em `<img>` nenhum momento testada porque não existe `<img>` no projeto ainda.
+- **Bundle size**: dependências avaliadas por custo antes da adoção; análise de bundle via `npm run build:analyze` (`rollup-plugin-visualizer`, gera `dist/stats.html`) antes de cada release relevante.
+- **Lighthouse**: `npm run lighthouse` builda a produção, sobe via `vite preview` (nunca o dev server — não reflete performance real) e roda auditorias mobile + desktop com os presets corretos de throttling do próprio Lighthouse, salvando relatórios em `lighthouse-reports/` (gitignored).
 
 ## Estratégias de SEO
 

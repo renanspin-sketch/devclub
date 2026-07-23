@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { m, useReducedMotion, useScroll, useTransform } from "framer-motion";
 
 import { Badge } from "@/components/ui/Badge";
 import { buttonVariants } from "@/components/ui/button-variants";
@@ -26,7 +26,7 @@ export function Hero() {
       aria-label="Apresentação"
       className="relative flex min-h-[100dvh] items-center overflow-hidden"
     >
-      <motion.div
+      <m.div
         aria-hidden="true"
         style={{ y: glowY }}
         className="pointer-events-none absolute -right-40 -top-40 -z-10 h-[32rem] w-[32rem] rounded-full bg-accent-gradient opacity-20 blur-3xl"

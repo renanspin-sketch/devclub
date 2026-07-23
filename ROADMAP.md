@@ -73,10 +73,10 @@ Legenda: ☐ pendente · ☑ concluído
 
 ## Fase 10 — Performance
 
-- [ ] Lighthouse ≥ 95 em todas as categorias
-- [ ] Code splitting por seção
-- [ ] Otimização de imagens (formatos modernos, dimensões explícitas)
-- [ ] Análise de bundle size
+- [x] Lighthouse ≥ 95 em todas as categorias — mobile 95-96, desktop 100, accessibility/best-practices/SEO 100 (2 execuções limpas consecutivas, ver CHANGELOG v0.11.0)
+- [x] Code splitting por seção — `About`/`Projects`/`Skills`/`Contact` via `React.lazy`; `Hero` fica fora (é o LCP)
+- [ ] Otimização de imagens (formatos modernos, dimensões explícitas) — **N/A por enquanto**: não há nenhuma imagem raster no site ainda (aguardando as fotos de projeto do usuário). Estratégia já documentada em `ARCHITECTURE.md`, será aplicada quando as imagens chegarem
+- [x] Análise de bundle size — `rollup-plugin-visualizer` (`npm run build:analyze`) usado para medir antes/depois; JS principal caiu de 303.45 kB (98.74 kB gzip) para 253.43 kB (84.56 kB gzip) com `LazyMotion`, mais 5 chunks de seção de 0.2-3 KB cada
 
 ## Fase 11 — Testes
 

@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import type { NavItem } from "@/types/nav";
 import { IconButton } from "@/components/ui/IconButton";
 
@@ -97,7 +97,7 @@ export function Header({ navItems = [] }: HeaderProps) {
       {navItems.length > 0 && (
         <AnimatePresence initial={false}>
           {isMenuOpen && (
-            <motion.nav
+            <m.nav
               id={menuId}
               aria-label="Navegação principal"
               initial={{ height: 0, opacity: 0 }}
@@ -124,7 +124,7 @@ export function Header({ navItems = [] }: HeaderProps) {
                   ))}
                 </ul>
               </Container>
-            </motion.nav>
+            </m.nav>
           )}
         </AnimatePresence>
       )}

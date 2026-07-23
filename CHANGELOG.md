@@ -6,6 +6,32 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.11.0] — 2026-07-23
+
+### Adicionado
+
+- `rollup-plugin-visualizer` + script `build:analyze` (`vite build --mode analyze`): gera treemap do bundle em `dist/stats.html`, usado para decidir onde otimizar em vez de adivinhar
+- Script `lighthouse` (`scripts/lighthouse.mjs`): builda produção, sobe via API do Vite (`preview()`, não child process — mais confiável no Windows), roda Lighthouse mobile + desktop com os presets de throttling corretos do próprio Lighthouse (o preset desktop precisa ser importado explicitamente; sem ele, o Lighthouse aplica throttling de mobile numa viewport desktop e penaliza a nota)
+- `public/robots.txt`
+
+### Alterado
+
+- Framer Motion migrado de `motion.*` para `m.*` + `<LazyMotion features={domAnimation} strict>` (`src/App.tsx`): o treemap do bundle mostrou que `gestures/drag` e os módulos de `projection` (layout animation) — recursos que o projeto não usa em lugar nenhum — respondiam por boa parte do peso do Framer Motion
+- `About`, `Projects`, `Skills` e `Contact` carregados via `React.lazy` + `Suspense`; `Hero` fica fora do split de propósito, por ser conteúdo acima da dobra (LCP)
+- Fontes: cada família importa só o subconjunto `latin` (cobre PT-BR por completo — os acentos do português estão em Latin-1 Supplement, dentro de `latin`), em vez dos arquivos "completos" que embutiam cirílico/grego/vietnamita sem necessidade
+
+### Corrigido
+
+- Durante a otimização de fontes, uma primeira tentativa importou `latin` **e** `latin-ext` para "garantir cobertura" — sem checar se `latin-ext` era necessário. Os arquivos do `@fontsource` por subconjunto não têm `unicode-range` (diferente dos arquivos "completos"), então cada import baixa incondicionalmente: isso *dobrou* o número de fontes baixadas por peso/família à toa, e a nota de performance mobile no Lighthouse caiu de ~95 para 86-88 como consequência direta. `latin-ext` foi removido (verificado depois: nenhum caractere do português está fora de `latin`) e a nota voltou a 95-96
+- Durante a investigação da queda de performance, descobri 22 processos `chrome.exe` órfãos acumulados de execuções anteriores do Lighthouse (o cleanup do `chrome-launcher` falha silenciosamente com `EPERM` no Windows ao tentar apagar o diretório temporário). Isso também contribuía para notas inconsistentes por contenção de CPU. O script agora força o encerramento via `taskkill /T /F` quando a limpeza normal falha
+
+### Verificado
+
+- Bundle JS principal: 303.45 kB → 253.43 kB (98.74 kB → 84.56 kB gzip) só com `LazyMotion`
+- CSS: 34.82 kB → 18.42 kB (12.48 kB → 4.27 kB gzip) com o ajuste de subconjunto de fontes
+- Lighthouse (build de produção, `vite preview`, 2 execuções limpas consecutivas): mobile 95-96/100/100/100, desktop 100/100/100/100 (performance/accessibility/best-practices/seo)
+- Regressão completa após as mudanças: axe-core (0 violações), navegação por teclado (19 paradas, mesma ordem), menu mobile (abrir/Tab/Esc), parallax do Hero — nada quebrou
+
 ## [0.10.0] — 2026-07-23
 
 ### Adicionado
