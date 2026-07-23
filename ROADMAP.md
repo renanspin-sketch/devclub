@@ -30,10 +30,10 @@ Legenda: ☐ pendente · ☑ concluído
 
 ## Fase 03 — Seção Hero
 
-- [ ] Composição da headline com `accent-gradient`
-- [ ] CTA primário e secundário
-- [ ] Micro-interação de entrada (scroll reveal / entrance)
-- [ ] Responsivo mobile-first
+- [x] Composição da headline com `accent-gradient`
+- [x] CTA primário e secundário
+- [x] Micro-interação de entrada (scroll reveal / entrance), via primitivo `Reveal` reutilizável
+- [x] Responsivo mobile-first
 
 ## Fase 04 — Seção Sobre
 
