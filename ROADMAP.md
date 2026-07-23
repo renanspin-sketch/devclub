@@ -37,8 +37,8 @@ Legenda: ☐ pendente · ☑ concluído
 
 ## Fase 04 — Seção Sobre
 
-- [ ] Narrativa curta de posicionamento profissional
-- [ ] Hierarquia visual clara entre texto e destaque visual
+- [x] Narrativa curta de posicionamento profissional _(conteúdo fictício — ver `src/data/about.ts`)_
+- [x] Hierarquia visual clara entre texto e destaque visual (narrativa + stats à esquerda, snippet de código estilizado à direita)
 
 ## Fase 05 — Seção Projetos
 

@@ -1,6 +1,7 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/sections/Hero";
+import { About } from "@/sections/About";
 
 const navItems = [
   { label: "Sobre", href: "#sobre" },
@@ -14,6 +15,7 @@ function App() {
       <Header navItems={navItems} />
       <main id="top">
         <Hero />
+        <About />
       </main>
       <Footer />
     </>
