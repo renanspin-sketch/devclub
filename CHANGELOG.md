@@ -6,6 +6,32 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.25.0] — 2026-07-24
+
+### Contexto
+
+Pedido do usuário: dar aos 6 capítulos uma sensação de profundidade 3D "conectando um capítulo ao outro", inspirado em sites de referência (`elirigobeli.com/higgsfield/*`) que o usuário indicou. Inspecionei essas referências (Playwright + leitura dos scripts carregados, não cópia de conteúdo) e identifiquei a técnica real: GSAP ScrollTrigger + Lenis fazendo scrub de uma sequência de frames em canvas (essencialmente um vídeo cinematográfico, provavelmente gerado no Higgsfield, sincronizado ao scroll) — não WebGL/geometria 3D de verdade. Apresentei ao usuário duas rotas (réplica real com vídeo gerado + GSAP/Lenis vs. efeito 3D leve com CSS/Framer Motion) e ele escolheu a segunda, mais barata em risco e sem dependência nova.
+
+### Adicionado
+
+- `useChapterTilt` (`src/hooks/useChapterTilt.ts`): hook compartilhado que aplica `rotateX`/`scale`/`opacity` acoplados ao progresso de scroll de cada capítulo (via `useScroll`/`useTransform` do Framer Motion, mesma base já usada no parallax do Hero) — cada capítulo inclina como se emergisse de baixo ao entrar e recua pro lado oposto ao sair, dentro do próprio elemento via `transformPerspective` (sem precisar de `perspective` num ancestral, então não mexe no layout de `Home`)
+- Aplicado aos 6 capítulos (Boot→Hire). Capítulos que já tinham `ref` próprio (Build, Connect, via `useInView`) reaproveitam o mesmo ref em vez de criar um segundo — uma única medição de scroll por capítulo
+- Boot é caso especial (`withEntry: false`): por ser o topo da página, não existe "capítulo anterior" entrando por baixo — só a saída (inclinando pro Build) é animada, evitando que a primeira coisa que o usuário vê já nasça com fade/tilt aplicado
+- Imagem de fundo no capítulo Boot (`src/assets/backgrounds/boot-code.webp`): arte de "editor de código" gerada por IA (fornecida pelo usuário), reforçando o tema terminal da abertura. Overlay escuro (`linear-gradient` + a imagem numa única declaração de `background-image`) garante contraste do texto ciano sobre o fundo
+
+### Decisões
+
+- Sob `prefers-reduced-motion`, o tilt/scale é totalmente suprimido (não apenas acelerado) — os capítulos ficam estáticos (`rotateX: 0`, `scale: 1`), só a opacidade de entrada/saída permanece, e essa não é considerada motion problemática (não desloca conteúdo, é o mesmo padrão já usado pelo `Reveal` em toda a página)
+- Imagem original (PNG, 1,5 MB, fornecida em `src/`) convertida para WebP a 1920px/qualidade 72 (~53 KB) antes de entrar no projeto — Boot carrega no LCP crítico da página (não é lazy), então o peso do asset importa; arquivo original removido do repositório após a conversão, só o derivado otimizado foi versionado
+- Fundo aplicado só no capítulo Boot, não no site inteiro — decisão do usuário, evita competir com os elementos gráficos próprios de Build/Connect e com o texto mais denso de seções futuras
+
+### Verificado
+
+- Sequência de 24 screenshots ao longo do scroll dos 6 capítulos confirmando a transição sem artefatos de recorte (`overflow-hidden` das seções não corta o conteúdo inclinado, já que a rotação máxima é de só 8°)
+- Computado o `transform` real do capítulo Level Up sob `prefers-reduced-motion: reduce` — confirmada matriz identidade (sem rotação/escala)
+- Contraste do texto do Boot sobre a nova imagem conferido via axe-core (zero violações) — não assumido visualmente
+- Zero violações de acessibilidade (axe-core), zero erros de console, suíte de testes (36/36) e build de produção passando
+
 ## [0.24.0] — 2026-07-24
 
 ### Adicionado

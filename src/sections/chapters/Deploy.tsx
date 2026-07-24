@@ -4,6 +4,7 @@ import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import { Badge } from "@/components/ui/Badge";
 import { Reveal } from "@/components/ui/Reveal";
 import { Container } from "@/components/layout/Container";
+import { useChapterTilt } from "@/hooks/useChapterTilt";
 
 interface DeployProject {
   slug: string;
@@ -103,12 +104,18 @@ function ProjectWindow({ project }: { project: DeployProject }) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: shouldReduceMotion ? 0.01 : 0.3, ease: [0.4, 0, 0.2, 1] }}
+            transition={{
+              duration: shouldReduceMotion ? 0.01 : 0.3,
+              ease: [0.4, 0, 0.2, 1],
+            }}
             className="overflow-hidden"
           >
             <div className="border-t border-border px-6 py-5">
               <p className="text-sm text-text-secondary">{project.description}</p>
-              <ul className="mt-4 flex flex-wrap gap-2" aria-label={`Stack de ${project.title}`}>
+              <ul
+                className="mt-4 flex flex-wrap gap-2"
+                aria-label={`Stack de ${project.title}`}
+              >
                 {project.stack.map((tech) => (
                   <li key={tech}>
                     <Badge>{tech}</Badge>
@@ -129,38 +136,43 @@ function ProjectWindow({ project }: { project: DeployProject }) {
  * expande descrição + stack numa transição de altura.
  */
 export function Deploy() {
+  const { ref, style } = useChapterTilt<HTMLElement>();
+
   return (
     <section
+      ref={ref}
       id="deploy"
       aria-label="Capítulo 3: Deploy"
       className="min-h-[100dvh] bg-canvas py-24"
     >
-      <Container>
-        <Reveal>
-          <p className="font-mono text-xs uppercase tracking-widest text-text-muted">
-            Capítulo 03 / 06 — Deploy
-          </p>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <h2 className="mt-3 max-w-xl font-display text-3xl font-bold text-text-primary md:text-4xl">
-            Não é exercício de sala de aula. É projeto no ar.
-          </h2>
-        </Reveal>
-        <Reveal delay={0.2}>
-          <p className="mt-4 max-w-md text-text-secondary">
-            Cada trilha termina em algo real, publicado — não numa pasta de exercícios
-            esquecida.
-          </p>
-        </Reveal>
+      <m.div style={style}>
+        <Container>
+          <Reveal>
+            <p className="font-mono text-xs uppercase tracking-widest text-text-muted">
+              Capítulo 03 / 06 — Deploy
+            </p>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <h2 className="mt-3 max-w-xl font-display text-3xl font-bold text-text-primary md:text-4xl">
+              Não é exercício de sala de aula. É projeto no ar.
+            </h2>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <p className="mt-4 max-w-md text-text-secondary">
+              Cada trilha termina em algo real, publicado — não numa pasta de exercícios
+              esquecida.
+            </p>
+          </Reveal>
 
-        <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-3">
-          {PROJECTS.map((project, index) => (
-            <Reveal key={project.slug} delay={0.25 + index * 0.05} className="h-full">
-              <ProjectWindow project={project} />
-            </Reveal>
-          ))}
-        </div>
-      </Container>
+          <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-3">
+            {PROJECTS.map((project, index) => (
+              <Reveal key={project.slug} delay={0.25 + index * 0.05} className="h-full">
+                <ProjectWindow project={project} />
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </m.div>
     </section>
   );
 }

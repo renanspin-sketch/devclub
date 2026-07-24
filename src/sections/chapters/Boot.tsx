@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
+
+import bootBackground from "@/assets/backgrounds/boot-code.webp";
+import { useChapterTilt } from "@/hooks/useChapterTilt";
 
 const PROMPT = "$ ";
 const QUESTION = "E se sua carreira começasse com uma linha de código?";
@@ -16,7 +19,10 @@ const TYPE_SPEED_MS = 45;
  */
 export function Boot() {
   const shouldReduceMotion = useReducedMotion();
-  const [typedLength, setTypedLength] = useState(shouldReduceMotion ? QUESTION.length : 0);
+  const { ref, style } = useChapterTilt<HTMLElement>({ withEntry: false });
+  const [typedLength, setTypedLength] = useState(
+    shouldReduceMotion ? QUESTION.length : 0,
+  );
 
   useEffect(() => {
     if (shouldReduceMotion || typedLength >= QUESTION.length) return;
@@ -29,43 +35,59 @@ export function Boot() {
 
   return (
     <section
+      ref={ref}
       id="boot"
       aria-label="Capítulo 1: Boot"
-      className="flex min-h-[100dvh] flex-col items-center justify-center bg-black px-6 text-center"
+      className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden bg-black px-6 text-center"
     >
-      <p className="mb-6 font-mono text-xs uppercase tracking-widest text-text-muted">
-        Capítulo 01 / 06 — Boot
-      </p>
-
-      <h1 className="max-w-2xl font-mono text-2xl leading-snug text-accent-cyan sm:text-3xl md:text-4xl">
-        <span aria-hidden="true">
-          {PROMPT}
-          {typedText}
-          <span
-            className="ml-0.5 inline-block h-[0.9em] w-[0.5em] translate-y-[0.12em] animate-blink bg-accent-cyan align-middle"
-            aria-hidden="true"
-          />
-        </span>
-        <span className="sr-only">{QUESTION}</span>
-      </h1>
-
       <div
-        className={`mt-16 flex flex-col items-center gap-2 text-text-muted transition-opacity duration-slower ${
-          isDone ? "opacity-100" : "opacity-0"
-        }`}
         aria-hidden="true"
-      >
-        <span className="font-mono text-xs uppercase tracking-widest">Role para continuar</span>
-        <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 animate-bounce">
-          <path
-            d="M4 7l6 6 6-6"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </div>
+        className="absolute inset-0 bg-black bg-cover bg-center"
+        style={{
+          // Overlay escuro combinado com a imagem numa única declaração de
+          // `background-image` (camadas de gradiente + imagem) — mantém o
+          // texto ciano legível por cima sem precisar de uma segunda div.
+          backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.78), rgba(0,0,0,0.88)), url(${bootBackground})`,
+        }}
+      />
+
+      <m.div style={style} className="relative z-10 flex flex-col items-center">
+        <p className="mb-6 font-mono text-xs uppercase tracking-widest text-text-muted">
+          Capítulo 01 / 06 — Boot
+        </p>
+
+        <h1 className="max-w-2xl font-mono text-2xl leading-snug text-accent-cyan sm:text-3xl md:text-4xl">
+          <span aria-hidden="true">
+            {PROMPT}
+            {typedText}
+            <span
+              className="ml-0.5 inline-block h-[0.9em] w-[0.5em] translate-y-[0.12em] animate-blink bg-accent-cyan align-middle"
+              aria-hidden="true"
+            />
+          </span>
+          <span className="sr-only">{QUESTION}</span>
+        </h1>
+
+        <div
+          className={`mt-16 flex flex-col items-center gap-2 text-text-muted transition-opacity duration-slower ${
+            isDone ? "opacity-100" : "opacity-0"
+          }`}
+          aria-hidden="true"
+        >
+          <span className="font-mono text-xs uppercase tracking-widest">
+            Role para continuar
+          </span>
+          <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4 animate-bounce">
+            <path
+              d="M4 7l6 6 6-6"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </div>
+      </m.div>
     </section>
   );
 }

@@ -107,6 +107,8 @@ Decisão do usuário em 2026-07-24: o DevClub deixa de ser só um portfólio pes
     - [x] Level Up — trilhas de `src/data/tracks.ts` como skill tree vertical (fundamentos "desbloqueados", especializações como "próximo nível")
     - [x] Connect — alunos/mentores/comunidade/empresas parceiras como malha de nós (todo par conectado, não um hub único), pulsando continuamente + pontos-satélite decorativos
     - [x] Hire — fechamento com callback à headline de abertura ("Do primeiro console.log à primeira contratação"), CTA primário rola até a seção `#contato` real (não é link morto)
+    - [x] Transição 3D conectando os capítulos (`useChapterTilt`) — cada capítulo inclina/recua sutilmente ao entrar e sair da viewport, sem depender de WebGL/vídeo, ver decisão em `CHANGELOG.md`
+    - [x] Imagem de fundo (código estilizado, gerada por IA) no capítulo Boot, com scrim escuro pra manter contraste AA
     - [ ] Indicador de progresso lateral ("Capítulo X/6") e paleta evolutiva entre os 6 capítulos como conjunto — adiado de propósito até os 6 existirem para orquestrar juntos, ver decisão em `CHANGELOG.md`
     - [ ] Remover as seções antigas redundantes (`Formacoes`↔Level Up, `Community`↔Connect, `Hero`↔Boot/Hire) de `Home.tsx` — hoje ainda coexistem
   - [ ] **Fase C — "Nossos Alunos"**: depoimentos fictícios, filtros por mídia/profissão anterior, paginação
