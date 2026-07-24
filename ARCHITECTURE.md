@@ -30,8 +30,9 @@ API declarativa (`animate`, `variants`, `whileInView`) que expressa animação c
 src/
   components/       # componentes de UI reutilizáveis, sem conhecimento de domínio
     ui/              # primitivos do design system (Button, Card, Badge...)
-    layout/          # estrutura de página (Header, Footer, Section...)
-  sections/         # composições de página com conhecimento de domínio (Hero, Projects, Contact...)
+    layout/          # estrutura de página (Header, Footer, Section, Layout...)
+  pages/            # componentes de rota (Home, Blog, NossosAlunos...) — montam sections
+  sections/         # composições de conteúdo com conhecimento de domínio (Hero, Projects, Contact...)
   hooks/            # hooks customizados reutilizáveis entre seções
   context/          # providers de estado compartilhado (ex.: tema)
   lib/              # funções puras, utilitários, formatadores
@@ -41,7 +42,15 @@ src/
   styles/           # estilos globais e configuração base do Tailwind
 ```
 
-A separação entre `components/` (sem conhecimento de domínio) e `sections/` (com conhecimento de domínio) existe para que os primitivos do design system permaneçam reutilizáveis fora do contexto deste portfólio — um `Button` não deveria saber o que é um "projeto".
+A separação entre `components/` (sem conhecimento de domínio) e `sections/` (com conhecimento de domínio) existe para que os primitivos do design system permaneçam reutilizáveis fora do contexto deste portfólio — um `Button` não deveria saber o que é um "projeto". `pages/` é a camada mais fina de todas: um componente de rota só compõe `sections/` (e, eventualmente, `Suspense`/lazy loading) — nunca tem markup ou lógica de apresentação própria.
+
+## Roteamento
+
+**React Router** (`react-router-dom`), API declarativa (`<Routes>`/`<Route>`), sem router de dados (`createBrowserRouter`) porque nenhuma rota tem loader/action — seria complexidade sem uso real. `Layout` (`src/components/layout/Layout.tsx`) é o casco persistente entre rotas (`Header`/`Footer`/`SkipLink` + `<Outlet />`), evitando remontar header/footer a cada navegação.
+
+Cada página fora da Home é `React.lazy` — mesma lógica das seções abaixo da dobra (ver Estratégias de performance): a Home é o ponto de entrada mais provável e não deve esperar o bundle de `/blog` ou `/newsletter` para renderizar.
+
+`Header` decide entre `<Link>` (rota, navegação client-side) e `<a>` (âncora) olhando o formato do `href` recebido (`/...` vs `#...`) — permite que o mesmo componente `NavItem` sirva os dois casos sem a seção que o usa precisar saber a diferença.
 
 ## Estratégia de componentes
 

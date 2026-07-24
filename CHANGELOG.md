@@ -6,6 +6,24 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.18.0] — 2026-07-24
+
+### Contexto
+
+O usuário forneceu um briefing detalhado para expandir o DevClub além de uma página só: a Home vira uma jornada de scrollytelling em 6 capítulos (Boot/Build/Deploy/Level Up/Connect/Hire, "Do primeiro `console.log` à primeira contratação"), mais 3 páginas novas (Nossos Alunos, Blog, Newsletter). O briefing é explícito: reaproveitar só a arquitetura de informação de referências externas, nunca texto/imagem/copy reais — todo conteúdo é fictício, escrito do zero. Dividido em sub-fases (A-E) dentro da Fase 12; este release cobre a Fase A.
+
+### Adicionado
+
+- `react-router-dom`: rotas `/`, `/nossos-alunos`, `/blog`, `/blog/:slug`, `/newsletter`, roteamento declarativo (`<Routes>`/`<Route>`, sem router de dados — nenhuma rota tem loader/action)
+- `Layout` (`src/components/layout/Layout.tsx`): casco persistente entre rotas (Header/Footer/SkipLink + `<Outlet />`)
+- `src/pages/`: nova camada de componentes de rota (`Home`, `NossosAlunos`, `Blog`, `BlogPost`, `Newsletter`) — `Home` reaproveita as seções existentes por enquanto (Fase B substitui pelos capítulos); as demais são placeholders explícitos ("em construção"), com `TODO` indicando a fase que preenche cada uma
+- `useScrollProgress` e `useInView` (`src/hooks/`): hooks reutilizáveis para animação acoplada a scroll, generalizando o padrão que já existia hardcoded no `Hero` — evita repetir `useScroll`/`target` em cada um dos 6 capítulos da Fase B
+- `Header`: passa a decidir entre `<Link>` (rota) e `<a>` (âncora) a partir do formato do `href` — necessário porque o nav agora mistura navegação entre páginas com âncoras dentro da Home
+
+### Corrigido
+
+- Cobertura de testes recalibrada temporariamente (70/65/60/85 → 50/45/40/85): a estrutura de rotas introduziu várias páginas placeholder sem lógica própria ainda: cobri-las com teste agora seria testar um "em construção" que muda de qualquer forma nas Fases B-E. Sobe de novo conforme essas páginas ganham conteúdo real
+
 ## [0.17.0] — 2026-07-24
 
 ### Adicionado

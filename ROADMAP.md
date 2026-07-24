@@ -98,7 +98,12 @@ Decisão do usuário em 2026-07-24: o DevClub deixa de ser só um portfólio pes
 - [ ] Seção FAQ
 - [ ] Footer expandido
 - [ ] Reconciliar `About`/`Contact` existentes com o novo posicionamento (hoje ainda escritos em primeira pessoa, como portfólio individual). `Skills` já reconciliado → virou `Stack`
-- [ ] Seção de scroll narrativo em capítulos (Boot/Build/Deploy/Level Up/Connect/Hire) com imagens geradas via Higgsfield — aguardando imagens de referência do usuário
+- [ ] Home em scrollytelling de 6 capítulos (Boot/Build/Deploy/Level Up/Connect/Hire) + páginas "Nossos Alunos"/Blog/Newsletter — briefing detalhado do usuário em 2026-07-24, ver `CHANGELOG.md`. Sub-fases:
+  - [x] **Fase A — Fundação**: `react-router-dom`, rotas (`/`, `/nossos-alunos`, `/blog`, `/blog/:slug`, `/newsletter`), `Layout` persistente, hooks `useScrollProgress`/`useInView`, páginas placeholder
+  - [ ] **Fase B — Home em 6 capítulos**: Boot (terminal), Build (nós conectados), Deploy (janelas vivas), Level Up (skill tree), Connect (rede pulsante), Hire (CTA final), com indicador de progresso lateral e paleta evolutiva
+  - [ ] **Fase C — "Nossos Alunos"**: depoimentos fictícios, filtros por mídia/profissão anterior, paginação
+  - [ ] **Fase D — Blog**: busca, post em destaque, grid de artigos, página de artigo
+  - [ ] **Fase E — Newsletter**: inscrição, lista de edições fictícias
 - **Fora do escopo, de propósito** (alegações factuais que não são verdadeiras para este projeto): certificação MEC, contadores de alunos/números de escala, garantia de reembolso de produto pago, depoimento em vídeo real
 
 ## Fase 13 — Deploy Final

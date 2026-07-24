@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 
 import { Header } from "./Header";
@@ -9,22 +10,34 @@ const navItems = [
   { label: "Contato", href: "#contato" },
 ];
 
+// Header usa <Link> do react-router (logo, Área do aluno, CTA) mesmo
+// quando os itens de nav são âncoras — por isso todo render precisa de
+// um Router por perto, mesmo neste conjunto de testes que só exercita
+// links de âncora.
+function renderHeader(props: Parameters<typeof Header>[0]) {
+  return render(
+    <MemoryRouter>
+      <Header {...props} />
+    </MemoryRouter>,
+  );
+}
+
 describe("Header", () => {
   it("renderiza a logo e os links de navegação", () => {
-    render(<Header navItems={navItems} />);
+    renderHeader({ navItems });
     expect(screen.getByRole("link", { name: "DevClub" })).toBeInTheDocument();
     expect(screen.getAllByRole("link", { name: "Sobre" })).toHaveLength(1);
   });
 
   it("sem navItems, não renderiza nav nem botão de menu", () => {
-    render(<Header navItems={[]} />);
+    renderHeader({ navItems: [] });
     expect(screen.queryByRole("navigation")).not.toBeInTheDocument();
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
   it("abre o menu mobile ao clicar, expõe aria-expanded e um segundo conjunto de links", async () => {
     const user = userEvent.setup();
-    render(<Header navItems={navItems} />);
+    renderHeader({ navItems });
 
     const toggle = screen.getByRole("button", { name: "Abrir menu" });
     expect(toggle).toHaveAttribute("aria-expanded", "false");
@@ -41,7 +54,7 @@ describe("Header", () => {
 
   it("Esc fecha o menu e devolve o foco ao botão, mesmo depois de tabular para os links", async () => {
     const user = userEvent.setup();
-    render(<Header navItems={navItems} />);
+    renderHeader({ navItems });
 
     const toggle = screen.getByRole("button", { name: "Abrir menu" });
     await user.click(toggle);
@@ -60,7 +73,7 @@ describe("Header", () => {
 
   it("clicar em um link do menu mobile fecha o menu", async () => {
     const user = userEvent.setup();
-    render(<Header navItems={navItems} />);
+    renderHeader({ navItems });
 
     await user.click(screen.getByRole("button", { name: "Abrir menu" }));
     const mobileLinks = screen.getAllByRole("link", { name: "Sobre" });

@@ -1,38 +1,22 @@
 import { lazy, Suspense } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { LazyMotion, domAnimation } from "framer-motion";
 
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { SkipLink } from "@/components/layout/SkipLink";
-import { Hero } from "@/sections/Hero";
-import { contactContent } from "@/data/contact";
+import { Layout } from "@/components/layout/Layout";
+import { Home } from "@/pages/Home";
 
-// Hero fica fora do code splitting: é o conteúdo acima da dobra (LCP),
-// carregá-lo sob demanda só atrasaria a primeira renderização. As seções
-// abaixo da dobra são carregadas sob demanda — ver ARCHITECTURE.md#estratégias-de-performance.
-const Formacoes = lazy(() =>
-  import("@/sections/Formacoes").then((mod) => ({ default: mod.Formacoes })),
+// Cada rota fora da Home é code-split — só a Home precisa carregar rápido
+// (é a página de entrada mais provável). Ver ARCHITECTURE.md#estratégias-de-performance.
+const NossosAlunos = lazy(() =>
+  import("@/pages/NossosAlunos").then((mod) => ({ default: mod.NossosAlunos })),
 );
-const Stack = lazy(() => import("@/sections/Stack").then((mod) => ({ default: mod.Stack })));
-const Community = lazy(() =>
-  import("@/sections/Community").then((mod) => ({ default: mod.Community })),
+const Blog = lazy(() => import("@/pages/Blog").then((mod) => ({ default: mod.Blog })));
+const BlogPost = lazy(() =>
+  import("@/pages/BlogPost").then((mod) => ({ default: mod.BlogPost })),
 );
-const About = lazy(() => import("@/sections/About").then((mod) => ({ default: mod.About })));
-const Projects = lazy(() =>
-  import("@/sections/Projects").then((mod) => ({ default: mod.Projects })),
+const Newsletter = lazy(() =>
+  import("@/pages/Newsletter").then((mod) => ({ default: mod.Newsletter })),
 );
-const Contact = lazy(() =>
-  import("@/sections/Contact").then((mod) => ({ default: mod.Contact })),
-);
-
-const navItems = [
-  { label: "Formações", href: "#formacoes" },
-  { label: "Stack", href: "#stack" },
-  { label: "Comunidade", href: "#comunidade" },
-  { label: "Sobre", href: "#sobre" },
-  { label: "Projetos", href: "#projetos" },
-  { label: "Contato", href: "#contato" },
-];
 
 function App() {
   return (
@@ -41,20 +25,45 @@ function App() {
     // (ver relatório do `npm run build:analyze`). `strict` impede o uso
     // acidental de `motion.*` (bundle completo) em vez de `m.*` no futuro.
     <LazyMotion features={domAnimation} strict>
-      <SkipLink />
-      <Header navItems={navItems} />
-      <main id="top" tabIndex={-1} className="outline-none">
-        <Hero />
-        <Suspense fallback={null}>
-          <Formacoes />
-          <Stack />
-          <Community />
-          <About />
-          <Projects />
-          <Contact />
-        </Suspense>
-      </main>
-      <Footer links={contactContent.socialLinks} />
+      <BrowserRouter>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route
+              path="/nossos-alunos"
+              element={
+                <Suspense fallback={null}>
+                  <NossosAlunos />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/blog"
+              element={
+                <Suspense fallback={null}>
+                  <Blog />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/blog/:slug"
+              element={
+                <Suspense fallback={null}>
+                  <BlogPost />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/newsletter"
+              element={
+                <Suspense fallback={null}>
+                  <Newsletter />
+                </Suspense>
+              }
+            />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </LazyMotion>
   );
 }

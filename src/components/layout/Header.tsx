@@ -1,5 +1,7 @@
 import { useEffect, useId, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { AnimatePresence, m, useReducedMotion } from "framer-motion";
+import type { AnchorHTMLAttributes } from "react";
 import type { NavItem } from "@/types/nav";
 import { IconButton } from "@/components/ui/IconButton";
 import { buttonVariants } from "@/components/ui/button-variants";
@@ -9,6 +11,34 @@ import { Container } from "./Container";
 
 export interface HeaderProps {
   navItems?: NavItem[];
+}
+
+/**
+ * `href` começando com "/" é uma rota (navegação client-side via Router);
+ * qualquer outra coisa (ex.: "#contato") é uma âncora normal. Evita que
+ * links de rota causem reload de página inteira.
+ */
+function NavLink({
+  href,
+  className,
+  children,
+  ...props
+}: { href: string; children: React.ReactNode } & Omit<
+  AnchorHTMLAttributes<HTMLAnchorElement>,
+  "href"
+>) {
+  if (href.startsWith("/")) {
+    return (
+      <Link to={href} className={className} {...props}>
+        {children}
+      </Link>
+    );
+  }
+  return (
+    <a href={href} className={className} {...props}>
+      {children}
+    </a>
+  );
 }
 
 function MenuIcon({ open }: { open: boolean }) {
@@ -71,13 +101,13 @@ export function Header({ navItems = [] }: HeaderProps) {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-canvas/80 backdrop-blur">
       <Container className="flex h-16 items-center justify-between gap-4">
-        <a
-          href="#top"
+        <Link
+          to="/"
           onClick={() => setIsMenuOpen(false)}
           className="font-display text-lg font-bold text-text-primary"
         >
           DevClub
-        </a>
+        </Link>
 
         {navItems.length > 0 && (
           <>
@@ -86,28 +116,28 @@ export function Header({ navItems = [] }: HeaderProps) {
                 <ul className="flex items-center gap-6">
                   {navItems.map((item) => (
                     <li key={item.label}>
-                      <a
+                      <NavLink
                         href={item.href}
                         className="text-sm text-text-secondary transition duration-fast ease-standard hover:text-text-primary"
                       >
                         {item.label}
-                      </a>
+                      </NavLink>
                     </li>
                   ))}
                 </ul>
               </nav>
 
               <div className="flex items-center gap-4 border-l border-border pl-6">
-                <a
-                  href="#contato"
+                <Link
+                  to="/"
                   className="flex items-center gap-1.5 text-sm text-text-secondary transition duration-fast ease-standard hover:text-text-primary"
                 >
                   <PersonIcon />
                   Área do aluno
-                </a>
-                <a href="#contato" className={buttonVariants({ variant: "primary", size: "sm" })}>
+                </Link>
+                <Link to="/" className={buttonVariants({ variant: "primary", size: "sm" })}>
                   Quero fazer parte
-                </a>
+                </Link>
               </div>
             </div>
 
@@ -144,31 +174,31 @@ export function Header({ navItems = [] }: HeaderProps) {
                 <ul className="flex flex-col gap-1 py-4">
                   {navItems.map((item) => (
                     <li key={item.label}>
-                      <a
+                      <NavLink
                         href={item.href}
                         onClick={() => setIsMenuOpen(false)}
                         className="block rounded-md px-2 py-2 text-text-secondary transition duration-fast ease-standard hover:bg-surface hover:text-text-primary"
                       >
                         {item.label}
-                      </a>
+                      </NavLink>
                     </li>
                   ))}
                   <li className="flex flex-col gap-2 pt-3">
-                    <a
-                      href="#contato"
+                    <Link
+                      to="/"
                       onClick={() => setIsMenuOpen(false)}
                       className="flex items-center gap-1.5 rounded-md px-2 py-2 text-text-secondary transition duration-fast ease-standard hover:bg-surface hover:text-text-primary"
                     >
                       <PersonIcon />
                       Área do aluno
-                    </a>
-                    <a
-                      href="#contato"
+                    </Link>
+                    <Link
+                      to="/"
                       onClick={() => setIsMenuOpen(false)}
                       className={cn(buttonVariants({ variant: "primary", size: "md" }), "w-full")}
                     >
                       Quero fazer parte
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </Container>
