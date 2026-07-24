@@ -82,6 +82,17 @@ export default {
       maxWidth: {
         container: "1320px",
       },
+      keyframes: {
+        blink: {
+          "0%, 49%": { opacity: "1" },
+          "50%, 100%": { opacity: "0" },
+        },
+      },
+      animation: {
+        // Corte abrupto (step-end), não fade — é assim que um cursor de
+        // terminal pisca de verdade. Usado no capítulo Boot.
+        blink: "blink 1s step-end infinite",
+      },
     },
   },
   plugins: [],

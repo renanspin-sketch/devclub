@@ -6,6 +6,19 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.19.0] — 2026-07-24
+
+### Adicionado
+
+- Capítulo 1 — `Boot` (`src/sections/chapters/Boot.tsx`): terminal escuro, pergunta de abertura digitada em tempo real (efeito de máquina de escrever, 45ms/caractere), cursor piscando (nova animação `blink` no Tailwind — corte abrupto, não fade, para parecer um cursor de terminal de verdade), indicador "Capítulo 01/06" e dica de scroll que aparece só após a digitação terminar
+- Home passa a abrir com `Boot` no lugar do `Hero` antigo — protótipo validado pelo usuário antes de investir nos outros 5 capítulos
+
+### Verificado
+
+- Acessibilidade do efeito de digitação: a pergunta completa existe no `<h1>` desde o primeiro render via um span `sr-only`; a animação visual fica `aria-hidden`. Confirmado medindo o **nome acessível real** do elemento (via `getByRole` com `name` exato, que respeita `aria-hidden`) — não o `textContent` bruto, que concatenaria as duas cópias do texto e daria um falso positivo de duplicação
+- `prefers-reduced-motion`: texto completo aparece instantaneamente, sem digitação
+- Zero violações de acessibilidade (axe-core), zero erros de console, mobile conferido
+
 ## [0.18.0] — 2026-07-24
 
 ### Contexto

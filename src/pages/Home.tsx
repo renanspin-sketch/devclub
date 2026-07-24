@@ -1,11 +1,11 @@
 import { lazy, Suspense } from "react";
 
-import { Hero } from "@/sections/Hero";
+import { Boot } from "@/sections/chapters/Boot";
 
-// Hero fica fora do code splitting: é o conteúdo acima da dobra (LCP).
-// TODO(Fase B): estas seções serão substituídas pelos 6 capítulos de
-// scrollytelling (Boot→Hire) — mantidas por enquanto para a Home não
-// ficar quebrada enquanto a Fase A (roteamento) é verificada isoladamente.
+// TODO(Fase B): Boot é o primeiro dos 6 capítulos de scrollytelling —
+// protótipo para validação de direção antes dos outros 5 (Build→Hire).
+// As seções abaixo ainda são as antigas, mantidas até serem substituídas
+// capítulo a capítulo.
 const Formacoes = lazy(() =>
   import("@/sections/Formacoes").then((mod) => ({ default: mod.Formacoes })),
 );
@@ -24,7 +24,7 @@ const Contact = lazy(() =>
 export function Home() {
   return (
     <>
-      <Hero />
+      <Boot />
       <Suspense fallback={null}>
         <Formacoes />
         <Stack />
