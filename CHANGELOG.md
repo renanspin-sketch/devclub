@@ -6,6 +6,21 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.29.0] — 2026-07-24
+
+### Adicionado
+
+- Link de demonstração no `README.md` — [devclub-flame.vercel.app](https://devclub-flame.vercel.app/), primeiro deploy real do projeto
+
+### Corrigido
+
+- `README.md`: seção de Testes ainda citava `Contact`/`Projects` e a contagem antiga de 35 testes, desatualizada desde a remoção das seções antigas (v0.27.0) — atualizado para 32 testes / `Header` + Capítulo 6/`Hire`
+
+### Verificado
+
+- Deploy em produção testado de ponta a ponta: `/`, `/blog`, `/nossos-alunos`, `/newsletter` retornam 200 (rewrite do `vercel.json` funcionando — sem ele, essas rotas dariam 404 ao serem acessadas direto, não navegando a partir da home)
+- Zero erros/warnings de console em produção, imagens dos capítulos (fundo global, projetos do Deploy) carregando corretamente
+
 ## [0.28.0] — 2026-07-24
 
 ### Adicionado

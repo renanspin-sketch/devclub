@@ -121,6 +121,6 @@ Decisão do usuário em 2026-07-24: o DevClub deixa de ser só um portfólio pes
 
 - [x] Escolha de plataforma — Vercel. Repositório publicado em `github.com/renanspin-sketch/devclub`, `vercel.json` com rewrite pra `index.html` (necessário pro React Router: sem isso, acessar `/blog` ou `/nossos-alunos` direto — não navegando a partir da home — dá 404 no Vercel, que serve arquivos estáticos por padrão)
 - [ ] Domínio e SEO final (meta tags, Open Graph, sitemap)
-- [ ] Link de demonstração adicionado ao `README.md`
+- [x] Link de demonstração adicionado ao `README.md` — [devclub-flame.vercel.app](https://devclub-flame.vercel.app/), verificado em produção (rotas do React Router, imagens dos capítulos, zero erros/warnings de console)
 - [ ] Teste manual com leitor de tela real (NVDA ou VoiceOver) — pendente da Fase 09, que usou apenas auditoria automatizada como proxy
-- [ ] Substituir conteúdo fictício pelos dados reais (bio, skills, e-mail/links de contato). Projetos: 3 dos 5 cards ainda são fictícios (Dashboard/Tarefas/Loja); os 2 com imagem são referências visuais de UI explicitamente marcadas como tal (sem `repoUrl`/`demoUrl`), não projetos de código — avaliar se entram projetos de código reais no lugar
+- [ ] Substituir conteúdo fictício pelos dados reais (e-mail/links de contato do Capítulo 6/Hire, trilhas do Level Up, projetos do Deploy, depoimentos/posts das Fases C/D/E quando existirem)

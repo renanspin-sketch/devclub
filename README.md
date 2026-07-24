@@ -12,7 +12,9 @@ Cada decisão registrada aqui — e nos demais documentos do projeto — existe 
 
 ## Demonstração
 
-🔗 _(link do deploy será adicionado na Fase 13 — Deploy Final. Ver [ROADMAP.md](./ROADMAP.md))_
+🔗 [devclub-flame.vercel.app](https://devclub-flame.vercel.app/)
+
+Nossos Alunos, Blog e Newsletter ainda estão em placeholder ("em construção") — publicado assim de propósito, para iterar em produção. Ver [ROADMAP.md](./ROADMAP.md#fase-12--reposicionamento-devclub-como-plataformacomunidade).
 
 ## Tecnologias
 
@@ -71,7 +73,7 @@ Lighthouse (build de produção, mobile + desktop): **mobile 95-96 · desktop 10
 
 ## Testes
 
-Vitest + React Testing Library. 35 testes cobrindo o design system (100% dos componentes de UI) e as seções com lógica de verdade (`Header`, `Contact`, `Projects`) — escopo e justificativa em [ARCHITECTURE.md](./ARCHITECTURE.md#estratégias-de-testes). Rode com `npm run test` ou `npm run test:coverage`.
+Vitest + React Testing Library. 32 testes cobrindo o design system (100% dos componentes de UI) e as seções com lógica de verdade (`Header`, Capítulo 6/`Hire`) — escopo e justificativa em [ARCHITECTURE.md](./ARCHITECTURE.md#estratégias-de-testes). Rode com `npm run test` ou `npm run test:coverage`.
 
 ## Responsividade
 
@@ -83,7 +85,7 @@ HTML semântico, navegação completa por teclado, contraste validado (WCAG AA) 
 
 ## Deploy
 
-_(A definir na Fase 13. Candidatos avaliados: Vercel e Netlify — ver [ROADMAP.md](./ROADMAP.md).)_
+Vercel, conectado ao repositório [github.com/renanspin-sketch/devclub](https://github.com/renanspin-sketch/devclub) — todo push em `master` gera um deploy novo automaticamente. `vercel.json` define o rewrite necessário para as rotas do React Router funcionarem em produção (ver [ROADMAP.md](./ROADMAP.md#fase-13--deploy-final)).
 
 ## Melhorias futuras
 
