@@ -6,6 +6,18 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.22.0] — 2026-07-24
+
+### Adicionado
+
+- Capítulo 4 — `LevelUp` (`src/sections/chapters/LevelUp.tsx`): as trilhas de formação (mesmo dado de `src/data/tracks.ts`, reaproveitado da seção "Formações") reaparecem como uma trilha vertical de skill tree — linha conectando os nós, os 3 fundamentos com selo "Disponível" (ícone de check), as 3 especializações com selo "Próximo nível" (ícone de cadeado)
+- Copy do capítulo evita prometer um mecanismo de acesso real que a plataforma não implementa — o "desbloqueio" é uma metáfora visual de progressão pedagógica (fundamentos → especialização), não uma trava de acesso factual
+
+### Verificado
+
+- Estado desbloqueado/bloqueado conferido visualmente em desktop e mobile
+- Zero violações de acessibilidade (axe-core), zero erros de console
+
 ## [0.21.0] — 2026-07-24
 
 ### Adicionado

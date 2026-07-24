@@ -104,7 +104,7 @@ Decisão do usuário em 2026-07-24: o DevClub deixa de ser só um portfólio pes
     - [x] Boot — terminal com digitação em tempo real, protótipo validado pelo usuário em 2026-07-24
     - [x] Build — tecnologias conectadas a um centro ("Você"), linhas SVG desenhando-se ao entrar na viewport
     - [x] Deploy — projetos como janelas vivas (mockup de barra de navegador), hover realça, clique expande descrição + stack
-    - [ ] Level Up — trilhas em formato skill tree
+    - [x] Level Up — trilhas de `src/data/tracks.ts` como skill tree vertical (fundamentos "desbloqueados", especializações como "próximo nível")
     - [ ] Connect — rede pulsante de comunidade
     - [ ] Hire — CTA final
   - [ ] **Fase C — "Nossos Alunos"**: depoimentos fictícios, filtros por mídia/profissão anterior, paginação
