@@ -102,7 +102,7 @@ Decisão do usuário em 2026-07-24: o DevClub deixa de ser só um portfólio pes
   - [x] **Fase A — Fundação**: `react-router-dom`, rotas (`/`, `/nossos-alunos`, `/blog`, `/blog/:slug`, `/newsletter`), `Layout` persistente, hooks `useScrollProgress`/`useInView`, páginas placeholder
   - [ ] **Fase B — Home em 6 capítulos** (indicador de progresso lateral e paleta evolutiva ficam para quando houver mais de um capítulo pra orquestrar):
     - [x] Boot — terminal com digitação em tempo real, protótipo validado pelo usuário em 2026-07-24
-    - [ ] Build — tecnologias conectadas como sistema vivo
+    - [x] Build — tecnologias conectadas a um centro ("Você"), linhas SVG desenhando-se ao entrar na viewport
     - [ ] Deploy — projetos como janelas vivas
     - [ ] Level Up — trilhas em formato skill tree
     - [ ] Connect — rede pulsante de comunidade

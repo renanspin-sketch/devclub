@@ -6,6 +6,22 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.20.0] — 2026-07-24
+
+### Adicionado
+
+- Capítulo 2 — `Build` (`src/sections/chapters/Build.tsx`): 6 tecnologias como nós ao redor de um centro ("Você"), conectados por linhas SVG que se desenham progressivamente (staggered) ao entrar na viewport, via `useInView`
+
+### Corrigido
+
+- **Bug real de SVG, não de React**: o gradiente das linhas usava `objectBoundingBox` (padrão) com coordenadas relativas 0→1 — para uma linha com bounding box de largura ou altura zero (ex.: uma linha perfeitamente vertical, como a de "React" no topo e "Tailwind CSS" embaixo), essa matriz degenera e o SVG não pinta nada, por especificação. As duas linhas verticais simplesmente não apareciam. Trocado para `gradientUnits="userSpaceOnUse"` com coordenadas absolutas do viewBox, que não depende da caixa delimitadora de cada elemento individual
+- No caminho, também descartei `pathLength` do Framer Motion em favor de `strokeDasharray`/`strokeDashoffset` manual para o desenho progressivo das linhas — mecânica SVG mais direta e previsível, sem depender do cálculo de comprimento de path da biblioteca
+
+### Verificado
+
+- Todos os 6 nós conectados corretamente em desktop e mobile (capturado antes e depois da correção do gradiente)
+- Zero violações de acessibilidade (axe-core), zero erros de console
+
 ## [0.19.0] — 2026-07-24
 
 ### Adicionado
