@@ -6,6 +6,17 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.15.0] — 2026-07-24
+
+### Adicionado
+
+- Seção `Formações` (`src/sections/Formacoes.tsx`): 6 trilhas de estudo em um scroll lateral de cards, `src/data/tracks.ts` como conteúdo fictício tipado
+- Item "Formações" na navegação principal, primeiro da lista (reflete a nova ordem de página: Hero → Formações → Sobre → Projetos → Skills → Contato)
+
+### Corrigido
+
+- Contêiner de scroll lateral recebeu `tabIndex={0}`: uma região com `overflow-x-auto` sem nenhum filho focável não é alcançável via Tab por padrão, o que deixaria usuários de teclado sem forma de rolar a lista de trilhas. Confirmado via teste real (medição de `scrollLeft` antes/depois de `ArrowRight` com o contêiner focado)
+
 ## [0.14.0] — 2026-07-24
 
 ### Alterado — reposicionamento do DevClub

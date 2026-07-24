@@ -90,7 +90,7 @@ Decisão do usuário em 2026-07-24: o DevClub deixa de ser só um portfólio pes
 
 - [x] `Header`: nav + "Área do aluno" + CTA "Quero fazer parte"
 - [x] `Hero`: manchete e copy em torno do storytelling console.log → contratação
-- [ ] Seção "Formações" (trilhas de estudo, scroll lateral)
+- [x] Seção "Formações" (trilhas de estudo, scroll lateral com `tabIndex` para navegação por teclado — sem isso, contêineres de overflow sem filhos focáveis ficam inacessíveis por teclado)
 - [ ] Seção "Stack ensinada" (equivalente honesto ao bloco "modelos ilimitados" da referência)
 - [ ] Seção "Comunidade" (mentoria, networking — sem alegações não verificáveis)
 - [ ] Seção "Plataforma" (preview conceitual, não screenshot de produto real)

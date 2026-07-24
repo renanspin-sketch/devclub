@@ -10,6 +10,9 @@ import { contactContent } from "@/data/contact";
 // Hero fica fora do code splitting: é o conteúdo acima da dobra (LCP),
 // carregá-lo sob demanda só atrasaria a primeira renderização. As seções
 // abaixo da dobra são carregadas sob demanda — ver ARCHITECTURE.md#estratégias-de-performance.
+const Formacoes = lazy(() =>
+  import("@/sections/Formacoes").then((mod) => ({ default: mod.Formacoes })),
+);
 const About = lazy(() => import("@/sections/About").then((mod) => ({ default: mod.About })));
 const Projects = lazy(() =>
   import("@/sections/Projects").then((mod) => ({ default: mod.Projects })),
@@ -20,6 +23,7 @@ const Contact = lazy(() =>
 );
 
 const navItems = [
+  { label: "Formações", href: "#formacoes" },
   { label: "Sobre", href: "#sobre" },
   { label: "Projetos", href: "#projetos" },
   { label: "Skills", href: "#skills" },
@@ -38,6 +42,7 @@ function App() {
       <main id="top" tabIndex={-1} className="outline-none">
         <Hero />
         <Suspense fallback={null}>
+          <Formacoes />
           <About />
           <Projects />
           <Skills />
