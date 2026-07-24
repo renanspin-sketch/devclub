@@ -17,7 +17,7 @@ const About = lazy(() => import("@/sections/About").then((mod) => ({ default: mo
 const Projects = lazy(() =>
   import("@/sections/Projects").then((mod) => ({ default: mod.Projects })),
 );
-const Skills = lazy(() => import("@/sections/Skills").then((mod) => ({ default: mod.Skills })));
+const Stack = lazy(() => import("@/sections/Stack").then((mod) => ({ default: mod.Stack })));
 const Contact = lazy(() =>
   import("@/sections/Contact").then((mod) => ({ default: mod.Contact })),
 );
@@ -26,7 +26,7 @@ const navItems = [
   { label: "Formações", href: "#formacoes" },
   { label: "Sobre", href: "#sobre" },
   { label: "Projetos", href: "#projetos" },
-  { label: "Skills", href: "#skills" },
+  { label: "Stack", href: "#stack" },
   { label: "Contato", href: "#contato" },
 ];
 
@@ -45,7 +45,7 @@ function App() {
           <Formacoes />
           <About />
           <Projects />
-          <Skills />
+          <Stack />
           <Contact />
         </Suspense>
       </main>

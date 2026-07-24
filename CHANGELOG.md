@@ -6,6 +6,14 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.16.0] — 2026-07-24
+
+### Alterado
+
+- Seção `Skills` reconciliada em `Stack` (`src/sections/Stack.tsx`, `src/data/stack.ts`): mesmo padrão visual (grid de categorias com badges), copy reescrita de "minhas habilidades" para "tecnologias que você vai dominar" — reflete o reposicionamento do DevClub e cobre duas necessidades de uma vez: o item "Stack ensinada" da Fase 12 e a reconciliação de conteúdo pessoal pendente
+- Categorias expandidas para cobrir as trilhas de Formações (Node.js e React Native adicionados; "Ferramentas" virou "Ferramentas & IA", incluindo GitHub Copilot/ChatGPT/Claude)
+- Nav principal: "Skills" → "Stack"; âncora `#skills` → `#stack`
+
 ## [0.15.0] — 2026-07-24
 
 ### Adicionado

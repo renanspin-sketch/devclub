@@ -91,13 +91,13 @@ Decisão do usuário em 2026-07-24: o DevClub deixa de ser só um portfólio pes
 - [x] `Header`: nav + "Área do aluno" + CTA "Quero fazer parte"
 - [x] `Hero`: manchete e copy em torno do storytelling console.log → contratação
 - [x] Seção "Formações" (trilhas de estudo, scroll lateral com `tabIndex` para navegação por teclado — sem isso, contêineres de overflow sem filhos focáveis ficam inacessíveis por teclado)
-- [ ] Seção "Stack ensinada" (equivalente honesto ao bloco "modelos ilimitados" da referência)
+- [x] Seção "Stack ensinada" (equivalente honesto ao bloco "modelos ilimitados" da referência) — implementada reconciliando a antiga seção `Skills` (que já era um grid categorizado de badges, mesma forma visual) em vez de criar conteúdo duplicado; resolve também o item de reconciliação abaixo
 - [ ] Seção "Comunidade" (mentoria, networking — sem alegações não verificáveis)
 - [ ] Seção "Plataforma" (preview conceitual, não screenshot de produto real)
 - [ ] Seção "Mentores" com placeholders claramente fictícios (sem fotos de pessoas reais)
 - [ ] Seção FAQ
 - [ ] Footer expandido
-- [ ] Reconciliar `About`/`Contact`/`Skills` existentes com o novo posicionamento (hoje ainda escritos em primeira pessoa, como portfólio individual)
+- [ ] Reconciliar `About`/`Contact` existentes com o novo posicionamento (hoje ainda escritos em primeira pessoa, como portfólio individual). `Skills` já reconciliado → virou `Stack`
 - [ ] Seção de scroll narrativo em capítulos (Boot/Build/Deploy/Level Up/Connect/Hire) com imagens geradas via Higgsfield — aguardando imagens de referência do usuário
 - **Fora do escopo, de propósito** (alegações factuais que não são verdadeiras para este projeto): certificação MEC, contadores de alunos/números de escala, garantia de reembolso de produto pago, depoimento em vídeo real
 
