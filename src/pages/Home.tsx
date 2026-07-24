@@ -1,11 +1,6 @@
 import { lazy, Suspense } from "react";
 
 import { Boot } from "@/sections/chapters/Boot";
-import { Build } from "@/sections/chapters/Build";
-import { Deploy } from "@/sections/chapters/Deploy";
-import { LevelUp } from "@/sections/chapters/LevelUp";
-import { Connect } from "@/sections/chapters/Connect";
-import { Hire } from "@/sections/chapters/Hire";
 
 // TODO(Fase B): os 6 capítulos de scrollytelling (Boot→Hire) estão
 // completos. As seções abaixo ainda são as antigas, mantidas até a
@@ -15,6 +10,25 @@ import { Hire } from "@/sections/chapters/Hire";
 // enquanto, é o destino real do CTA de `Hire`. Falta também orquestrar o
 // indicador lateral "Capítulo X/6" e a paleta evolutiva entre os 6
 // capítulos como conjunto, adiado até aqui de propósito (ver ROADMAP.md).
+//
+// Só o Boot fica fora do code splitting — é o único capítulo visível no
+// primeiro paint (LCP). Os outros 5, mesmo compostos de SVG/Framer Motion
+// razoavelmente pesados, ficavam todos no bundle principal antes de virarem
+// `lazy` aqui — isso media ~2,5s de atraso no LCP no perfil de CPU
+// throttled do Lighthouse mobile (trabalho de parse/exec de JS que a
+// página nem tinha renderizado ainda na tela).
+const Build = lazy(() => import("@/sections/chapters/Build").then((mod) => ({ default: mod.Build })));
+const Deploy = lazy(() =>
+  import("@/sections/chapters/Deploy").then((mod) => ({ default: mod.Deploy })),
+);
+const LevelUp = lazy(() =>
+  import("@/sections/chapters/LevelUp").then((mod) => ({ default: mod.LevelUp })),
+);
+const Connect = lazy(() =>
+  import("@/sections/chapters/Connect").then((mod) => ({ default: mod.Connect })),
+);
+const Hire = lazy(() => import("@/sections/chapters/Hire").then((mod) => ({ default: mod.Hire })));
+
 const Formacoes = lazy(() =>
   import("@/sections/Formacoes").then((mod) => ({ default: mod.Formacoes })),
 );
@@ -34,12 +48,12 @@ export function Home() {
   return (
     <>
       <Boot />
-      <Build />
-      <Deploy />
-      <LevelUp />
-      <Connect />
-      <Hire />
       <Suspense fallback={null}>
+        <Build />
+        <Deploy />
+        <LevelUp />
+        <Connect />
+        <Hire />
         <Formacoes />
         <Stack />
         <Community />

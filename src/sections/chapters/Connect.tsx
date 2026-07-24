@@ -57,7 +57,7 @@ export function Connect() {
       ref={ref}
       id="connect"
       aria-label="Capítulo 5: Connect"
-      className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden bg-canvas px-6 py-24 text-center"
+      className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden bg-canvas/80 px-6 py-24 text-center"
     >
       <m.div style={style} className="flex flex-col items-center">
         <p className="mb-6 font-mono text-xs uppercase tracking-widest text-text-muted">

@@ -6,6 +6,36 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.26.0] — 2026-07-24
+
+### Contexto
+
+Pedido do usuário: (1) fotos reais dos 3 projetos fictícios do capítulo Deploy (mockups de UI gerados por IA, fornecidos pelo usuário em `src/projetos/`); (2) ver a imagem de fundo do Boot aplicada no site inteiro, não só num capítulo. O pedido (2) expôs uma regressão real de performance que precisou de investigação e correção antes de poder ser aceito.
+
+### Adicionado
+
+- Capítulo Deploy: cada card de projeto ganhou a prévia de UI correspondente (`src/assets/projects/deploy/*.webp`) entre a barra de navegador e o texto, com `object-cover`/`object-top`, `loading="lazy"` e `width`/`height` explícitos
+- Imagem de fundo (antes só no Boot) agora fixa atrás de toda a navegação (`Layout`), com variantes separadas mobile (640px) e desktop (1920px) — `background-image` não tem `srcset`, a troca por breakpoint usa duas divs com visibilidade condicionada por classe responsiva. Cada capítulo ganhou `bg-canvas/80`/`bg-black/80` (era opaco) pra deixar a camada passar por trás; seções antigas sem fundo próprio (via `Section`) já mostravam a imagem integralmente, sem precisar de mudança
+
+### Corrigido — regressão real de performance (Lighthouse mobile: 95-96 → 83)
+
+Rodar Lighthouse depois dessas mudanças (o hábito estabelecido desde a Fase 10, não pulado mesmo numa tarefa que parecia "só visual") expôs uma queda real, não ruído de medição:
+
+- **Cumulative Layout Shift**: o efeito de digitação do Boot fazia o `<h1>` crescer de 1 pra 2 linhas conforme o texto era digitado, empurrando o conteúdo abaixo — contabilizado como CLS de verdade pelo Lighthouse. Corrigido reservando a altura final desde o primeiro paint: uma cópia invisível do texto completo empilhada via CSS Grid (`col-start-1 row-start-1`) na mesma célula do texto animado, então o container nunca muda de tamanho. Esse bug é anterior a esta sessão (existia desde que o Boot foi criado, v0.19.0) — só não tinha sido pego porque o Lighthouse não rodou de novo depois daquele capítulo
+- **Imagem de fundo desproporcional em mobile**: sem a separação de variantes por breakpoint, mobile baixava a versão de 1920px (pensada pra desktop) — corrigido com a variante de 640px descrita acima
+- **JS eager desnecessário**: os 5 capítulos abaixo do Boot (Build→Hire) estavam todos fora do code splitting, junto no bundle principal — igual ao padrão já usado antes pras seções antigas (`Hero` fica de fora do lazy por ser o LCP, o resto é `React.lazy`), só que essa mesma regra não tinha sido aplicada aos capítulos novos. Corrigido: só o Boot fica eager agora, os outros 5 entraram no mesmo `Suspense` que já envolvia as seções antigas
+
+### Decisões
+
+- Depois dos três fixes acima, mobile subiu de 83 pra 92 (desktop seguiu 100 o tempo todo). Testei remover o `useChapterTilt` do Boot por completo pra isolar se o hook (`useScroll`/`useTransform`) pesava no bundle crítico — sem diferença mensurável, então mantive o efeito. Os ~2,4s de "Render Delay" restantes do LCP não têm uma causa única e isolável nos testes que fiz; ficam registrados como item aberto no ROADMAP em vez de eu forçar mais mudanças sem um diagnóstico claro do que ainda falta
+- Imagens originais (`src/projetos/*.png`, ~1,5MB cada) removidas do repositório depois de convertidas — só os derivados otimizados (WebP, redimensionados) foram versionados, mesmo padrão já usado pro fundo do Boot
+
+### Verificado
+
+- Zero violações de acessibilidade (axe-core) em `/`, `/nossos-alunos`, `/blog`, `/newsletter` com o fundo global aplicado
+- Suíte de testes (36/36) e build de produção passando
+- Lighthouse mobile 92 / desktop 100 / accessibility, best-practices, SEO 100 em todas as categorias (era mobile 83 antes dos três fixes)
+
 ## [0.25.0] — 2026-07-24
 
 ### Contexto

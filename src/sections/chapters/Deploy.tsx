@@ -5,6 +5,9 @@ import { Badge } from "@/components/ui/Badge";
 import { Reveal } from "@/components/ui/Reveal";
 import { Container } from "@/components/layout/Container";
 import { useChapterTilt } from "@/hooks/useChapterTilt";
+import financasPreview from "@/assets/projects/deploy/financas.webp";
+import habitoPreview from "@/assets/projects/deploy/habito.webp";
+import lojaPreview from "@/assets/projects/deploy/loja.webp";
 
 interface DeployProject {
   slug: string;
@@ -12,12 +15,19 @@ interface DeployProject {
   tagline: string;
   description: string;
   stack: string[];
+  image: string;
 }
+
+// Dimensões reais das imagens (1536×1024, 3:2) — evita layout shift
+// enquanto a imagem carrega.
+const IMAGE_WIDTH = 750;
+const IMAGE_HEIGHT = 500;
 
 /**
  * Conteúdo fictício, próprio deste capítulo — não é o mesmo dado da seção
  * `Projects` antiga (que sai de cena quando os 6 capítulos substituírem
- * as seções herdadas da Fase 12 anterior).
+ * as seções herdadas da Fase 12 anterior). As imagens são mockups de UI
+ * gerados por IA (fornecidos pelo usuário), não capturas de produtos reais.
  */
 const PROJECTS: DeployProject[] = [
   {
@@ -27,6 +37,7 @@ const PROJECTS: DeployProject[] = [
     description:
       "Dashboard pessoal de finanças com categorização automática de despesas e metas de economia mês a mês.",
     stack: ["React", "TypeScript", "Recharts"],
+    image: financasPreview,
   },
   {
     slug: "app-habitos",
@@ -35,6 +46,7 @@ const PROJECTS: DeployProject[] = [
     description:
       "Aplicativo de acompanhamento de hábitos com streaks visuais e lembretes contextuais, pensado para uso diário.",
     stack: ["React Native", "TypeScript"],
+    image: habitoPreview,
   },
   {
     slug: "loja-capsula",
@@ -43,6 +55,7 @@ const PROJECTS: DeployProject[] = [
     description:
       "E-commerce minimalista para coleções cápsula, com foco em performance de checkout e catálogo pequeno.",
     stack: ["Next.js", "Tailwind CSS"],
+    image: lojaPreview,
   },
 ];
 
@@ -62,6 +75,14 @@ function ProjectWindow({ project }: { project: DeployProject }) {
       </div>
 
       <div className="relative overflow-hidden">
+        <img
+          src={project.image}
+          alt={`Prévia da interface do projeto ${project.title}`}
+          width={IMAGE_WIDTH}
+          height={IMAGE_HEIGHT}
+          loading="lazy"
+          className="aspect-[3/2] w-full object-cover object-top transition-transform duration-slower ease-standard group-hover:scale-105"
+        />
         <div
           aria-hidden="true"
           className="absolute inset-0 bg-accent-gradient opacity-0 transition-opacity duration-base ease-standard group-hover:opacity-10"
@@ -70,7 +91,7 @@ function ProjectWindow({ project }: { project: DeployProject }) {
           type="button"
           onClick={() => setIsExpanded((v) => !v)}
           aria-expanded={isExpanded}
-          className="relative block w-full px-6 py-10 text-left"
+          className="relative block w-full px-6 py-6 text-left"
         >
           <h3 className="font-display text-lg font-semibold text-text-primary">
             {project.title}
@@ -143,7 +164,7 @@ export function Deploy() {
       ref={ref}
       id="deploy"
       aria-label="Capítulo 3: Deploy"
-      className="min-h-[100dvh] bg-canvas py-24"
+      className="min-h-[100dvh] bg-canvas/80 py-24"
     >
       <m.div style={style}>
         <Container>

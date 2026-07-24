@@ -12,6 +12,15 @@ interface UseChapterTiltOptions<T extends HTMLElement> {
    * saída (inclinando pro próximo capítulo) é animada.
    */
   withEntry?: boolean;
+  /**
+   * Falso pra não aplicar `rotateX`/`scale` — só o Boot usa isso. Ele é o
+   * único capítulo já visível na primeira pintura da página (os outros
+   * ainda nem foram renderizados), então o pequeno "assentamento" do
+   * `useScroll` logo após o mount conta como Cumulative Layout Shift de
+   * verdade (medido via Lighthouse) — só a opacidade continua (não desloca
+   * a caixa do elemento, não afeta CLS).
+   */
+  withRotate?: boolean;
 }
 
 /**
@@ -25,6 +34,7 @@ interface UseChapterTiltOptions<T extends HTMLElement> {
 export function useChapterTilt<T extends HTMLElement = HTMLElement>({
   ref: externalRef,
   withEntry = true,
+  withRotate = true,
 }: UseChapterTiltOptions<T> = {}) {
   const internalRef = useRef<T>(null);
   const ref = externalRef ?? internalRef;
@@ -39,16 +49,9 @@ export function useChapterTilt<T extends HTMLElement = HTMLElement>({
   });
 
   const input = withEntry ? [0, 0.5, 1] : [0, 1];
-  const rotateOutput = shouldReduceMotion
-    ? input.map(() => 0)
-    : withEntry
-      ? [8, 0, -8]
-      : [0, -8];
-  const scaleOutput = shouldReduceMotion
-    ? input.map(() => 1)
-    : withEntry
-      ? [0.94, 1, 0.94]
-      : [1, 0.94];
+  const skipRotate = shouldReduceMotion || !withRotate;
+  const rotateOutput = skipRotate ? input.map(() => 0) : withEntry ? [8, 0, -8] : [0, -8];
+  const scaleOutput = skipRotate ? input.map(() => 1) : withEntry ? [0.94, 1, 0.94] : [1, 0.94];
   const opacityInput = withEntry ? [0, 0.2, 0.8, 1] : [0, 0.8, 1];
   const opacityOutput = withEntry ? [0, 1, 1, 0] : [1, 1, 0];
 
@@ -56,5 +59,8 @@ export function useChapterTilt<T extends HTMLElement = HTMLElement>({
   const scale = useTransform(scrollYProgress, input, scaleOutput);
   const opacity = useTransform(scrollYProgress, opacityInput, opacityOutput);
 
-  return { ref, style: { rotateX, scale, opacity, transformPerspective: 1000 } };
+  return {
+    ref,
+    style: { rotateX, scale, opacity, transformPerspective: withRotate ? 1000 : undefined },
+  };
 }

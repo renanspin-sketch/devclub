@@ -73,7 +73,7 @@ Legenda: ☐ pendente · ☑ concluído
 
 ## Fase 10 — Performance
 
-- [x] Lighthouse ≥ 95 em todas as categorias — mobile 95-96, desktop 100, accessibility/best-practices/SEO 100 (2 execuções limpas consecutivas, ver CHANGELOG v0.11.0)
+- [x] Lighthouse ≥ 95 em todas as categorias — mobile 95-96, desktop 100, accessibility/best-practices/SEO 100 (2 execuções limpas consecutivas, ver CHANGELOG v0.11.0). **Atualização 2026-07-24**: a expansão de 6 capítulos + fundo global + fotos de projeto (Fase 12) derrubou o mobile pra 83 — real, não ruído (CLS do efeito de digitação do Boot, imagem de fundo desproporcional pra viewport mobile, capítulos novos carregando eager). Corrigido parcialmente, mobile em 92 (desktop segue 100); ver decisão em CHANGELOG — fica como item aberto, não escondido atrás de um número antigo
 - [x] Code splitting por seção — `About`/`Projects`/`Skills`/`Contact` via `React.lazy`; `Hero` fica fora (é o LCP)
 - [x] Otimização de imagens (formatos modernos, dimensões explícitas) — as 2 imagens da seção Projetos usam `loading="lazy"` + `width`/`height` explícitos. WebP/AVIF com fallback fica pendente para quando o volume de imagens justificar o pipeline
 - [x] Análise de bundle size — `rollup-plugin-visualizer` (`npm run build:analyze`) usado para medir antes/depois; JS principal caiu de 303.45 kB (98.74 kB gzip) para 253.43 kB (84.56 kB gzip) com `LazyMotion`, mais 5 chunks de seção de 0.2-3 KB cada
@@ -108,7 +108,8 @@ Decisão do usuário em 2026-07-24: o DevClub deixa de ser só um portfólio pes
     - [x] Connect — alunos/mentores/comunidade/empresas parceiras como malha de nós (todo par conectado, não um hub único), pulsando continuamente + pontos-satélite decorativos
     - [x] Hire — fechamento com callback à headline de abertura ("Do primeiro console.log à primeira contratação"), CTA primário rola até a seção `#contato` real (não é link morto)
     - [x] Transição 3D conectando os capítulos (`useChapterTilt`) — cada capítulo inclina/recua sutilmente ao entrar e sair da viewport, sem depender de WebGL/vídeo, ver decisão em `CHANGELOG.md`
-    - [x] Imagem de fundo (código estilizado, gerada por IA) no capítulo Boot, com scrim escuro pra manter contraste AA
+    - [x] Imagem de fundo (código estilizado, gerada por IA) aplicada no site inteiro (fixa, atrás de header/conteúdo/footer), variantes mobile/desktop separadas — cada seção com fundo próprio deixa passar um pouco dessa camada
+    - [x] Fotos reais (mockups de UI gerados por IA, fornecidos pelo usuário) nos 3 cards do capítulo Deploy — Painel Financeiro, App de Hábitos, Loja Cápsula
     - [ ] Indicador de progresso lateral ("Capítulo X/6") e paleta evolutiva entre os 6 capítulos como conjunto — adiado de propósito até os 6 existirem para orquestrar juntos, ver decisão em `CHANGELOG.md`
     - [ ] Remover as seções antigas redundantes (`Formacoes`↔Level Up, `Community`↔Connect, `Hero`↔Boot/Hire) de `Home.tsx` — hoje ainda coexistem
   - [ ] **Fase C — "Nossos Alunos"**: depoimentos fictícios, filtros por mídia/profissão anterior, paginação

@@ -19,7 +19,7 @@ export function Hire() {
       ref={ref}
       id="hire"
       aria-label="Capítulo 6: Hire"
-      className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden bg-canvas px-6 py-24 text-center"
+      className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden bg-canvas/80 px-6 py-24 text-center"
     >
       <div
         aria-hidden="true"

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { m, useReducedMotion } from "framer-motion";
 
-import bootBackground from "@/assets/backgrounds/boot-code.webp";
 import { useChapterTilt } from "@/hooks/useChapterTilt";
 
 const PROMPT = "$ ";
@@ -19,7 +18,7 @@ const TYPE_SPEED_MS = 45;
  */
 export function Boot() {
   const shouldReduceMotion = useReducedMotion();
-  const { ref, style } = useChapterTilt<HTMLElement>({ withEntry: false });
+  const { ref, style } = useChapterTilt<HTMLElement>({ withEntry: false, withRotate: false });
   const [typedLength, setTypedLength] = useState(
     shouldReduceMotion ? QUESTION.length : 0,
   );
@@ -38,26 +37,24 @@ export function Boot() {
       ref={ref}
       id="boot"
       aria-label="Capítulo 1: Boot"
-      className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden bg-black px-6 text-center"
+      className="relative flex min-h-[100dvh] items-center justify-center overflow-hidden bg-black/80 px-6 text-center"
     >
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-black bg-cover bg-center"
-        style={{
-          // Overlay escuro combinado com a imagem numa única declaração de
-          // `background-image` (camadas de gradiente + imagem) — mantém o
-          // texto ciano legível por cima sem precisar de uma segunda div.
-          backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.78), rgba(0,0,0,0.88)), url(${bootBackground})`,
-        }}
-      />
-
       <m.div style={style} className="relative z-10 flex flex-col items-center">
         <p className="mb-6 font-mono text-xs uppercase tracking-widest text-text-muted">
           Capítulo 01 / 06 — Boot
         </p>
 
-        <h1 className="max-w-2xl font-mono text-2xl leading-snug text-accent-cyan sm:text-3xl md:text-4xl">
-          <span aria-hidden="true">
+        <h1 className="grid max-w-2xl font-mono text-2xl leading-snug text-accent-cyan sm:text-3xl md:text-4xl">
+          {/* Cópia invisível do texto completo, empilhada na mesma célula de
+              grid — reserva a altura final (2 linhas) desde o primeiro
+              paint, pra digitação não empurrar o conteúdo abaixo aos
+              poucos (esse "empurrão" contava como Cumulative Layout Shift
+              de verdade, medido via Lighthouse). */}
+          <span aria-hidden="true" className="invisible col-start-1 row-start-1">
+            {PROMPT}
+            {QUESTION}
+          </span>
+          <span aria-hidden="true" className="col-start-1 row-start-1">
             {PROMPT}
             {typedText}
             <span

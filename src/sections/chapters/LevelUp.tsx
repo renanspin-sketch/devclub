@@ -62,7 +62,7 @@ export function LevelUp() {
       ref={ref}
       id="level-up"
       aria-label="Capítulo 4: Level Up"
-      className="bg-canvas py-24"
+      className="bg-canvas/80 py-24"
     >
       <m.div style={style}>
         <Container>
