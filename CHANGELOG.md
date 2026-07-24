@@ -6,6 +6,18 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.21.0] — 2026-07-24
+
+### Adicionado
+
+- Capítulo 3 — `Deploy` (`src/sections/chapters/Deploy.tsx`): 3 projetos fictícios (Painel Financeiro, App de Hábitos, Loja Cápsula) apresentados como "janelas vivas" — mockup de barra de navegador (semáforo de 3 pontos + barra de endereço fake `devclub.dev/projetos/...`) em vez de card estático
+- Micro-interações: hover realça a janela (borda, sombra e um glow do gradiente de acento por trás do conteúdo); clique num botão real (`aria-expanded`) expande/recolhe descrição + stack técnica, com transição de altura via `AnimatePresence`/`framer-motion` e `prefers-reduced-motion` respeitado
+
+### Verificado
+
+- Estados de hover e expandido conferidos visualmente em desktop e mobile; conteúdo permanece legível empilhado no mobile mesmo com a barra de endereço truncando o slug
+- Zero violações de acessibilidade (axe-core), zero erros de console — o toggle usa `<button aria-expanded>` real, não uma `div` clicável
+
 ## [0.20.0] — 2026-07-24
 
 ### Adicionado

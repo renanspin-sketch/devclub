@@ -2,9 +2,10 @@ import { lazy, Suspense } from "react";
 
 import { Boot } from "@/sections/chapters/Boot";
 import { Build } from "@/sections/chapters/Build";
+import { Deploy } from "@/sections/chapters/Deploy";
 
-// TODO(Fase B): Boot e Build são os 2 primeiros dos 6 capítulos de
-// scrollytelling — os outros 4 (Deploy→Hire) ainda faltam. As seções
+// TODO(Fase B): Boot, Build e Deploy são os 3 primeiros dos 6 capítulos de
+// scrollytelling — os outros 3 (Level Up→Hire) ainda faltam. As seções
 // abaixo ainda são as antigas, mantidas até serem substituídas
 // capítulo a capítulo.
 const Formacoes = lazy(() =>
@@ -27,6 +28,7 @@ export function Home() {
     <>
       <Boot />
       <Build />
+      <Deploy />
       <Suspense fallback={null}>
         <Formacoes />
         <Stack />
