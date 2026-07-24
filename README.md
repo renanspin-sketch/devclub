@@ -53,6 +53,9 @@ npm run preview
 | `typecheck` | Valida os tipos sem emitir arquivos |
 | `build:analyze` | Gera o build com relatório visual do bundle (`dist/stats.html`) |
 | `lighthouse` | Builda produção e roda Lighthouse (mobile + desktop) contra ela |
+| `test` | Roda a suíte de testes uma vez |
+| `test:watch` | Roda a suíte em modo watch |
+| `test:coverage` | Roda a suíte com relatório de cobertura |
 
 ## Estrutura de pastas
 
@@ -65,6 +68,10 @@ Decisões estruturais, estratégias de componentização, hooks, performance e a
 ## Performance
 
 Lighthouse (build de produção, mobile + desktop): **mobile 95-96 · desktop 100 · accessibility 100 · best-practices 100 · SEO 100**. Reproduza com `npm run lighthouse`. Estratégias (code splitting por seção, `LazyMotion`, subsetting de fontes) detalhadas em [ARCHITECTURE.md](./ARCHITECTURE.md#estratégias-de-performance).
+
+## Testes
+
+Vitest + React Testing Library. 35 testes cobrindo o design system (100% dos componentes de UI) e as seções com lógica de verdade (`Header`, `Contact`, `Projects`) — escopo e justificativa em [ARCHITECTURE.md](./ARCHITECTURE.md#estratégias-de-testes). Rode com `npm run test` ou `npm run test:coverage`.
 
 ## Responsividade
 

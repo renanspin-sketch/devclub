@@ -80,9 +80,9 @@ Legenda: ☐ pendente · ☑ concluído
 
 ## Fase 11 — Testes
 
-- [ ] Testes unitários dos componentes do design system
-- [ ] Testes de integração das seções críticas
-- [ ] Definir cobertura mínima aceitável
+- [x] Testes unitários dos componentes do design system — `Button`, `Badge`, `Card`, `Input`, `IconButton` (100% statements) + hook `useCopyToClipboard`
+- [x] Testes de integração das seções críticas — `Header` (menu mobile, foco, Esc), `Contact` (copiar e-mail via Clipboard API), `Projects` (dados reais + estado vazio via mock de módulo). `Hero`/`About`/`Skills`/`Footer`/`App` deliberadamente fora do escopo — composição estática sem lógica própria, ver `ARCHITECTURE.md#estratégias-de-testes`
+- [x] Definir cobertura mínima aceitável — thresholds do Vitest calibrados sobre a cobertura real medida (70% statements / 89% branches / 63% functions / 74% lines), não um número escolhido a priori. 35 testes, 11 arquivos, todos passando
 
 ## Fase 12 — Deploy Final
 

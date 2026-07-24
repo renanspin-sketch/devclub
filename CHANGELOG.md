@@ -6,6 +6,21 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.12.0] — 2026-07-23
+
+### Adicionado
+
+- Vitest + React Testing Library + `@testing-library/user-event` + `jest-dom`, configurados em `vite.config.ts` (reaproveita alias e transform do Vite, sem build paralela)
+- `src/test/setup.ts`: mocks globais de `IntersectionObserver` e `matchMedia` (jsdom não implementa nenhum dos dois — necessários para qualquer componente que use `Reveal` ou `useReducedMotion`)
+- 35 testes em 11 arquivos: `Button`, `Badge`, `Card`, `Input`, `IconButton`, `Footer` (unitários), `useCopyToClipboard` (hook), `Header`, `Contact`, `Projects` + `Projects` estado vazio (integração)
+- Scripts `test`, `test:watch`, `test:coverage`
+- Threshold de cobertura no Vitest (`vite.config.ts`), calibrado sobre a cobertura real medida: 65% statements / 85% branches / 60% functions / 70% lines
+
+### Corrigido
+
+- `Object.assign(navigator, { clipboard: ... })` falha no jsdom porque `navigator.clipboard` é exposto como getter — trocado por `Object.defineProperty` com `configurable: true`
+- No teste do botão de copiar e-mail, `userEvent.setup()` instala seu próprio stub de `navigator.clipboard`, sobrescrevendo qualquer mock definido antes dele (ex.: em `beforeEach`). O mock precisa ser definido depois do `setup()`
+
 ## [0.11.0] — 2026-07-23
 
 ### Adicionado

@@ -4,6 +4,7 @@ dist-ssr
 *.local
 *.tsbuildinfo
 lighthouse-reports
+coverage
 
 # Editor / OS
 .DS_Store

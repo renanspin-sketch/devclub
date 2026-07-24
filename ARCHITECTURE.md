@@ -87,6 +87,19 @@ Ver detalhamento de tokens e estados em [DESIGN-SYSTEM.md](./DESIGN-SYSTEM.md). 
 
 Isso não elimina a necessidade de uma auditoria de conjunto: a Fase 09 rodou uma passada dedicada com [axe-core](https://github.com/dequelabs/axe-core) sobre a página inteira, mapeamento de tab order e revisão de landmarks — e mesmo com a disciplina por componente, encontrou problemas reais (dois tokens de cor fora do contraste mínimo, foco não devolvido ao fechar o menu mobile). A lição prática: contraste calculado manualmente deve ser tratado como estimativa até ser confirmado por ferramenta; `DESIGN-SYSTEM.md` documenta os valores já corrigidos e medidos. `SkipLink` (`src/components/layout/SkipLink.tsx`) é o primeiro elemento focável da página, permitindo pular a navegação do `Header` e ir direto ao `<main>`.
 
+## Estratégias de testes
+
+**Vitest** + **React Testing Library**, não Jest: o projeto já roda em Vite, e Vitest reaproveita a mesma configuração (alias `@/*`, transform do React) sem uma segunda cadeia de build para manter sincronizada. Testing Library é usado por filosofia, não só por popularidade — consultar por `getByRole`/`getByLabelText` força os testes a exercitar o componente do jeito que um usuário (ou leitor de tela) o acessaria, então um teste que passa já é, em algum grau, evidência de acessibilidade.
+
+Escopo escolhido para esta fase, e por quê:
+
+- **Componentes do design system** (`Button`, `Badge`, `Card`, `Input`, `IconButton`) têm 100% de cobertura de statements — são a base reutilizada por tudo, então um bug aqui se propaga para o site inteiro.
+- **`useCopyToClipboard`**: único hook customizado do projeto, com lógica assíncrona e efeito colateral (timer) — exatamente o tipo de código que "parece óbvio" mas quebra silenciosamente.
+- **Seções tratadas como críticas**: `Header` (estado de menu mobile, foco, Esc), `Contact` (Clipboard API, feedback assíncrono) e `Projects` (renderização condicional a partir de dados, estado vazio). São as únicas seções com lógica de verdade — ramos condicionais, estado, efeitos.
+- **Deliberadamente não testadas isoladamente**: `Hero`, `About`, `Skills`, `Footer` e `App` são composição de conteúdo estático — sem branches, sem estado próprio. Testá-las forçaria a reescrever, em formato de teste, o mesmo conteúdo já declarado no componente (teste que só quebra quando o texto muda, não quando a lógica quebra). Cobertas indiretamente pelos testes dos componentes de UI que elas reutilizam.
+
+Cobertura mínima é um piso medido, não uma meta escolhida a priori: rodei a suíte, extraí os números reais (70% statements / 89% branches / 63% functions / 74% lines em 2026-07-23) e configurei os thresholds do Vitest (`vite.config.ts`) alguns pontos abaixo disso — o suficiente pra pegar uma regressão real (alguém apaga um teste, ou adiciona um branch não coberto), sem exigir 100% artificial em código que não justifica o esforço.
+
 ## Escalabilidade futura
 
 A separação `components/ui` vs `sections` permite extrair o design system para um pacote independente sem reescrita, caso o projeto evolua para múltiplas superfícies (ex.: um blog técnico complementar). `data/` tipado como camada de conteúdo prepara o terreno para, no futuro, ser substituído por um CMS headless sem alterar a camada de apresentação.
