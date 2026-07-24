@@ -12,7 +12,7 @@ Cada decisão registrada aqui — e nos demais documentos do projeto — existe 
 
 ## Demonstração
 
-🔗 _(link do deploy será adicionado na Fase 12 — Deploy Final. Ver [ROADMAP.md](./ROADMAP.md))_
+🔗 _(link do deploy será adicionado na Fase 13 — Deploy Final. Ver [ROADMAP.md](./ROADMAP.md))_
 
 ## Tecnologias
 
@@ -83,7 +83,7 @@ HTML semântico, navegação completa por teclado, contraste validado (WCAG AA) 
 
 ## Deploy
 
-_(A definir na Fase 12. Candidatos avaliados: Vercel e Netlify — ver [ROADMAP.md](./ROADMAP.md).)_
+_(A definir na Fase 13. Candidatos avaliados: Vercel e Netlify — ver [ROADMAP.md](./ROADMAP.md).)_
 
 ## Melhorias futuras
 

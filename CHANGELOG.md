@@ -6,6 +6,19 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.14.0] — 2026-07-24
+
+### Alterado — reposicionamento do DevClub
+
+Início do reposicionamento do DevClub de portfólio pessoal para marca/comunidade de formação em tecnologia (decisão do usuário — ver contexto no histórico do projeto). Primeira fatia: `Header` e `Hero`.
+
+- `Header`: adiciona link "Área do aluno" e CTA "Quero fazer parte", agrupados à direita do nav com um separador visual — replica a estrutura de referência (site de terceiro usado só como referência de layout, não de conteúdo) sem copiar conteúdo, pessoas ou logos reais
+- `Hero`: manchete reescrita em torno do storytelling "Do primeiro `console.log` à primeira contratação"; texto de apoio e CTAs ("Quero fazer parte" / "Ver projetos") refletindo comunidade/formação em vez de portfólio individual
+
+### Decisões
+
+- O usuário forneceu capturas de tela de um site real (aparentemente Asimov Academy) como referência para o restante do reposicionamento. Usar apenas a **estrutura/layout** das seções — não o conteúdo: as capturas incluem fotos e nomes de pessoas reais (instrutores/alunos), logos de empresas reais como prova social (Facebook, iFood, OAB, UFRJ) e alegações verificáveis específicas de outro negócio (reconhecimento do MEC, +30 mil alunos, garantia de reembolso de 7 dias). Nenhuma dessas alegações será replicada — cada seção nova recebe conteúdo próprio do DevClub, e três blocos da referência (certificação MEC, contadores de alunos, garantia de reembolso) ficam de fora por representarem afirmações factuais que não são verdadeiras para este projeto
+
 ## [0.13.0] — 2026-07-23
 
 ### Adicionado

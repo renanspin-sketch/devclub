@@ -10,7 +10,7 @@ export interface ContactContent {
 
 /**
  * Conteúdo fictício — placeholder claramente substituível pelos dados
- * reais antes da Fase 12 (Deploy Final). Ver ROADMAP.md.
+ * reais antes da Fase 13 (Deploy Final). Ver ROADMAP.md.
  */
 export const contactContent: ContactContent = {
   eyebrow: "Vamos conversar",

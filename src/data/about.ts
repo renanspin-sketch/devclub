@@ -18,7 +18,7 @@ export interface AboutContent {
 
 /**
  * Conteúdo fictício — placeholder claramente substituível pelo texto real
- * antes da Fase 12 (Deploy Final). Ver ROADMAP.md.
+ * antes da Fase 13 (Deploy Final). Ver ROADMAP.md.
  */
 export const aboutContent: AboutContent = {
   eyebrow: "Quem constrói",

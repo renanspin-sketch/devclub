@@ -20,7 +20,7 @@ export interface Project {
 
 /**
  * Conteúdo fictício — placeholder claramente substituível pelos projetos
- * reais antes da Fase 12 (Deploy Final). Ver ROADMAP.md.
+ * reais antes da Fase 13 (Deploy Final). Ver ROADMAP.md.
  *
  * As duas entradas com `image` são referências visuais de UI (exploração
  * de design, sem código associado) — por isso não têm `repoUrl`/`demoUrl`

@@ -12,3 +12,7 @@ Thumbs.db
 
 # Claude Code local settings
 .claude/
+
+# Agent tooling (installed skills/plugins) — not part of the product
+.agents/
+skills-lock.json

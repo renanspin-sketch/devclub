@@ -5,7 +5,7 @@ export interface SkillCategory {
 
 /**
  * Conteúdo fictício — placeholder claramente substituível pelas skills
- * reais antes da Fase 12 (Deploy Final). Ver ROADMAP.md.
+ * reais antes da Fase 13 (Deploy Final). Ver ROADMAP.md.
  */
 export const skillCategories: SkillCategory[] = [
   {

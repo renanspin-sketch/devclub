@@ -2,6 +2,8 @@ import { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import type { NavItem } from "@/types/nav";
 import { IconButton } from "@/components/ui/IconButton";
+import { buttonVariants } from "@/components/ui/button-variants";
+import { cn } from "@/lib/cn";
 
 import { Container } from "./Container";
 
@@ -31,6 +33,20 @@ function MenuIcon({ open }: { open: boolean }) {
   );
 }
 
+function PersonIcon() {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4" aria-hidden="true">
+      <circle cx="10" cy="6.5" r="3.25" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M3.5 17c.9-3.6 4-5.5 6.5-5.5s5.6 1.9 6.5 5.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 export function Header({ navItems = [] }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuId = useId();
@@ -54,7 +70,7 @@ export function Header({ navItems = [] }: HeaderProps) {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-canvas/80 backdrop-blur">
-      <Container className="flex h-16 items-center justify-between">
+      <Container className="flex h-16 items-center justify-between gap-4">
         <a
           href="#top"
           onClick={() => setIsMenuOpen(false)}
@@ -65,20 +81,35 @@ export function Header({ navItems = [] }: HeaderProps) {
 
         {navItems.length > 0 && (
           <>
-            <nav aria-label="Navegação principal" className="hidden md:block">
-              <ul className="flex items-center gap-6">
-                {navItems.map((item) => (
-                  <li key={item.label}>
-                    <a
-                      href={item.href}
-                      className="text-sm text-text-secondary transition duration-fast ease-standard hover:text-text-primary"
-                    >
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
+            <div className="hidden items-center gap-6 md:flex">
+              <nav aria-label="Navegação principal">
+                <ul className="flex items-center gap-6">
+                  {navItems.map((item) => (
+                    <li key={item.label}>
+                      <a
+                        href={item.href}
+                        className="text-sm text-text-secondary transition duration-fast ease-standard hover:text-text-primary"
+                      >
+                        {item.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+
+              <div className="flex items-center gap-4 border-l border-border pl-6">
+                <a
+                  href="#contato"
+                  className="flex items-center gap-1.5 text-sm text-text-secondary transition duration-fast ease-standard hover:text-text-primary"
+                >
+                  <PersonIcon />
+                  Área do aluno
+                </a>
+                <a href="#contato" className={buttonVariants({ variant: "primary", size: "sm" })}>
+                  Quero fazer parte
+                </a>
+              </div>
+            </div>
 
             <IconButton
               ref={menuButtonRef}
@@ -122,6 +153,23 @@ export function Header({ navItems = [] }: HeaderProps) {
                       </a>
                     </li>
                   ))}
+                  <li className="flex flex-col gap-2 pt-3">
+                    <a
+                      href="#contato"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="flex items-center gap-1.5 rounded-md px-2 py-2 text-text-secondary transition duration-fast ease-standard hover:bg-surface hover:text-text-primary"
+                    >
+                      <PersonIcon />
+                      Área do aluno
+                    </a>
+                    <a
+                      href="#contato"
+                      onClick={() => setIsMenuOpen(false)}
+                      className={cn(buttonVariants({ variant: "primary", size: "md" }), "w-full")}
+                    >
+                      Quero fazer parte
+                    </a>
+                  </li>
                 </ul>
               </Container>
             </m.nav>

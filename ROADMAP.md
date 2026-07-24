@@ -84,7 +84,24 @@ Legenda: ☐ pendente · ☑ concluído
 - [x] Testes de integração das seções críticas — `Header` (menu mobile, foco, Esc), `Contact` (copiar e-mail via Clipboard API), `Projects` (dados reais + estado vazio via mock de módulo). `Hero`/`About`/`Skills`/`Footer`/`App` deliberadamente fora do escopo — composição estática sem lógica própria, ver `ARCHITECTURE.md#estratégias-de-testes`
 - [x] Definir cobertura mínima aceitável — thresholds do Vitest calibrados sobre a cobertura real medida (70% statements / 89% branches / 63% functions / 74% lines), não um número escolhido a priori. 35 testes, 11 arquivos, todos passando
 
-## Fase 12 — Deploy Final
+## Fase 12 — Reposicionamento: DevClub como plataforma/comunidade
+
+Decisão do usuário em 2026-07-24: o DevClub deixa de ser só um portfólio pessoal e passa a se posicionar como marca/comunidade de formação em tecnologia ("Do primeiro `console.log` à primeira contratação"). Estrutura de referência vem de capturas de tela de um site real de terceiro — reaproveitada só como layout/estrutura, nunca como conteúdo (sem pessoas, empresas ou alegações reais de terceiros). Ver `CHANGELOG.md` v0.14.0 para o detalhamento da decisão.
+
+- [x] `Header`: nav + "Área do aluno" + CTA "Quero fazer parte"
+- [x] `Hero`: manchete e copy em torno do storytelling console.log → contratação
+- [ ] Seção "Formações" (trilhas de estudo, scroll lateral)
+- [ ] Seção "Stack ensinada" (equivalente honesto ao bloco "modelos ilimitados" da referência)
+- [ ] Seção "Comunidade" (mentoria, networking — sem alegações não verificáveis)
+- [ ] Seção "Plataforma" (preview conceitual, não screenshot de produto real)
+- [ ] Seção "Mentores" com placeholders claramente fictícios (sem fotos de pessoas reais)
+- [ ] Seção FAQ
+- [ ] Footer expandido
+- [ ] Reconciliar `About`/`Contact`/`Skills` existentes com o novo posicionamento (hoje ainda escritos em primeira pessoa, como portfólio individual)
+- [ ] Seção de scroll narrativo em capítulos (Boot/Build/Deploy/Level Up/Connect/Hire) com imagens geradas via Higgsfield — aguardando imagens de referência do usuário
+- **Fora do escopo, de propósito** (alegações factuais que não são verdadeiras para este projeto): certificação MEC, contadores de alunos/números de escala, garantia de reembolso de produto pago, depoimento em vídeo real
+
+## Fase 13 — Deploy Final
 
 - [ ] Escolha de plataforma (Vercel/Netlify)
 - [ ] Domínio e SEO final (meta tags, Open Graph, sitemap)
