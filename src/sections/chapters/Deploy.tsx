@@ -24,9 +24,7 @@ const IMAGE_WIDTH = 750;
 const IMAGE_HEIGHT = 500;
 
 /**
- * Conteúdo fictício, próprio deste capítulo — não é o mesmo dado da seção
- * `Projects` antiga (que sai de cena quando os 6 capítulos substituírem
- * as seções herdadas da Fase 12 anterior). As imagens são mockups de UI
+ * Conteúdo fictício, próprio deste capítulo. As imagens são mockups de UI
  * gerados por IA (fornecidos pelo usuário), não capturas de produtos reais.
  */
 const PROJECTS: DeployProject[] = [
@@ -164,7 +162,7 @@ export function Deploy() {
       ref={ref}
       id="deploy"
       aria-label="Capítulo 3: Deploy"
-      className="min-h-[100dvh] bg-canvas/80 py-24"
+      className="relative min-h-[100dvh] bg-canvas/80 py-24"
     >
       <m.div style={style}>
         <Container>

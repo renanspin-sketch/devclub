@@ -49,10 +49,9 @@ function LockIcon() {
 }
 
 /**
- * Capítulo 4 — Level Up. As trilhas de formação (mesmo dado de
- * `src/data/tracks.ts`, usado também na seção "Formações") reaparecem como
- * uma trilha vertical de skill tree: os fundamentos já "desbloqueados",
- * as especializações aparecem como próximo nível.
+ * Capítulo 4 — Level Up. As trilhas de formação (`src/data/tracks.ts`)
+ * aparecem como uma trilha vertical de skill tree: os fundamentos já
+ * "desbloqueados", as especializações aparecem como próximo nível.
  */
 export function LevelUp() {
   const { ref, style } = useChapterTilt<HTMLElement>();
@@ -62,7 +61,7 @@ export function LevelUp() {
       ref={ref}
       id="level-up"
       aria-label="Capítulo 4: Level Up"
-      className="bg-canvas/80 py-24"
+      className="relative bg-canvas/80 py-24"
     >
       <m.div style={style}>
         <Container>

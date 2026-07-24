@@ -2,11 +2,11 @@ import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { Contact } from "./Contact";
+import { Hire } from "./Hire";
 import { contactContent } from "@/data/contact";
 
-describe("Contact", () => {
-  it("botão de e-mail copia o endereço e dá feedback visual", async () => {
+describe("Hire", () => {
+  it("CTA primário copia o e-mail e dá feedback visual", async () => {
     // userEvent.setup() instala seu próprio stub de clipboard — por isso o
     // mock precisa ser definido DEPOIS do setup(), não antes (um
     // Object.defineProperty em beforeEach seria sobrescrito).
@@ -18,10 +18,10 @@ describe("Contact", () => {
       writable: true,
     });
 
-    render(<Contact />);
+    render(<Hire />);
 
     const copyButton = screen.getByRole("button", {
-      name: `Copiar e-mail: ${contactContent.email}`,
+      name: `Quero fazer parte — copiar e-mail: ${contactContent.email}`,
     });
     await user.click(copyButton);
 
@@ -32,13 +32,13 @@ describe("Contact", () => {
   });
 
   it("link 'Enviar e-mail' usa mailto: com o endereço correto", () => {
-    render(<Contact />);
+    render(<Hire />);
     const mailLink = screen.getByRole("link", { name: "Enviar e-mail" });
     expect(mailLink).toHaveAttribute("href", `mailto:${contactContent.email}`);
   });
 
   it("renderiza todos os links sociais do conteúdo", () => {
-    render(<Contact />);
+    render(<Hire />);
     for (const social of contactContent.socialLinks) {
       expect(screen.getByRole("link", { name: social.label })).toHaveAttribute(
         "href",

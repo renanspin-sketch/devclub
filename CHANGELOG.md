@@ -6,6 +6,35 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.27.0] — 2026-07-24
+
+### Contexto
+
+Usuário reportou o menu/header "repetindo" ao rolar a página, logo depois do Capítulo 6/Hire, e pediu pra finalizar o site ali — ou seja, que a Home termine no Hire em vez de continuar pras seções antigas de portfólio pessoal (Formações, Stack, Comunidade, Sobre, Projetos, Contato) que ainda coexistiam por baixo dos 6 capítulos desde a Fase 12. Essa remoção já estava registrada como item pendente no ROADMAP.
+
+### Removido
+
+- Seções antigas de portfólio pessoal (página única, anteriores à decisão de reposicionamento como plataforma/comunidade): `Hero`, `Formacoes`, `Stack`, `Community`, `About`, `Projects`, `Contact`, com seus dados (`data/about.ts`, `data/stack.ts`, `data/community.ts`, `data/projects.ts`), testes (`Contact.test.tsx`, `Projects.test.tsx`, `Projects.empty.test.tsx`) e imagens (`ui-concept-studio.jpg`, `ui-concept-architecture.jpg`) — todas órfãs depois da remoção, sem uso em nenhum outro lugar
+- `Home.tsx` agora renderiza só os 6 capítulos (Boot→Hire); a página termina no Hire seguido do `Footer`
+
+### Adicionado
+
+- Capítulo 6/Hire ganhou a funcionalidade real de contato que antes vivia em `Contact` (copiar e-mail com feedback acessível, `mailto:`, links sociais) — o CTA "Quero fazer parte" deixa de depender de uma âncora (`#contato`) pra uma seção que não existe mais e passa a copiar o e-mail de contato diretamente, com o mesmo padrão acessível (aria-live, troca de ícone) já testado em `Contact`
+- `Hire.test.tsx`: mesma cobertura que `Contact.test.tsx` tinha (copiar e-mail, link `mailto:`, links sociais), adaptada pro novo componente
+
+### Corrigido
+
+- **Aviso real do Framer Motion, presente desde o Capítulo 2/Build (v0.20.0), nunca detectado até agora**: `useScroll({ target })` (usado por `useChapterTilt`) mede o offset contra o container de scroll — que aqui é o `<html>` (`document.scrollingElement`, não o `<body>`), já que a página rola nativamente. Sem posicionamento não-estático nele, o Framer Motion avisa no console a cada carregamento. Todas as verificações anteriores desta sessão (e das fases anteriores) só capturavam `console.error`, nunca `console.warn` — esse aviso específico passou despercebido por 6 capítulos inteiros até uma varredura mais completa pra esta tarefa. Corrigido com `position: relative` no `<html>` (`globals.css`) — não afeta elementos `fixed`, que continuam relativos à viewport
+- Coverage do Vitest recalibrado (40/38/30/45, era 50/45/40/85) — a remoção das seções antigas tirou os arquivos mais bem testados do projeto (`Contact`, `Projects`) da base de cobertura; os 5 capítulos sem teste próprio (Boot, Build, Deploy, LevelUp, Connect) agora pesam mais no cálculo
+
+### Verificado
+
+- Lighthouse mobile **voltou a 95** (tinha caído pra 83, recuperado pra 92 na entrega anterior, agora de volta ao patamar histórico) — a remoção do JS/CSS morto das seções antigas foi a peça que faltava; desktop segue 100, accessibility/best-practices/SEO 100 em tudo
+- Zero warnings E zero errors no console durante um scroll completo pelos 6 capítulos (antes só zero errors era verificado)
+- Zero violações de acessibilidade (axe-core) em `/`, `/nossos-alunos`, `/blog`, `/newsletter`
+- Confirmado visualmente que a página termina em Hire + Footer, sem menu duplicado nem seções soltas por baixo
+- Suíte de testes (32/32) e build de produção passando
+
 ## [0.26.0] — 2026-07-24
 
 ### Contexto

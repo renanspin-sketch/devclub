@@ -8,6 +8,14 @@
   }
 
   html {
+    /* `relative`: `document.scrollingElement` é o `<html>` (não o body) —
+       é ele que o Framer Motion (`useScroll` com `target`, usado pelo
+       `useChapterTilt`) trata como container de scroll, já que a página
+       rola nativamente (sem div de scroll customizada). Sem posicionamento
+       não-estático nele, o Framer Motion acusa aviso no console mesmo com
+       o cálculo correto (não afeta elementos `fixed`, que continuam
+       relativos à viewport). */
+    position: relative;
     color-scheme: dark;
   }
 

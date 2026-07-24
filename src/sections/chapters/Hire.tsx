@@ -1,18 +1,46 @@
 import { m } from "framer-motion";
 
+import { Button } from "@/components/ui/Button";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { Reveal } from "@/components/ui/Reveal";
 import { Container } from "@/components/layout/Container";
 import { useChapterTilt } from "@/hooks/useChapterTilt";
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
+import { contactContent } from "@/data/contact";
+
+function CopyIcon({ copied }: { copied: boolean }) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4" aria-hidden="true">
+      {copied ? (
+        <path
+          d="M4 10l4 4 8-8"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      ) : (
+        <path
+          d="M7 7h8v8H7V7Zm-2 2H4a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1v-1"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      )}
+    </svg>
+  );
+}
 
 /**
- * Capítulo 6 — Hire, fechamento da jornada de 6 capítulos. O CTA aponta
- * pra `#contato`, a seção real (com cópia de e-mail funcional) que ainda
- * segue renderizada em `Home` — não é um link morto pra uma página de
- * inscrição que não existe.
+ * Capítulo 6 — Hire, fechamento da jornada de 6 capítulos e fim da página
+ * (as seções antigas que existiam abaixo dele foram removidas — Hire
+ * herda a funcionalidade real de contato que estava em `Contact`, que
+ * não existe mais como seção própria).
  */
 export function Hire() {
   const { ref, style } = useChapterTilt<HTMLElement>();
+  const { isCopied, copy } = useCopyToClipboard();
 
   return (
     <section
@@ -54,19 +82,47 @@ export function Hire() {
 
           <Reveal delay={0.3}>
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <a
-                href="#contato"
-                className={buttonVariants({ variant: "primary", size: "lg" })}
+              <Button
+                type="button"
+                variant="primary"
+                size="lg"
+                onClick={() => copy(contactContent.email)}
+                aria-label={
+                  isCopied
+                    ? "E-mail copiado para a área de transferência"
+                    : `Quero fazer parte — copiar e-mail: ${contactContent.email}`
+                }
               >
-                Quero fazer parte
-              </a>
+                {isCopied ? "Copiado!" : "Quero fazer parte"}
+                <CopyIcon copied={isCopied} />
+              </Button>
               <a
-                href="#level-up"
+                href={`mailto:${contactContent.email}`}
                 className={buttonVariants({ variant: "secondary", size: "lg" })}
               >
-                Ver trilhas de formação
+                Enviar e-mail
               </a>
             </div>
+            <p aria-live="polite" className="sr-only">
+              {isCopied ? "E-mail copiado para a área de transferência." : ""}
+            </p>
+          </Reveal>
+
+          <Reveal delay={0.4}>
+            <ul className="flex items-center gap-6 pt-2 text-sm font-medium">
+              {contactContent.socialLinks.map((link) => (
+                <li key={link.label}>
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-text-secondary transition duration-fast ease-standard hover:text-text-primary"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </Reveal>
         </Container>
       </m.div>

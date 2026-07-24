@@ -73,7 +73,7 @@ Legenda: ☐ pendente · ☑ concluído
 
 ## Fase 10 — Performance
 
-- [x] Lighthouse ≥ 95 em todas as categorias — mobile 95-96, desktop 100, accessibility/best-practices/SEO 100 (2 execuções limpas consecutivas, ver CHANGELOG v0.11.0). **Atualização 2026-07-24**: a expansão de 6 capítulos + fundo global + fotos de projeto (Fase 12) derrubou o mobile pra 83 — real, não ruído (CLS do efeito de digitação do Boot, imagem de fundo desproporcional pra viewport mobile, capítulos novos carregando eager). Corrigido parcialmente, mobile em 92 (desktop segue 100); ver decisão em CHANGELOG — fica como item aberto, não escondido atrás de um número antigo
+- [x] Lighthouse ≥ 95 em todas as categorias — mobile 95-96, desktop 100, accessibility/best-practices/SEO 100 (2 execuções limpas consecutivas, ver CHANGELOG v0.11.0). **Atualização 2026-07-24**: a expansão de 6 capítulos + fundo global + fotos de projeto (Fase 12) derrubou o mobile pra 83 — real, não ruído (CLS do efeito de digitação do Boot, imagem de fundo desproporcional pra viewport mobile, capítulos novos carregando eager). Corrigido em duas passadas (ver CHANGELOG v0.26.0 e v0.27.0): mobile recuperou pra **95**, de volta ao patamar original, depois que as seções antigas (fonte do JS/CSS ocioso restante) foram removidas de vez
 - [x] Code splitting por seção — `About`/`Projects`/`Skills`/`Contact` via `React.lazy`; `Hero` fica fora (é o LCP)
 - [x] Otimização de imagens (formatos modernos, dimensões explícitas) — as 2 imagens da seção Projetos usam `loading="lazy"` + `width`/`height` explícitos. WebP/AVIF com fallback fica pendente para quando o volume de imagens justificar o pipeline
 - [x] Análise de bundle size — `rollup-plugin-visualizer` (`npm run build:analyze`) usado para medir antes/depois; JS principal caiu de 303.45 kB (98.74 kB gzip) para 253.43 kB (84.56 kB gzip) com `LazyMotion`, mais 5 chunks de seção de 0.2-3 KB cada
@@ -81,37 +81,37 @@ Legenda: ☐ pendente · ☑ concluído
 ## Fase 11 — Testes
 
 - [x] Testes unitários dos componentes do design system — `Button`, `Badge`, `Card`, `Input`, `IconButton` (100% statements) + hook `useCopyToClipboard`
-- [x] Testes de integração das seções críticas — `Header` (menu mobile, foco, Esc), `Contact` (copiar e-mail via Clipboard API), `Projects` (dados reais + estado vazio via mock de módulo). `Hero`/`About`/`Skills`/`Footer`/`App` deliberadamente fora do escopo — composição estática sem lógica própria, ver `ARCHITECTURE.md#estratégias-de-testes`
-- [x] Definir cobertura mínima aceitável — thresholds do Vitest calibrados sobre a cobertura real medida (70% statements / 89% branches / 63% functions / 74% lines), não um número escolhido a priori. 35 testes, 11 arquivos, todos passando
+- [x] Testes de integração das seções críticas — `Header` (menu mobile, foco, Esc), Capítulo 6/`Hire` (copiar e-mail via Clipboard API, mesmo teste que era do antigo `Contact`). `Footer`/`App`/os outros 5 capítulos deliberadamente fora do escopo — composição estática ou sem lógica própria testável ainda, ver `ARCHITECTURE.md#estratégias-de-testes`
+- [x] Definir cobertura mínima aceitável — thresholds do Vitest calibrados sobre a cobertura real medida, não um número escolhido a priori (recalibrado de novo em 2026-07-24 após a remoção das seções antigas, ver `CHANGELOG.md`). 32 testes, 9 arquivos, todos passando
 
 ## Fase 12 — Reposicionamento: DevClub como plataforma/comunidade
 
 Decisão do usuário em 2026-07-24: o DevClub deixa de ser só um portfólio pessoal e passa a se posicionar como marca/comunidade de formação em tecnologia ("Do primeiro `console.log` à primeira contratação"). Estrutura de referência vem de capturas de tela de um site real de terceiro — reaproveitada só como layout/estrutura, nunca como conteúdo (sem pessoas, empresas ou alegações reais de terceiros). Ver `CHANGELOG.md` v0.14.0 para o detalhamento da decisão.
 
 - [x] `Header`: nav + "Área do aluno" + CTA "Quero fazer parte"
-- [x] `Hero`: manchete e copy em torno do storytelling console.log → contratação
-- [x] Seção "Formações" (trilhas de estudo, scroll lateral com `tabIndex` para navegação por teclado — sem isso, contêineres de overflow sem filhos focáveis ficam inacessíveis por teclado)
-- [x] Seção "Stack ensinada" (equivalente honesto ao bloco "modelos ilimitados" da referência) — implementada reconciliando a antiga seção `Skills` (que já era um grid categorizado de badges, mesma forma visual) em vez de criar conteúdo duplicado; resolve também o item de reconciliação abaixo
-- [x] Seção "Comunidade" (mentoria, networking — sem alegações não verificáveis): 4 pilares (mentoria, comunidade ativa, preparação para entrevistas, rede de indicações), sem números de escala nem superlativos
+- [x] ~~`Hero`: manchete e copy em torno do storytelling console.log → contratação~~ — retirado em 2026-07-24, substituído pelo Capítulo 1/Boot (mesmo storytelling, formato de scrollytelling)
+- [x] ~~Seção "Formações"~~ — retirada em 2026-07-24, substituída pelo Capítulo 4/Level Up (mesmo dado, `src/data/tracks.ts`)
+- [x] ~~Seção "Stack ensinada"~~ — retirada em 2026-07-24 junto com o restante do layout de página única
+- [x] ~~Seção "Comunidade"~~ — retirada em 2026-07-24, substituída pelo Capítulo 5/Connect
 - [ ] Seção "Plataforma" (preview conceitual, não screenshot de produto real)
 - [ ] Seção "Mentores" com placeholders claramente fictícios (sem fotos de pessoas reais)
 - [ ] Seção FAQ
 - [ ] Footer expandido
-- [ ] Reconciliar `About`/`Contact` existentes com o novo posicionamento (hoje ainda escritos em primeira pessoa, como portfólio individual). `Skills` já reconciliado → virou `Stack`
+- [x] ~~Reconciliar `About`/`Contact` existentes com o novo posicionamento~~ — resolvido removendo as duas seções em 2026-07-24: a funcionalidade real de `Contact` (copiar e-mail) foi absorvida pelo Capítulo 6/Hire, `About` não tinha equivalente nos 6 capítulos e foi descartado
 - [ ] Home em scrollytelling de 6 capítulos (Boot/Build/Deploy/Level Up/Connect/Hire) + páginas "Nossos Alunos"/Blog/Newsletter — briefing detalhado do usuário em 2026-07-24, ver `CHANGELOG.md`. Sub-fases:
   - [x] **Fase A — Fundação**: `react-router-dom`, rotas (`/`, `/nossos-alunos`, `/blog`, `/blog/:slug`, `/newsletter`), `Layout` persistente, hooks `useScrollProgress`/`useInView`, páginas placeholder
-  - [ ] **Fase B — Home em 6 capítulos**:
+  - [x] **Fase B — Home em 6 capítulos**:
     - [x] Boot — terminal com digitação em tempo real, protótipo validado pelo usuário em 2026-07-24
     - [x] Build — tecnologias conectadas a um centro ("Você"), linhas SVG desenhando-se ao entrar na viewport
     - [x] Deploy — projetos como janelas vivas (mockup de barra de navegador), hover realça, clique expande descrição + stack
     - [x] Level Up — trilhas de `src/data/tracks.ts` como skill tree vertical (fundamentos "desbloqueados", especializações como "próximo nível")
     - [x] Connect — alunos/mentores/comunidade/empresas parceiras como malha de nós (todo par conectado, não um hub único), pulsando continuamente + pontos-satélite decorativos
-    - [x] Hire — fechamento com callback à headline de abertura ("Do primeiro console.log à primeira contratação"), CTA primário rola até a seção `#contato` real (não é link morto)
+    - [x] Hire — fechamento com callback à headline de abertura ("Do primeiro console.log à primeira contratação"); CTA primário copia o e-mail de contato (mesma lógica que era da antiga seção `Contact`, absorvida aqui), não depende mais de âncora pra seção nenhuma
     - [x] Transição 3D conectando os capítulos (`useChapterTilt`) — cada capítulo inclina/recua sutilmente ao entrar e sair da viewport, sem depender de WebGL/vídeo, ver decisão em `CHANGELOG.md`
     - [x] Imagem de fundo (código estilizado, gerada por IA) aplicada no site inteiro (fixa, atrás de header/conteúdo/footer), variantes mobile/desktop separadas — cada seção com fundo próprio deixa passar um pouco dessa camada
     - [x] Fotos reais (mockups de UI gerados por IA, fornecidos pelo usuário) nos 3 cards do capítulo Deploy — Painel Financeiro, App de Hábitos, Loja Cápsula
-    - [ ] Indicador de progresso lateral ("Capítulo X/6") e paleta evolutiva entre os 6 capítulos como conjunto — adiado de propósito até os 6 existirem para orquestrar juntos, ver decisão em `CHANGELOG.md`
-    - [ ] Remover as seções antigas redundantes (`Formacoes`↔Level Up, `Community`↔Connect, `Hero`↔Boot/Hire) de `Home.tsx` — hoje ainda coexistem
+    - [x] Seções antigas (`Formacoes`, `Stack`, `Community`, `About`, `Projects`, `Contact`, `Hero`) removidas de `Home.tsx` — a página termina no Capítulo 6/Hire + `Footer`, sem duplicar conteúdo nem navegação
+    - [ ] Indicador de progresso lateral ("Capítulo X/6") e paleta evolutiva entre os 6 capítulos como conjunto — segue adiado, ver decisão em `CHANGELOG.md`
   - [ ] **Fase C — "Nossos Alunos"**: depoimentos fictícios, filtros por mídia/profissão anterior, paginação
   - [ ] **Fase D — Blog**: busca, post em destaque, grid de artigos, página de artigo
   - [ ] **Fase E — Newsletter**: inscrição, lista de edições fictícias
