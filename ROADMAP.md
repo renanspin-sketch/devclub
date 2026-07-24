@@ -119,7 +119,7 @@ Decisão do usuário em 2026-07-24: o DevClub deixa de ser só um portfólio pes
 
 ## Fase 13 — Deploy Final
 
-- [ ] Escolha de plataforma (Vercel/Netlify)
+- [x] Escolha de plataforma — Vercel. Repositório publicado em `github.com/renanspin-sketch/devclub`, `vercel.json` com rewrite pra `index.html` (necessário pro React Router: sem isso, acessar `/blog` ou `/nossos-alunos` direto — não navegando a partir da home — dá 404 no Vercel, que serve arquivos estáticos por padrão)
 - [ ] Domínio e SEO final (meta tags, Open Graph, sitemap)
 - [ ] Link de demonstração adicionado ao `README.md`
 - [ ] Teste manual com leitor de tela real (NVDA ou VoiceOver) — pendente da Fase 09, que usou apenas auditoria automatizada como proxy

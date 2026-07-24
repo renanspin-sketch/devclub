@@ -6,7 +6,16 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
-## [0.27.0] — 2026-07-24
+## [0.28.0] — 2026-07-24
+
+### Adicionado
+
+- `vercel.json` com rewrite (`/(.*)` → `/index.html`) — necessário pro React Router funcionar em produção na Vercel: hospedagem estática por padrão só serve arquivos que existem fisicamente, então acessar `/blog` ou `/nossos-alunos` direto (sem navegar a partir de `/`) daria 404 sem essa regra
+
+### Decisões
+
+- Repositório publicado no GitHub (`github.com/renanspin-sketch/devclub`, público) — decisão do usuário: projeto de portfólio/processo seletivo, faz sentido ficar visível. Deploy na Vercel conectado via importação do repositório (fluxo do painel da Vercel, não CLI — login da Vercel exige OAuth interativo que não é possível automatizar por aqui)
+- Publicado com as páginas Nossos Alunos/Blog/Newsletter ainda em placeholder ("em construção") — decisão explícita do usuário, iterar em produção em vez de esperar as Fases C/D/E
 
 ### Contexto
 
