@@ -6,6 +6,14 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.17.0] — 2026-07-24
+
+### Adicionado
+
+- Seção `Community` (`src/sections/Community.tsx`): 4 pilares de apoio "além do código" (mentoria, comunidade ativa, preparação para entrevistas, rede de indicações), cada um com ícone SVG próprio (sem biblioteca externa, consistente com o restante do projeto)
+- `src/data/community.ts`: conteúdo fictício, deliberadamente escrito **sem** os equivalentes não verificáveis da referência (sem "recrutadora semanal", "terapeuta", contadores de alunos ou superlativos como "maior comunidade do Brasil")
+- Nav principal: "Comunidade" adicionado; ordem de página ajustada para Hero → Formações → Stack → Comunidade → Sobre → Projetos → Contato, mais próxima da estrutura de referência
+
 ## [0.16.0] — 2026-07-24
 
 ### Alterado

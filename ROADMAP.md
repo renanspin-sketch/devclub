@@ -92,7 +92,7 @@ Decisão do usuário em 2026-07-24: o DevClub deixa de ser só um portfólio pes
 - [x] `Hero`: manchete e copy em torno do storytelling console.log → contratação
 - [x] Seção "Formações" (trilhas de estudo, scroll lateral com `tabIndex` para navegação por teclado — sem isso, contêineres de overflow sem filhos focáveis ficam inacessíveis por teclado)
 - [x] Seção "Stack ensinada" (equivalente honesto ao bloco "modelos ilimitados" da referência) — implementada reconciliando a antiga seção `Skills` (que já era um grid categorizado de badges, mesma forma visual) em vez de criar conteúdo duplicado; resolve também o item de reconciliação abaixo
-- [ ] Seção "Comunidade" (mentoria, networking — sem alegações não verificáveis)
+- [x] Seção "Comunidade" (mentoria, networking — sem alegações não verificáveis): 4 pilares (mentoria, comunidade ativa, preparação para entrevistas, rede de indicações), sem números de escala nem superlativos
 - [ ] Seção "Plataforma" (preview conceitual, não screenshot de produto real)
 - [ ] Seção "Mentores" com placeholders claramente fictícios (sem fotos de pessoas reais)
 - [ ] Seção FAQ

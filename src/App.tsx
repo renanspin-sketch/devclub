@@ -13,20 +13,24 @@ import { contactContent } from "@/data/contact";
 const Formacoes = lazy(() =>
   import("@/sections/Formacoes").then((mod) => ({ default: mod.Formacoes })),
 );
+const Stack = lazy(() => import("@/sections/Stack").then((mod) => ({ default: mod.Stack })));
+const Community = lazy(() =>
+  import("@/sections/Community").then((mod) => ({ default: mod.Community })),
+);
 const About = lazy(() => import("@/sections/About").then((mod) => ({ default: mod.About })));
 const Projects = lazy(() =>
   import("@/sections/Projects").then((mod) => ({ default: mod.Projects })),
 );
-const Stack = lazy(() => import("@/sections/Stack").then((mod) => ({ default: mod.Stack })));
 const Contact = lazy(() =>
   import("@/sections/Contact").then((mod) => ({ default: mod.Contact })),
 );
 
 const navItems = [
   { label: "Formações", href: "#formacoes" },
+  { label: "Stack", href: "#stack" },
+  { label: "Comunidade", href: "#comunidade" },
   { label: "Sobre", href: "#sobre" },
   { label: "Projetos", href: "#projetos" },
-  { label: "Stack", href: "#stack" },
   { label: "Contato", href: "#contato" },
 ];
 
@@ -43,9 +47,10 @@ function App() {
         <Hero />
         <Suspense fallback={null}>
           <Formacoes />
+          <Stack />
+          <Community />
           <About />
           <Projects />
-          <Stack />
           <Contact />
         </Suspense>
       </main>
