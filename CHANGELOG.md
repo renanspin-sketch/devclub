@@ -6,6 +6,23 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.24.0] — 2026-07-24
+
+### Adicionado
+
+- Capítulo 6 — `Hire` (`src/sections/chapters/Hire.tsx`), fechamento da jornada de 6 capítulos: título reaproveita a headline de abertura do antigo `Hero` ("Do primeiro `console.log` à primeira contratação") como callback intencional ao Capítulo 1 (Boot). CTA primário ("Quero fazer parte") aponta para `#contato` — a seção real, funcional, que ainda segue renderizada em `Home` — não uma página de inscrição inexistente. CTA secundário volta pro topo da trilha (`#level-up`)
+- Com Hire, os 6 capítulos do briefing do usuário (Boot→Hire) estão implementados
+
+### Decisões
+
+- Progresso lateral ("Capítulo X/6") e paleta evolutiva entre capítulos ficam para uma passada dedicada, agora que os 6 existem pra orquestrar como conjunto — não empacotado nesta entrega para manter cada commit focado num único capítulo, como nas anteriores
+- Seções antigas redundantes (`Formacoes`, `Community`, `Hero`) continuam temporariamente renderizadas em `Home`; a remoção é um passo de limpeza à parte, não misturado com a adição de conteúdo novo
+
+### Verificado
+
+- Clique no CTA primário rola até `#contato` de verdade (não é link morto) — confirmado via automação (Playwright), não só lido no código
+- Zero violações de acessibilidade (axe-core), zero erros de console, desktop e mobile conferidos
+
 ## [0.23.0] — 2026-07-24
 
 ### Adicionado

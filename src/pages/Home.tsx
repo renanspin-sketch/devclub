@@ -5,13 +5,16 @@ import { Build } from "@/sections/chapters/Build";
 import { Deploy } from "@/sections/chapters/Deploy";
 import { LevelUp } from "@/sections/chapters/LevelUp";
 import { Connect } from "@/sections/chapters/Connect";
+import { Hire } from "@/sections/chapters/Hire";
 
-// TODO(Fase B): Boot, Build, Deploy, Level Up e Connect são os 5 primeiros
-// dos 6 capítulos de scrollytelling — só falta Hire. As seções abaixo
-// ainda são as antigas, mantidas até serem substituídas capítulo a
-// capítulo. "Formações" fica redundante com Level Up (mesmo dado de
-// `src/data/tracks.ts`) e "Community" com Connect — ambas serão removidas
-// quando os 6 capítulos estiverem completos.
+// TODO(Fase B): os 6 capítulos de scrollytelling (Boot→Hire) estão
+// completos. As seções abaixo ainda são as antigas, mantidas até a
+// próxima passada de limpeza: "Formações" fica redundante com Level Up
+// (mesmo dado de `src/data/tracks.ts`), "Community" com Connect, e
+// "Hero"/"Contact" com Boot/Hire — Contact segue em uso de verdade por
+// enquanto, é o destino real do CTA de `Hire`. Falta também orquestrar o
+// indicador lateral "Capítulo X/6" e a paleta evolutiva entre os 6
+// capítulos como conjunto, adiado até aqui de propósito (ver ROADMAP.md).
 const Formacoes = lazy(() =>
   import("@/sections/Formacoes").then((mod) => ({ default: mod.Formacoes })),
 );
@@ -35,6 +38,7 @@ export function Home() {
       <Deploy />
       <LevelUp />
       <Connect />
+      <Hire />
       <Suspense fallback={null}>
         <Formacoes />
         <Stack />

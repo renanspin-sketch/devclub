@@ -100,13 +100,15 @@ Decisão do usuário em 2026-07-24: o DevClub deixa de ser só um portfólio pes
 - [ ] Reconciliar `About`/`Contact` existentes com o novo posicionamento (hoje ainda escritos em primeira pessoa, como portfólio individual). `Skills` já reconciliado → virou `Stack`
 - [ ] Home em scrollytelling de 6 capítulos (Boot/Build/Deploy/Level Up/Connect/Hire) + páginas "Nossos Alunos"/Blog/Newsletter — briefing detalhado do usuário em 2026-07-24, ver `CHANGELOG.md`. Sub-fases:
   - [x] **Fase A — Fundação**: `react-router-dom`, rotas (`/`, `/nossos-alunos`, `/blog`, `/blog/:slug`, `/newsletter`), `Layout` persistente, hooks `useScrollProgress`/`useInView`, páginas placeholder
-  - [ ] **Fase B — Home em 6 capítulos** (indicador de progresso lateral e paleta evolutiva ficam para quando houver mais de um capítulo pra orquestrar):
+  - [ ] **Fase B — Home em 6 capítulos**:
     - [x] Boot — terminal com digitação em tempo real, protótipo validado pelo usuário em 2026-07-24
     - [x] Build — tecnologias conectadas a um centro ("Você"), linhas SVG desenhando-se ao entrar na viewport
     - [x] Deploy — projetos como janelas vivas (mockup de barra de navegador), hover realça, clique expande descrição + stack
     - [x] Level Up — trilhas de `src/data/tracks.ts` como skill tree vertical (fundamentos "desbloqueados", especializações como "próximo nível")
     - [x] Connect — alunos/mentores/comunidade/empresas parceiras como malha de nós (todo par conectado, não um hub único), pulsando continuamente + pontos-satélite decorativos
-    - [ ] Hire — CTA final
+    - [x] Hire — fechamento com callback à headline de abertura ("Do primeiro console.log à primeira contratação"), CTA primário rola até a seção `#contato` real (não é link morto)
+    - [ ] Indicador de progresso lateral ("Capítulo X/6") e paleta evolutiva entre os 6 capítulos como conjunto — adiado de propósito até os 6 existirem para orquestrar juntos, ver decisão em `CHANGELOG.md`
+    - [ ] Remover as seções antigas redundantes (`Formacoes`↔Level Up, `Community`↔Connect, `Hero`↔Boot/Hire) de `Home.tsx` — hoje ainda coexistem
   - [ ] **Fase C — "Nossos Alunos"**: depoimentos fictícios, filtros por mídia/profissão anterior, paginação
   - [ ] **Fase D — Blog**: busca, post em destaque, grid de artigos, página de artigo
   - [ ] **Fase E — Newsletter**: inscrição, lista de edições fictícias
