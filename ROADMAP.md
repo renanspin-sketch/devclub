@@ -105,7 +105,7 @@ Decisão do usuário em 2026-07-24: o DevClub deixa de ser só um portfólio pes
     - [x] Build — tecnologias conectadas a um centro ("Você"), linhas SVG desenhando-se ao entrar na viewport
     - [x] Deploy — projetos como janelas vivas (mockup de barra de navegador), hover realça, clique expande descrição + stack
     - [x] Level Up — trilhas de `src/data/tracks.ts` como skill tree vertical (fundamentos "desbloqueados", especializações como "próximo nível")
-    - [ ] Connect — rede pulsante de comunidade
+    - [x] Connect — alunos/mentores/comunidade/empresas parceiras como malha de nós (todo par conectado, não um hub único), pulsando continuamente + pontos-satélite decorativos
     - [ ] Hire — CTA final
   - [ ] **Fase C — "Nossos Alunos"**: depoimentos fictícios, filtros por mídia/profissão anterior, paginação
   - [ ] **Fase D — Blog**: busca, post em destaque, grid de artigos, página de artigo

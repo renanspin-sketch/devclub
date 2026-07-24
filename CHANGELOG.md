@@ -6,6 +6,22 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.23.0] — 2026-07-24
+
+### Adicionado
+
+- Capítulo 5 — `Connect` (`src/sections/chapters/Connect.tsx`): alunos, mentores, comunidade e empresas parceiras como 4 nós numa malha — todo par conectado (6 linhas), não um hub único apontando pra um centro (diferencia visualmente do Capítulo 2/Build, que é hub-and-spoke). Nós pulsam continuamente (`scale`/`opacity` em loop) após entrar na viewport, mais 8 pontos-satélite decorativos com `animate-pulse` reforçando a sensação de rede povoada e viva
+
+### Decisões
+
+- Linhas da malha usam cor sólida (`#7C5CFC`), não gradiente — decisão deliberada pra não reintroduzir a classe de bug já resolvida no Build (`linearGradient` com `objectBoundingBox` degenera em linhas de largura/altura zero); aqui nem era necessário gradiente, então o caminho mais simples também é o mais seguro
+- Animação de pulso contínuo (`repeat: Infinity`) é suprimida por completo com `prefers-reduced-motion` — os nós vão direto pro estado final estático, sem loop nenhum, não apenas mais rápido
+
+### Verificado
+
+- Malha completa (6 linhas + 4 nós + 8 satélites) renderizando corretamente em desktop e mobile
+- Zero violações de acessibilidade (axe-core), zero erros de console
+
 ## [0.22.0] — 2026-07-24
 
 ### Adicionado
