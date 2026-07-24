@@ -8,6 +8,20 @@ import type { Project } from "@/data/projects";
 function ProjectCard({ project }: { project: Project }) {
   return (
     <Card interactive className="flex h-full flex-col gap-4">
+      {project.image && (
+        <div className="-mx-6 -mt-6 overflow-hidden rounded-t-lg">
+          <img
+            src={project.image.src}
+            alt={project.image.alt}
+            width={project.image.width}
+            height={project.image.height}
+            loading="lazy"
+            decoding="async"
+            className="h-48 w-full object-cover object-top"
+          />
+        </div>
+      )}
+
       <div>
         <h3 className="font-display text-xl font-semibold text-text-primary">
           {project.title}

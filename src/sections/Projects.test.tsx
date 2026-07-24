@@ -16,16 +16,26 @@ describe("Projects", () => {
     }
   });
 
-  it("só mostra o link 'Ver projeto' quando o projeto tem demoUrl", () => {
+  it("só mostra os links 'Código'/'Ver projeto' quando o projeto tem repoUrl/demoUrl", () => {
     render(<Projects />);
 
+    const withRepo = projects.filter((p) => p.repoUrl);
     const withDemo = projects.filter((p) => p.demoUrl);
     const withoutDemo = projects.filter((p) => !p.demoUrl);
 
+    expect(screen.getAllByRole("link", { name: "Código" })).toHaveLength(withRepo.length);
     expect(screen.getAllByRole("link", { name: /Ver projeto/ })).toHaveLength(withDemo.length);
-    // Todo projeto neste conjunto de dados tem repoUrl, então "Código"
-    // aparece pra todos.
-    expect(screen.getAllByRole("link", { name: "Código" })).toHaveLength(projects.length);
     expect(withoutDemo.length).toBeGreaterThan(0); // garante que o caso está coberto pelos dados reais
+  });
+
+  it("renderiza imagem apenas nos projetos que têm `image`, com alt text", () => {
+    render(<Projects />);
+
+    const withImage = projects.filter((p) => p.image);
+    expect(withImage.length).toBeGreaterThan(0); // garante que o caso está coberto
+
+    for (const project of withImage) {
+      expect(screen.getByRole("img", { name: project.image?.alt })).toBeInTheDocument();
+    }
   });
 });

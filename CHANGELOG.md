@@ -6,6 +6,18 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.13.0] — 2026-07-23
+
+### Adicionado
+
+- Duas imagens na seção Projetos (`src/assets/projects/`), com `loading="lazy"` e `width`/`height` explícitos para evitar layout shift
+- `Project.image` (opcional) no modelo de dados, com `src`/`alt`/`width`/`height`
+- 2 novas entradas de projeto ("Landing Page — Estúdio Criativo", "Landing Page — Arquitetura & Construção"), explicitamente marcadas como referências visuais de UI — sem `repoUrl`/`demoUrl` e sem nome de marca real, para não sugerir autoria de software que não foi implementado
+
+### Decisões
+
+- O usuário enviou 5 imagens para a seção de Projetos. Ao inspecionar cada uma antes de integrar, 3 se mostraram impróprias para uso: duas eram designs de terceiros (uma com o WhatsApp e preço de outro freelancer visíveis na própria imagem) e uma era gerada por IA com texto visivelmente corrompido. Apenas as 2 imagens limpas foram usadas, e como referência visual explícita — não como prova de projetos implementados — a pedido do usuário
+
 ## [0.12.0] — 2026-07-23
 
 ### Adicionado

@@ -75,7 +75,7 @@ Legenda: ☐ pendente · ☑ concluído
 
 - [x] Lighthouse ≥ 95 em todas as categorias — mobile 95-96, desktop 100, accessibility/best-practices/SEO 100 (2 execuções limpas consecutivas, ver CHANGELOG v0.11.0)
 - [x] Code splitting por seção — `About`/`Projects`/`Skills`/`Contact` via `React.lazy`; `Hero` fica fora (é o LCP)
-- [ ] Otimização de imagens (formatos modernos, dimensões explícitas) — **N/A por enquanto**: não há nenhuma imagem raster no site ainda (aguardando as fotos de projeto do usuário). Estratégia já documentada em `ARCHITECTURE.md`, será aplicada quando as imagens chegarem
+- [x] Otimização de imagens (formatos modernos, dimensões explícitas) — as 2 imagens da seção Projetos usam `loading="lazy"` + `width`/`height` explícitos. WebP/AVIF com fallback fica pendente para quando o volume de imagens justificar o pipeline
 - [x] Análise de bundle size — `rollup-plugin-visualizer` (`npm run build:analyze`) usado para medir antes/depois; JS principal caiu de 303.45 kB (98.74 kB gzip) para 253.43 kB (84.56 kB gzip) com `LazyMotion`, mais 5 chunks de seção de 0.2-3 KB cada
 
 ## Fase 11 — Testes
@@ -90,4 +90,4 @@ Legenda: ☐ pendente · ☑ concluído
 - [ ] Domínio e SEO final (meta tags, Open Graph, sitemap)
 - [ ] Link de demonstração adicionado ao `README.md`
 - [ ] Teste manual com leitor de tela real (NVDA ou VoiceOver) — pendente da Fase 09, que usou apenas auditoria automatizada como proxy
-- [ ] Substituir conteúdo fictício pelos dados reais (bio, projetos — **lembrar de pedir as ~3 imagens de projeto ao usuário**, skills, e-mail/links de contato)
+- [ ] Substituir conteúdo fictício pelos dados reais (bio, skills, e-mail/links de contato). Projetos: 3 dos 5 cards ainda são fictícios (Dashboard/Tarefas/Loja); os 2 com imagem são referências visuais de UI explicitamente marcadas como tal (sem `repoUrl`/`demoUrl`), não projetos de código — avaliar se entram projetos de código reais no lugar
