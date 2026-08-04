@@ -120,6 +120,7 @@ Decisão do usuário em 2026-07-24: o DevClub deixa de ser só um portfólio pes
     - [x] Todos os títulos do site (`h1`/`h2`/`h3`) passaram a usar `accent-green`, que antes era exclusivo do texto do Boot — pedido do usuário em 2026-08-04. Estados semânticos existentes foram preservados: skill bloqueada (Level Up) continua em cinza, e o destaque em duas cores da headline de fechamento do Hire (`console.log` em ciano, "primeira contratação" em gradiente) não foi alterado, ver `CHANGELOG.md`
     - [x] Ícone próprio (`icone.png`, fornecido pelo usuário) substituiu o favicon SVG genérico e passou a acompanhar "DevClub" no logotipo do cabeçalho — pedido do usuário em 2026-08-04, ver `CHANGELOG.md`
     - [x] Vídeo (`sistema.mp4`, fornecido pelo usuário) como fundo em loop mudo da caixa de tags flutuantes do Build — pedido do usuário em 2026-08-04, ver `CHANGELOG.md`
+    - [x] Cada badge de tecnologia do Build ganhou uma linha ligando ele a um ponto fixo pulsante no centro da caixa, acompanhando a flutuação em tempo real — pedido do usuário em 2026-08-04, ver `CHANGELOG.md`
     - [ ] Indicador de progresso lateral ("Capítulo X/6") e paleta evolutiva entre os 6 capítulos como conjunto — segue adiado, ver decisão em `CHANGELOG.md`
   - [ ] **Fase C — "Nossos Alunos"**: depoimentos fictícios, filtros por mídia/profissão anterior, paginação
   - [ ] **Fase D — Blog**: busca, post em destaque, grid de artigos, página de artigo

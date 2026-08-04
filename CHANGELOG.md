@@ -6,6 +6,29 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.39.0] — 2026-08-04
+
+### Contexto
+
+Usuário pediu uma linha de conexão em cada balão de tecnologia do Build. Como o núcleo "Você" tinha sido removido quando os balões passaram a flutuar livremente (v0.35.0), perguntei o que a linha deveria ligar — ele escolheu voltar a ter um ponto fixo no centro da caixa (sem reintroduzir o badge "Você" de antes), com cada balão ligado a esse ponto por uma linha reta enquanto flutua.
+
+### Adicionado
+
+- Ponto fixo pulsante no centro da caixa (pequeno círculo com o gradiente violeta→ciano do site, sem texto — só um marcador de ancoragem, não o núcleo "Você" que existia antes)
+- Uma `<line>` de SVG por badge, ligando esse ponto ao centro do badge — os atributos `x1`/`y1`/`x2`/`y2` são escritos a cada frame junto com o `transform` do badge (mesmo laço de física existente), então a linha acompanha a flutuação em tempo real sem re-renderizar a árvore React
+- Linhas somem sob `prefers-reduced-motion`, junto com o resto da física e do vídeo de fundo
+
+### Corrigido
+
+- O comentário do hook de física já afirmava que o tamanho do container vinha de `ResizeObserver`, mas o código real só lia `getBoundingClientRect` uma vez, de forma preguiçosa, e nunca mais — se a caixa mudasse de tamanho depois (giro de tela, redimensionamento de janela), a física continuava usando os limites antigos. Corrigido implementando o `ResizeObserver` de verdade, aproveitando que já estava mexendo nessa função pra adicionar as linhas
+
+### Verificado
+
+- Script confere que as 6 linhas sempre partem exatamente do centro geométrico da caixa e que as pontas (`x2`/`y2`) avançam ao longo do tempo, acompanhando os badges
+- Sob `prefers-reduced-motion`, zero linhas no DOM
+- Zero violações de acessibilidade (axe-core) e zero mensagens de console num scroll completo da página
+- Suíte de testes (32/32) e build de produção passando
+
 ## [0.38.0] — 2026-08-04
 
 ### Contexto

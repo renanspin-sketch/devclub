@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import type { RefObject } from "react";
 import { m, useAnimationFrame, useReducedMotion } from "framer-motion";
 
@@ -26,10 +26,14 @@ interface TagState {
 /**
  * Flutuação livre estilo "protetor de tela" (referência trazida pelo
  * usuário): cada badge tem posição e velocidade próprias e quica nas
- * bordas do container. A física roda a cada frame escrevendo direto no
- * `transform`/`opacity` de cada elemento via ref, sem passar por estado do
- * React — 6 badges atualizando 60x/s por state re-renderizaria a árvore
- * toda à toa (mesmo raciocínio do hook de frames do Boot).
+ * bordas do container, e uma linha liga cada um ao ponto fixo no centro da
+ * caixa (pedido do usuário — o núcleo "Você" que existia antes de virar
+ * flutuação livre foi removido, mas o ponto de ancoragem ficou). A física
+ * roda a cada frame escrevendo direto no `transform`/`opacity` de cada
+ * badge e nos atributos `x2`/`y2` de cada linha via ref, sem passar por
+ * estado do React — 6 badges e 6 linhas atualizando 60x/s por state
+ * re-renderizaria a árvore toda à toa (mesmo raciocínio do hook de frames
+ * do Boot).
  *
  * Tamanho do container vem de `ResizeObserver` (não de leituras de
  * `getBoundingClientRect` dentro do loop) para não repetir o
@@ -38,20 +42,29 @@ interface TagState {
  */
 function useFloatingTags(containerRef: RefObject<HTMLDivElement>, count: number, active: boolean) {
   const tagRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const lineRefs = useRef<(SVGLineElement | null)[]>([]);
   const boundsRef = useRef({ width: 0, height: 0 });
   const states = useRef<TagState[]>(
     Array.from({ length: count }, () => ({ x: 0, y: 0, vx: 0, vy: 0, w: 0, h: 0, ready: false })),
   );
 
-  useAnimationFrame(() => {
+  useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
-    if (!boundsRef.current.width || !boundsRef.current.height) {
-      const rect = container.getBoundingClientRect();
-      boundsRef.current = { width: rect.width, height: rect.height };
-    }
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      boundsRef.current = { width: entry.contentRect.width, height: entry.contentRect.height };
+    });
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [containerRef]);
+
+  useAnimationFrame(() => {
     if (!active) return;
     const bounds = boundsRef.current;
+    if (!bounds.width || !bounds.height) return;
+    const centerX = bounds.width / 2;
+    const centerY = bounds.height / 2;
 
     states.current.forEach((state, i) => {
       const el = tagRefs.current[i];
@@ -70,6 +83,8 @@ function useFloatingTags(containerRef: RefObject<HTMLDivElement>, count: number,
         state.vy = Math.sin(angle) * SPEED;
         state.ready = true;
         el.style.opacity = "1";
+        const line = lineRefs.current[i];
+        if (line) line.style.opacity = "1";
       }
 
       state.x += state.vx;
@@ -91,27 +106,45 @@ function useFloatingTags(containerRef: RefObject<HTMLDivElement>, count: number,
       }
 
       el.style.transform = `translate(${state.x}px, ${state.y}px)`;
+
+      const line = lineRefs.current[i];
+      if (line) {
+        line.setAttribute("x1", String(centerX));
+        line.setAttribute("y1", String(centerY));
+        line.setAttribute("x2", String(state.x + state.w / 2));
+        line.setAttribute("y2", String(state.y + state.h / 2));
+      }
     });
   });
 
-  return (index: number) => (el: HTMLLIElement | null) => {
-    tagRefs.current[index] = el;
+  return {
+    setTagRef: (index: number) => (el: HTMLLIElement | null) => {
+      tagRefs.current[index] = el;
+    },
+    setLineRef: (index: number) => (el: SVGLineElement | null) => {
+      lineRefs.current[index] = el;
+    },
   };
 }
 
 /**
  * Capítulo 2 — Build. Tecnologias flutuando livremente dentro de uma
- * "caixa", quicando nas bordas — estilo protetor de tela trazido pelo
- * usuário como referência (substitui o diagrama anterior de núcleo +
- * órbita + linhas de conexão). Sob `prefers-reduced-motion`, os mesmos
- * badges aparecem num layout estático (flex-wrap), sem física nenhuma.
+ * "caixa" com vídeo de fundo, quicando nas bordas — estilo protetor de
+ * tela trazido pelo usuário como referência — cada uma ligada por uma
+ * linha a um ponto fixo no centro. Sob `prefers-reduced-motion`, os mesmos
+ * badges aparecem num layout estático (flex-wrap), sem vídeo, linhas ou
+ * física nenhuma.
  */
 export function Build() {
   const shouldReduceMotion = useReducedMotion();
   const { ref, isInView } = useInView<HTMLElement>();
   const { style } = useChapterTilt({ ref });
   const containerRef = useRef<HTMLDivElement>(null);
-  const setTagRef = useFloatingTags(containerRef, NODES.length, isInView && !shouldReduceMotion);
+  const { setTagRef, setLineRef } = useFloatingTags(
+    containerRef,
+    NODES.length,
+    isInView && !shouldReduceMotion,
+  );
 
   return (
     <section
@@ -158,6 +191,39 @@ export function Build() {
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 bg-accent-gradient opacity-[0.05] blur-3xl"
           />
+
+          {!shouldReduceMotion && (
+            <>
+              {/* Ponto fixo no centro da caixa — cada badge fica ligado a
+                  ele por uma linha reta enquanto flutua. `x1`/`y1`/`x2`/`y2`
+                  são escritos a cada frame pelo `useFloatingTags`, junto
+                  com o `transform` do badge correspondente. */}
+              <svg aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full">
+                {NODES.map((label, i) => (
+                  <line
+                    key={`line-${label}`}
+                    ref={setLineRef(i)}
+                    x1="50%"
+                    y1="50%"
+                    x2="50%"
+                    y2="50%"
+                    stroke="#22D3EE"
+                    strokeWidth={1.5}
+                    strokeOpacity={0.4}
+                    className="opacity-0 transition-opacity duration-300"
+                  />
+                ))}
+              </svg>
+              <div className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2">
+                <m.div
+                  aria-hidden="true"
+                  className="h-3 w-3 rounded-full bg-accent-gradient shadow-glow-cyan"
+                  animate={isInView ? { scale: [1, 1.4, 1], opacity: [0.7, 1, 0.7] } : {}}
+                  transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                />
+              </div>
+            </>
+          )}
 
           {shouldReduceMotion ? (
             <ul role="list" className="flex h-full flex-wrap items-center justify-center gap-3 p-8">
