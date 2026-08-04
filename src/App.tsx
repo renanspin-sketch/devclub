@@ -18,6 +18,12 @@ const BlogPost = lazy(() =>
 const Newsletter = lazy(() =>
   import("@/pages/Newsletter").then((mod) => ({ default: mod.Newsletter })),
 );
+const Sobre = lazy(() => import("@/pages/Sobre").then((mod) => ({ default: mod.Sobre })));
+const Formacoes = lazy(() =>
+  import("@/pages/Formacoes").then((mod) => ({ default: mod.Formacoes })),
+);
+const Mba = lazy(() => import("@/pages/Mba").then((mod) => ({ default: mod.Mba })));
+const Login = lazy(() => import("@/pages/Login").then((mod) => ({ default: mod.Login })));
 
 function App() {
   return (
@@ -60,6 +66,38 @@ function App() {
                 element={
                   <Suspense fallback={null}>
                     <Newsletter />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/sobre"
+                element={
+                  <Suspense fallback={null}>
+                    <Sobre />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/formacoes"
+                element={
+                  <Suspense fallback={null}>
+                    <Formacoes />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/mba"
+                element={
+                  <Suspense fallback={null}>
+                    <Mba />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/login"
+                element={
+                  <Suspense fallback={null}>
+                    <Login />
                   </Suspense>
                 }
               />

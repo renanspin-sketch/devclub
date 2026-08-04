@@ -131,7 +131,8 @@ Decisão do usuário em 2026-07-24: o DevClub deixa de ser só um portfólio pes
   - [ ] **Fase C — "Nossos Alunos"**: depoimentos fictícios, filtros por mídia/profissão anterior, paginação
   - [ ] **Fase D — Blog**: busca, post em destaque, grid de artigos, página de artigo
   - [ ] **Fase E — Newsletter**: inscrição, lista de edições fictícias
-- **Fora do escopo, de propósito** (alegações factuais que não são verdadeiras para este projeto): certificação MEC, contadores de alunos/números de escala, garantia de reembolso de produto pago, depoimento em vídeo real
+  - [x] Menu principal expandido de 3 pra 8 itens (Home, Sobre, Formações, MBA, Blog, Newsletter, Nossos Alunos, Login) — pedido do usuário em 2026-08-04. Sobre/Formações/MBA/Login ganharam rotas e páginas placeholder novas (mesmo padrão de Nossos Alunos/Blog/Newsletter); conteúdo real de todas as quatro fica pra **Fase F** (sem data ainda). Corrigido de passagem: o corte responsivo do menu (nav completa vs. hambúrguer) subiu de `md` (768px) pra `xl` (1280px) — com 8 itens + cluster utilitário, 768–1279px quebrava o texto em duas linhas; achado só ao testar em várias larguras, não só a que "parecia" o breakpoint certo
+- **Fora do escopo, de propósito** (alegações factuais que não são verdadeiras para este projeto): certificação MEC, contadores de alunos/números de escala, garantia de reembolso de produto pago, depoimento em vídeo real — vale também pra nova página de MBA (nenhuma alegação de reconhecimento formal/credenciamento)
 
 ## Fase 13 — Deploy Final
 

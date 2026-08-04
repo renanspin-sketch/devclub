@@ -165,7 +165,11 @@ export function Header({ navItems = [] }: HeaderProps) {
 
         {navItems.length > 0 && (
           <>
-            <div className="hidden items-center gap-6 md:flex">
+            {/* 8 itens de menu + cluster utilitário não cabem numa linha
+                confortável antes de `xl` (1280px) — testado em 1024px
+                (`lg`) e quebrava em duas linhas. Por isso o corte fica em
+                `xl`, não no `md` usado no resto do site. */}
+            <div className="hidden items-center gap-6 xl:flex">
               <nav aria-label="Navegação principal">
                 <ul className="flex items-center gap-6">
                   {navItems.map((item) => (
@@ -196,7 +200,7 @@ export function Header({ navItems = [] }: HeaderProps) {
               </div>
             </div>
 
-            <div className="flex items-center gap-1 md:hidden">
+            <div className="flex items-center gap-1 xl:hidden">
               <ThemeToggle />
               <IconButton
                 ref={menuButtonRef}
@@ -225,7 +229,7 @@ export function Header({ navItems = [] }: HeaderProps) {
                 duration: shouldReduceMotion ? 0.01 : 0.25,
                 ease: [0.4, 0, 0.2, 1],
               }}
-              className="overflow-hidden border-b border-border md:hidden"
+              className="overflow-hidden border-b border-border xl:hidden"
             >
               <Container>
                 <ul className="flex flex-col gap-1 py-4">

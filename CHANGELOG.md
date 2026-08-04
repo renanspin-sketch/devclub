@@ -6,6 +6,31 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.45.0] — 2026-08-04
+
+### Contexto
+
+Usuário pediu pra acrescentar 8 itens ao menu principal: Home, Sobre, Formações, MBA, Blog, Newsletter, Nossos Alunos, Login. O menu tinha só 3 (Nossos Alunos, Blog, Newsletter); os outros 5 não tinham página nem rota ainda.
+
+### Adicionado
+
+- 4 páginas novas — `Sobre`, `Formações`, `MBA`, `Login` — seguindo exatamente o padrão já usado em Blog/Newsletter/Nossos Alunos: `Section` simples, eyebrow + título "Página em construção" + parágrafo explicando o que a página vai reunir. Rotas (`/sobre`, `/formacoes`, `/mba`, `/login`) e code-splitting via `React.lazy` no `App.tsx`, mesmo padrão das páginas existentes
+- Menu principal (`Layout.tsx`) expandido pros 8 itens pedidos, na ordem dada: Home → "/", Sobre, Formações, MBA, Blog, Newsletter, Nossos Alunos, Login
+
+### Corrigido
+
+- Bug real de layout, achado ao testar em várias larguras (não só a que "parecia" a certa): com 8 itens de menu + o cluster utilitário (tema, Área do aluno, CTA), o corte responsivo antigo (nav completa a partir de `md`, 768px) quebrava o texto em duas linhas entre 768–1023px — "Nossos Alunos", "Área do aluno" e o botão "Quero fazer parte" todos quebravam, alterando a altura do cabeçalho. Corrigido subindo o corte pra `xl` (1280px), a primeira largura em que a fila inteira coube numa linha sem quebrar
+- Bug relacionado, pego na mesma verificação: o painel do menu mobile (dropdown que abre ao clicar no hambúrguer) ainda usava `md:hidden`, então numa largura entre 768–1279px o botão do hambúrguer já aparecia (com o corte novo em `xl`) mas o painel continuava escondido por conta do `md:hidden` antigo — clicar no botão não abria nada de visível. Corrigido pro mesmo `xl:hidden`
+
+### Verificado
+
+- As 4 rotas novas carregam com o `<h1>` esperado e zero mensagens de console
+- Cabeçalho conferido via screenshot em 768, 900, 1024, 1279, 1280 e 1440px — sem quebra de linha em nenhuma largura, painel do menu mobile abre corretamente em 900px (a largura que expôs o bug do `md:hidden`)
+- axe-core rodado nas 5 páginas (Home + 4 novas) e no menu mobile aberto, nos dois temas (12 leituras): 0 violações em todas
+- Zero mensagens de console num scroll completo da página
+- Suíte de testes (32/32) e build de produção passando — as 4 páginas novas aparecem como chunks separados, confirmando o code-splitting
+- Lighthouse mobile 93 / desktop 100 / accessibility, best-practices, SEO 100 — dentro da variação normal, sem regressão real
+
 ## [0.44.0] — 2026-08-04
 
 ### Contexto

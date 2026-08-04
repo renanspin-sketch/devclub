@@ -9,9 +9,14 @@ import codeTexture from "@/assets/backgrounds/code-texture.webp";
 import codeTextureMobile from "@/assets/backgrounds/code-texture-mobile.webp";
 
 const navItems = [
-  { label: "Nossos Alunos", href: "/nossos-alunos" },
+  { label: "Home", href: "/" },
+  { label: "Sobre", href: "/sobre" },
+  { label: "Formações", href: "/formacoes" },
+  { label: "MBA", href: "/mba" },
   { label: "Blog", href: "/blog" },
   { label: "Newsletter", href: "/newsletter" },
+  { label: "Nossos Alunos", href: "/nossos-alunos" },
+  { label: "Login", href: "/login" },
 ];
 
 /**
