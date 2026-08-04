@@ -6,6 +6,30 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.32.0] — 2026-08-04
+
+### Contexto
+
+Usuário pediu uma animação "fluida" pro Capítulo 2/Build a partir de uma referência em vídeo (`tela.mp4`, gravação de tela de um produto real — núcleo brilhante pulsante, anéis orbitais decorativos, nós de IA chegando um a um com uma partícula percorrendo a linha até cada um). A referência mostrava logos e copy reais de um produto comercial de terceiro; reaproveitada só a linguagem de movimento — o conteúdo do capítulo continua sendo as mesmas tecnologias fictícias já usadas (React, TypeScript, Node.js etc.), não os logos/marcas reais do vídeo.
+
+### Adicionado
+
+- Núcleo ("Você") ganhou um brilho suave atrás (`blur-2xl`, gradiente) pulsando continuamente, e o próprio badge central passou a respirar (`scale` sutil em loop) — antes era estático
+- Dois anéis elípticos decorativos ao redor do núcleo, girando bem devagar e continuamente (puramente atmosféricos, não representam dado nenhum — inspirados no anel orbital da referência)
+- Uma partícula por linha percorre do centro até o nó junto com o desenho da linha na entrada, depois repete periodicamente (com atraso escalonado por nó, pra não pulsarem todas juntas) — o "pulso de energia" da referência
+
+### Corrigido
+
+- Rótulo "TypeScript" cortado na borda da viewport em telas estreitas — bug de overflow pré-existente (o wrapper de cada nó centraliza sua origem `(x,y)`, mas o badge em si cresce a partir dali sem ficar centralizado nele, então o rótulo mais longo no nó mais deslocado ultrapassava a tela). Corrigido encolhendo o diagrama inteiro (`scale`) abaixo do breakpoint `sm`
+
+### Verificado
+
+- Sequência de screenshots ao longo de ~6,5s confirmando a entrada escalonada dos 6 nós com partículas e o loop periódico funcionando depois
+- `prefers-reduced-motion`: núcleo estático, anéis fixos (sem rotação), sem partículas — só o estado final, igual ao padrão já usado no resto do site
+- Zero violações de acessibilidade (axe-core), zero erros/warnings de console num scroll completo da página (com as animações contínuas já rodando)
+- Suíte de testes (32/32) e build de produção passando
+- Lighthouse mobile 94 / desktop 100 / accessibility, best-practices, SEO 100 — dentro da variação normal, sem regressão real (mudança é só CSS/SVG, nenhum asset novo)
+
 ## [0.31.0] — 2026-08-04
 
 ### Contexto
