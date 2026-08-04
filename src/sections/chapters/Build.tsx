@@ -1,5 +1,7 @@
-import { useMemo } from "react";
-import { m, useReducedMotion } from "framer-motion";
+import { useMemo, useRef } from "react";
+import type { PointerEvent as ReactPointerEvent } from "react";
+import { m, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
+import type { MotionValue } from "framer-motion";
 
 import { useChapterTilt } from "@/hooks/useChapterTilt";
 import { useInView } from "@/hooks/useInView";
@@ -8,6 +10,18 @@ const NODES = ["React", "TypeScript", "Node.js", "Tailwind CSS", "Git", "JavaScr
 const RADIUS = 170;
 const STAGGER = 0.22;
 const LINE_DURATION = 0.9;
+// Raio (em unidades do viewBox) em que o mouse passa a "puxar" uma linha.
+const LINE_HOVER_RADIUS = 70;
+const LINE_PULL_MAX = 14;
+// Nós usam a própria caixa (hover local), não coordenadas do SVG — força
+// proporcional ao deslocamento do mouse dentro do badge, com teto.
+const NODE_MAGNET_STRENGTH = 0.3;
+const NODE_MAGNET_MAX = 16;
+
+interface Point {
+  x: number;
+  y: number;
+}
 
 function useOrbitPositions(count: number, radius: number) {
   return useMemo(
@@ -20,26 +34,194 @@ function useOrbitPositions(count: number, radius: number) {
   );
 }
 
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
+}
+
+interface ConnectionLineProps {
+  to: Point;
+  index: number;
+  isInView: boolean;
+  shouldReduceMotion: boolean | null;
+  mouseX: MotionValue<number>;
+  mouseY: MotionValue<number>;
+}
+
+/**
+ * Linha do centro até um nó. Além do desenho de entrada (strokeDasharray),
+ * reage à proximidade do mouse com um leve puxão elástico — não é hover
+ * literal (a linha tem só 1.5px, alvo pequeno demais pra mirar), é
+ * proximidade: o quanto mais perto o mouse passa do meio da linha, mais
+ * ela "escorrega" na direção dele, e volta sozinha (mola) quando o mouse
+ * se afasta.
+ */
+function ConnectionLine({ to, index, isInView, shouldReduceMotion, mouseX, mouseY }: ConnectionLineProps) {
+  const midX = to.x / 2;
+  const midY = to.y / 2;
+
+  const pullX = useTransform([mouseX, mouseY], (latest) => {
+    const [mx, my] = latest as [number, number];
+    const dist = Math.hypot(mx - midX, my - midY);
+    if (dist > LINE_HOVER_RADIUS) return 0;
+    const strength = (1 - dist / LINE_HOVER_RADIUS) * LINE_PULL_MAX;
+    return dist === 0 ? 0 : ((mx - midX) / dist) * strength;
+  });
+  const pullY = useTransform([mouseX, mouseY], (latest) => {
+    const [mx, my] = latest as [number, number];
+    const dist = Math.hypot(mx - midX, my - midY);
+    if (dist > LINE_HOVER_RADIUS) return 0;
+    const strength = (1 - dist / LINE_HOVER_RADIUS) * LINE_PULL_MAX;
+    return dist === 0 ? 0 : ((my - midY) / dist) * strength;
+  });
+  const springX = useSpring(pullX, { stiffness: 250, damping: 20, mass: 0.4 });
+  const springY = useSpring(pullY, { stiffness: 250, damping: 20, mass: 0.4 });
+
+  return (
+    // strokeDasharray/Dashoffset em vez de `pathLength` do Framer Motion:
+    // em teste manual, `pathLength` não desenhava as linhas perfeitamente
+    // verticais (x1 === x2) de forma confiável — a técnica manual é
+    // mecânica SVG pura, sem essa dependência.
+    <m.line
+      x1={0}
+      y1={0}
+      x2={to.x}
+      y2={to.y}
+      stroke="url(#build-gradient)"
+      strokeWidth={1.5}
+      strokeDasharray={RADIUS}
+      style={shouldReduceMotion ? undefined : { x: springX, y: springY }}
+      initial={{ strokeDashoffset: RADIUS, opacity: 0 }}
+      animate={isInView ? { strokeDashoffset: 0, opacity: 0.6 } : {}}
+      transition={{
+        duration: shouldReduceMotion ? 0.01 : LINE_DURATION,
+        delay: shouldReduceMotion ? 0 : STAGGER * index,
+        ease: [0.16, 1, 0.3, 1],
+      }}
+    />
+  );
+}
+
+interface TechNodeProps {
+  label: string;
+  pos: Point;
+  index: number;
+  isInView: boolean;
+  shouldReduceMotion: boolean | null;
+}
+
+/**
+ * Badge de tecnologia: efeito vidro (fundo translúcido + `backdrop-blur`),
+ * flutuação contínua sutil depois que entra, e um leve "ímã elástico" que
+ * segue o mouse enquanto ele está por cima e volta pra posição original
+ * (mola) quando sai — em duas camadas de `m.div` porque a flutuação e a
+ * resposta ao mouse animam a mesma propriedade (`y`) por caminhos
+ * diferentes (keyframes vs. mola contínua) e não podem competir no mesmo
+ * elemento.
+ */
+function TechNode({ label, pos, index, isInView, shouldReduceMotion }: TechNodeProps) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { stiffness: 220, damping: 18, mass: 0.4 });
+  const springY = useSpring(y, { stiffness: 220, damping: 18, mass: 0.4 });
+
+  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (shouldReduceMotion) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    const offsetX = event.clientX - (rect.left + rect.width / 2);
+    const offsetY = event.clientY - (rect.top + rect.height / 2);
+    x.set(clamp(offsetX * NODE_MAGNET_STRENGTH, -NODE_MAGNET_MAX, NODE_MAGNET_MAX));
+    y.set(clamp(offsetY * NODE_MAGNET_STRENGTH, -NODE_MAGNET_MAX, NODE_MAGNET_MAX));
+  };
+  const handlePointerLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  const entryDelay = STAGGER * index + LINE_DURATION * 0.7;
+
+  return (
+    <div
+      className="absolute left-1/2 top-1/2"
+      style={{ transform: `translate(-50%, -50%) translate(${pos.x}px, ${pos.y}px)` }}
+    >
+      <m.div
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={
+          isInView
+            ? shouldReduceMotion
+              ? { opacity: 1, scale: 1 }
+              : { opacity: 1, scale: 1, y: [0, -7, 0] }
+            : {}
+        }
+        transition={
+          shouldReduceMotion
+            ? { duration: 0.01 }
+            : {
+                opacity: { duration: 0.4, delay: entryDelay, ease: [0.16, 1, 0.3, 1] },
+                scale: { duration: 0.4, delay: entryDelay, ease: [0.16, 1, 0.3, 1] },
+                y: {
+                  duration: 3 + index * 0.3,
+                  delay: entryDelay + 0.4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                },
+              }
+        }
+      >
+        <m.div
+          onPointerMove={handlePointerMove}
+          onPointerLeave={handlePointerLeave}
+          style={{ x: springX, y: springY }}
+          className="whitespace-nowrap rounded-full border border-white/15 bg-white/[0.06] px-3 py-2 font-mono text-xs text-text-primary shadow-[0_4px_20px_rgba(0,0,0,0.35)] backdrop-blur-md"
+        >
+          {label}
+        </m.div>
+      </m.div>
+    </div>
+  );
+}
+
 /**
  * Capítulo 2 — Build. Tecnologias como nós conectados a um centro. Estilo
  * de movimento pedido pelo usuário a partir de uma referência (gravação de
  * tela de um produto real, `tela.mp4`): órbita decorativa ao redor de um
  * núcleo pulsante, cada nó chega um de cada vez com uma partícula
- * percorrendo a linha até ele. Só a linguagem de movimento vem da
+ * percorrendo a linha até ele — e, no ajuste seguinte, efeito vidro nos
+ * elementos, badges flutuantes e um sistema elástico que reage à
+ * proximidade do mouse (nós e linhas se deslocam levemente na direção do
+ * cursor e voltam sozinhos, com mola). Só a linguagem de movimento vem da
  * referência — os nomes de tecnologia são o mesmo conteúdo original já
  * usado aqui, não os logos/marcas reais que apareciam no vídeo.
- *
- * Cada nó é um wrapper estático (posição via transform simples, translate
- * de centralização + offset orbital compostos numa única string) com um
- * `m.div` filho só pra opacidade/escala — motion e Tailwind não competem
- * pela propriedade `transform` do mesmo elemento, o que quebraria a
- * centralização (motion sobrescreve qualquer transform aplicado via classe).
  */
 export function Build() {
   const shouldReduceMotion = useReducedMotion();
   const { ref, isInView } = useInView<HTMLElement>();
   const { style } = useChapterTilt({ ref });
   const positions = useOrbitPositions(NODES.length, RADIUS);
+
+  const svgRef = useRef<SVGSVGElement>(null);
+  // Sentinela "infinito": qualquer linha calcula distância até isso como
+  // maior que `LINE_HOVER_RADIUS`, então elas ficam relaxadas por padrão
+  // sem precisar de um segundo estado "mouse dentro/fora".
+  const mouseX = useMotionValue(Infinity);
+  const mouseY = useMotionValue(Infinity);
+
+  const handleSvgPointerMove = (event: ReactPointerEvent<SVGSVGElement>) => {
+    if (shouldReduceMotion) return;
+    const svg = svgRef.current;
+    const ctm = svg?.getScreenCTM();
+    if (!svg || !ctm) return;
+    const point = svg.createSVGPoint();
+    point.x = event.clientX;
+    point.y = event.clientY;
+    const local = point.matrixTransform(ctm.inverse());
+    mouseX.set(local.x);
+    mouseY.set(local.y);
+  };
+  const handleSvgPointerLeave = () => {
+    mouseX.set(Infinity);
+    mouseY.set(Infinity);
+  };
 
   return (
     <section
@@ -78,9 +260,12 @@ export function Build() {
           />
 
           <svg
+            ref={svgRef}
             viewBox="-210 -210 420 420"
             className="absolute inset-0 h-full w-full overflow-visible"
             aria-hidden="true"
+            onPointerMove={handleSvgPointerMove}
+            onPointerLeave={handleSvgPointerLeave}
           >
             <defs>
               {/* gradientUnits="userSpaceOnUse" com coordenadas absolutas do
@@ -137,26 +322,14 @@ export function Build() {
             />
 
             {positions.map((pos, i) => (
-              // strokeDasharray/Dashoffset em vez de `pathLength` do Framer
-              // Motion: em teste manual, `pathLength` não desenhava as linhas
-              // perfeitamente verticais (x1 === x2) de forma confiável — a
-              // técnica manual é mecânica SVG pura, sem essa dependência.
-              <m.line
+              <ConnectionLine
                 key={NODES[i]}
-                x1={0}
-                y1={0}
-                x2={pos.x}
-                y2={pos.y}
-                stroke="url(#build-gradient)"
-                strokeWidth={1.5}
-                strokeDasharray={RADIUS}
-                initial={{ strokeDashoffset: RADIUS, opacity: 0 }}
-                animate={isInView ? { strokeDashoffset: 0, opacity: 0.6 } : {}}
-                transition={{
-                  duration: shouldReduceMotion ? 0.01 : LINE_DURATION,
-                  delay: shouldReduceMotion ? 0 : STAGGER * i,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
+                to={pos}
+                index={i}
+                isInView={isInView}
+                shouldReduceMotion={shouldReduceMotion}
+                mouseX={mouseX}
+                mouseY={mouseY}
               />
             ))}
 
@@ -193,36 +366,25 @@ export function Build() {
           </svg>
 
           <m.div
-            className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-accent-gradient font-display text-xs font-bold text-text-primary shadow-glow-violet"
-            animate={
-              isInView && !shouldReduceMotion ? { scale: [1, 1.06, 1] } : {}
-            }
+            className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 font-display text-xs font-bold text-text-primary shadow-glow-violet backdrop-blur-md"
+            style={{
+              backgroundImage: "linear-gradient(135deg, rgba(124,92,252,0.55), rgba(34,211,238,0.55))",
+            }}
+            animate={isInView && !shouldReduceMotion ? { scale: [1, 1.06, 1] } : {}}
             transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
           >
             Você
           </m.div>
 
           {positions.map((pos, i) => (
-            <div
+            <TechNode
               key={NODES[i]}
-              className="absolute left-1/2 top-1/2"
-              style={{
-                transform: `translate(-50%, -50%) translate(${pos.x}px, ${pos.y}px)`,
-              }}
-            >
-              <m.div
-                className="whitespace-nowrap rounded-full border border-border-strong bg-surface px-3 py-2 font-mono text-xs text-text-primary"
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                transition={{
-                  duration: shouldReduceMotion ? 0.01 : 0.4,
-                  delay: shouldReduceMotion ? 0 : STAGGER * i + LINE_DURATION * 0.7,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-              >
-                {NODES[i]}
-              </m.div>
-            </div>
+              label={NODES[i]}
+              pos={pos}
+              index={i}
+              isInView={isInView}
+              shouldReduceMotion={shouldReduceMotion}
+            />
           ))}
         </div>
       </m.div>

@@ -6,6 +6,27 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.33.0] — 2026-08-04
+
+### Contexto
+
+Ajuste fino do Build pedido pelo usuário: efeito vidro no núcleo e nos badges de tecnologia, badges flutuantes, e um "sistema elástico" — nós e linhas reagem ao mouse passando perto/por cima e voltam sozinhos pra formação original, como uma mola.
+
+### Adicionado
+
+- Núcleo ("Você") e badges de tecnologia com efeito vidro (`backdrop-blur-md` + fundo translúcido + borda clara) em vez de fundo sólido
+- Badges ganharam flutuação contínua sutil (oscilação vertical, duração levemente diferente por nó pra não sincronizarem) depois que entram na tela
+- Sistema elástico com `useSpring`: cada badge segue o mouse enquanto ele está por cima (deslocamento proporcional, com teto) e volta pra posição original quando o mouse sai; cada linha reage à proximidade do mouse mesmo sem hover exato (são linhas de 1.5px, alvo pequeno demais pra mirar) — desloca na direção do mouse com força proporcional à distância, some acima de um raio, e volta com mola quando o mouse se afasta. Sob `prefers-reduced-motion`, nenhuma das duas reações roda — só a flutuação/glass ficam (são visuais estáticos, não movimento)
+
+### Verificado
+
+- Centralização do núcleo confirmada matematicamente: medi a posição real na tela do centro do núcleo contra o centroide dos 6 nós ao redor sob `prefers-reduced-motion` (sem a flutuação, que desincroniza os nós e mascarava a medição) — diferença de 0px. O leve desalinhamento que se via numa medição inicial era só a flutuação contínua pegando cada nó numa fase diferente do próprio ciclo, não um bug de posicionamento
+- Sequência de screenshots com movimento de mouse real (não teleporte) simulando passar por cima de um badge e por perto de uma linha, confirmando o puxão elástico e o retorno suave em ambos os casos
+- `prefers-reduced-motion`: sem flutuação nem reação ao mouse, só o estado final estático (efeito vidro continua, por ser visual, não movimento)
+- Zero violações de acessibilidade (axe-core), zero erros/warnings de console num scroll completo da página
+- Suíte de testes (32/32) e build de produção passando
+- Lighthouse mobile 94 / desktop 100 / accessibility, best-practices, SEO 100 — dentro da variação normal, sem regressão real (mudança é só CSS/interação, nenhum asset novo)
+
 ## [0.32.0] — 2026-08-04
 
 ### Contexto
