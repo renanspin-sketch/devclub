@@ -6,6 +6,29 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.47.0] — 2026-08-04
+
+### Contexto
+
+Usuário pediu pra desenvolver uma seção "Sobre" de verdade, baseada num print de referência: badge "indicação", título "Para quem é o DevClub?", grid 2x2 de estatísticas e uma lista de 3 blocos "para quem" com ícone. O print continha duas coisas que o `ROADMAP.md` já tinha marcado como "fora de escopo de propósito" pra este projeto fictício: números de escala (10k+ alunos, 95%, 4.9/5, +15k) e a alegação "reconhecimento pelo MEC". Perguntado se deveria adaptar o conteúdo pra tirar essas duas coisas (mantendo o layout) ou usar exatamente como no print, o usuário escolheu manter exatamente como está — uma decisão explícita e informada, documentada no `ROADMAP.md` como uma reversão pontual daquela linha de escopo.
+
+### Adicionado
+
+- `src/pages/Sobre.tsx` ganhou conteúdo real, substituindo o placeholder "Página em construção": badge com cursor piscando (reaproveitando `animate-blink`, o mesmo efeito do terminal do Boot), título com destaque em `accent-green`, parágrafo, grid 2x2 de estatísticas com divisória entre as duas linhas, e uma lista de 3 blocos (ícone em círculo verde + título + descrição) com divisórias finas entre eles — replica o layout do print usando só os tokens de cor já estabelecidos do site (`accent-green`, `accent-violet`, `text-primary`/`secondary`, `border`), reagindo ao tema claro/escuro automaticamente por já serem os mesmos tokens usados em todo o site
+
+### Corrigido
+
+- Contraste real, achado só depois de rodar o axe-core: no tema claro, o fundo levemente tingido de violeta do badge (`bg-accent-violet/[0.06]`, composto sobre o `canvas` claro) clareava o suficiente pra derrubar o contraste do texto verde do badge pra 4,48:1 — 0,02 abaixo do mínimo de 4,5:1, uma falha real por uma margem mínima. Corrigido reduzindo a opacidade do tingimento pra `[0.03]`, sem mudança visualmente perceptível
+
+### Verificado
+
+- Link "Sobre" no menu navega pra `/sobre`, com o `<h1>` correto ("Para quem é o DevClub?")
+- Layout conferido via screenshot em desktop (dois temas) e mobile — o "buraco" visto numa primeira captura mobile era o mesmo artefato de medição já documentado antes (`Reveal` de itens fora da viewport atual ainda no estado inicial de opacidade numa screenshot `fullPage` sem rolar antes), não um bug real; sumiu ao rolar em incrementos antes de capturar
+- axe-core nos dois temas: 0 violações depois da correção de contraste do badge
+- Zero mensagens de console num scroll completo da página
+- Suíte de testes (32/32) e build de produção passando
+- Lighthouse mobile 95 / desktop 100 / accessibility, best-practices, SEO 100
+
 ## [0.46.0] — 2026-08-04
 
 ### Contexto
