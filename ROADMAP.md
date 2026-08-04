@@ -112,6 +112,7 @@ Decisão do usuário em 2026-07-24: o DevClub deixa de ser só um portfólio pes
     - [x] Fotos reais (mockups de UI gerados por IA, fornecidos pelo usuário) nos 3 cards do capítulo Deploy — Painel Financeiro, App de Hábitos, Loja Cápsula
     - [x] Seções antigas (`Formacoes`, `Stack`, `Community`, `About`, `Projects`, `Contact`, `Hero`) removidas de `Home.tsx` — a página termina no Capítulo 6/Hire + `Footer`, sem duplicar conteúdo nem navegação
     - [x] Boot redesenhado: seção "pinada" (scroll alto + conteúdo `sticky`) onde texto (verde, sem "$") e uma sequência de 28 imagens de fundo avançam por scroll em vez de timer — pedido do usuário em 2026-08-04, ver decisão em `CHANGELOG.md`
+    - [x] Ajuste fino do scroll do Boot: progresso suavizado com mola (`useSpring`) em vez de seguir a posição bruta 1:1, e altura da faixa de scroll aumentada (220dvh → 260dvh) — pedido do usuário pra um movimento "menos agressivo", ver `CHANGELOG.md`
     - [ ] Indicador de progresso lateral ("Capítulo X/6") e paleta evolutiva entre os 6 capítulos como conjunto — segue adiado, ver decisão em `CHANGELOG.md`
   - [ ] **Fase C — "Nossos Alunos"**: depoimentos fictícios, filtros por mídia/profissão anterior, paginação
   - [ ] **Fase D — Blog**: busca, post em destaque, grid de artigos, página de artigo

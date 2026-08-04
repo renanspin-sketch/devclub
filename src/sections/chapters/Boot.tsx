@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { m, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import {
+  m,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 
 import { useScrollFrameSequence } from "@/hooks/useScrollFrameSequence";
 
@@ -38,18 +45,31 @@ export function Boot() {
     target: sectionRef,
     offset: ["start start", "end end"],
   });
+  // Suaviza o progresso bruto do scroll com uma mola crítica-mente
+  // amortecida (sem oscilar, só desacelera) — sem isso, cada frame/letra
+  // seguia a posição do scroll 1:1, o que lia como "duro"/abrupto num
+  // scroll rápido (roda do mouse, flick de trackpad). `mass` baixo +
+  // `damping` alto dão a sensação de "puxar com atraso suave" sem parecer
+  // desconectado da rolagem real. Sob reduced-motion usa o valor bruto —
+  // suavização de scroll é decorativa, não crítica pra funcionalidade.
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 30,
+    mass: 0.5,
+  });
+  const progress = shouldReduceMotion ? scrollYProgress : smoothProgress;
   // Único `useScroll` do capítulo (não duplica com `useChapterTilt`, que
   // criaria uma segunda medição de geometria da mesma section) — o fade de
   // saída usa a cauda da mesma faixa de progresso que já dirige texto e
   // imagens: por volta de 85% o pin ainda está preso, então o texto já
   // está totalmente apagado quando a seção começa a rolar embora de vez.
   const exitOpacity = useTransform(
-    scrollYProgress,
+    progress,
     [0, 0.85, 1],
     shouldReduceMotion ? [1, 1, 1] : [1, 1, 0],
   );
   const { canvasRef } = useScrollFrameSequence({
-    progress: scrollYProgress,
+    progress,
     frameUrls: shouldReduceMotion ? [] : FRAMES,
   });
 
@@ -78,11 +98,11 @@ export function Boot() {
       if (typedTextRef.current) typedTextRef.current.textContent = QUESTION;
       return;
     }
-    applyProgress(scrollYProgress.get());
+    applyProgress(progress.get());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shouldReduceMotion]);
 
-  useMotionValueEvent(scrollYProgress, "change", (value) => {
+  useMotionValueEvent(progress, "change", (value) => {
     if (shouldReduceMotion) return;
     applyProgress(value);
   });
@@ -92,7 +112,7 @@ export function Boot() {
       ref={sectionRef}
       id="boot"
       aria-label="Capítulo 1: Boot"
-      style={{ height: shouldReduceMotion ? undefined : "220dvh" }}
+      style={{ height: shouldReduceMotion ? undefined : "260dvh" }}
       className="relative"
     >
       <div className="sticky top-0 flex h-[100dvh] flex-col items-center justify-center overflow-hidden bg-black px-6 text-center">

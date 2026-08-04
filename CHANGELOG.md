@@ -6,6 +6,25 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.31.0] — 2026-08-04
+
+### Contexto
+
+Usuário aprovou o scroll-scrub do Boot mas pediu um ajuste fino: movimento "mais lento e fluído, menos agressivo" — o progresso seguia a posição bruta do scroll 1:1, o que lia como abrupto num scroll rápido (roda do mouse, flick de trackpad): cada frame/letra pulava direto pra posição exata, sem transição.
+
+### Corrigido
+
+- Progresso de scroll do Boot passa por `useSpring` (massa 0.5, rigidez 120, amortecimento 30 — crítico-mente amortecido, sem oscilar) antes de dirigir texto, imagem de fundo e fade de saída. Num scroll rápido, o visual agora "persegue" a posição real do scroll suavemente ao longo de ~0,5s em vez de saltar pra lá instantaneamente — confirmado via teste automatizado (salto instantâneo de scroll + sequência de screenshots mostrando o texto/frame ainda incompletos no instante do salto, completos só ~560ms depois)
+- Altura da faixa de scroll pinada aumentada de 220dvh pra 260dvh — mais distância física de scroll pro mesmo conteúdo, movimento menos apressado
+- Sob `prefers-reduced-motion`, a suavização é ignorada (usa o progresso bruto) — é puramente decorativa, sem motivo pra existir quando a digitação/scrub nem estão ativos nesse modo
+
+### Verificado
+
+- Zero violações de acessibilidade (axe-core), zero erros/warnings de console num scroll completo da página
+- `prefers-reduced-motion` continua mostrando o texto completo e o fundo estático corretamente
+- Suíte de testes (32/32) e build de produção passando
+- Lighthouse mobile 94 / desktop 100 / accessibility, best-practices, SEO 100 — dentro da variação normal já observada neste ambiente, sem regressão real (suavização é só matemática de interpolação, não adiciona I/O)
+
 ## [0.30.0] — 2026-08-04
 
 ### Contexto
