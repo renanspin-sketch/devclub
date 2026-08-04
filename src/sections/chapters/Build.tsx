@@ -249,15 +249,22 @@ export function Build() {
             badge inteiro, que cresce a partir dali. */}
         <div className="relative mt-16 h-[380px] w-[380px] max-w-full origin-center scale-[0.78] sm:h-[420px] sm:w-[420px] sm:scale-100">
           {/* Brilho suave atrás do núcleo, pulsando continuamente — dá a
-              sensação de "energia viva" no centro do sistema. */}
-          <m.div
+              sensação de "energia viva" no centro do sistema. Mesmo
+              wrapper-separado-do-`m.div` do núcleo logo abaixo: `scale`
+              animado descartaria o `-translate-x-1/2 -translate-y-1/2` se
+              estivesse no mesmo elemento. */}
+          <div
             aria-hidden="true"
-            className="absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-gradient opacity-30 blur-2xl"
-            animate={
-              isInView && !shouldReduceMotion ? { scale: [1, 1.35, 1], opacity: [0.2, 0.4, 0.2] } : {}
-            }
-            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-          />
+            className="absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2"
+          >
+            <m.div
+              className="h-28 w-28 rounded-full bg-accent-gradient opacity-30 blur-2xl"
+              animate={
+                isInView && !shouldReduceMotion ? { scale: [1, 1.35, 1], opacity: [0.2, 0.4, 0.2] } : {}
+              }
+              transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </div>
 
           <svg
             ref={svgRef}
@@ -365,16 +372,25 @@ export function Build() {
               ))}
           </svg>
 
-          <m.div
-            className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 font-display text-xs font-bold text-text-primary shadow-glow-violet backdrop-blur-md"
-            style={{
-              backgroundImage: "linear-gradient(135deg, rgba(124,92,252,0.55), rgba(34,211,238,0.55))",
-            }}
-            animate={isInView && !shouldReduceMotion ? { scale: [1, 1.06, 1] } : {}}
-            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-          >
-            Você
-          </m.div>
+          {/* Wrapper estático só pra centralizar (classe Tailwind) — o
+              `m.div` de dentro anima `scale`, e Framer Motion assume o
+              controle inteiro da propriedade `transform` do elemento que
+              anima; se o `-translate-x-1/2 -translate-y-1/2` estivesse
+              nesse mesmo elemento, ele seria descartado assim que a
+              animação começasse, e o núcleo saltaria pra fora do centro
+              (mesma armadilha documentada abaixo pros nós orbitais). */}
+          <div className="absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2">
+            <m.div
+              className="flex h-16 w-16 items-center justify-center rounded-full border border-white/25 font-display text-xs font-bold text-text-primary shadow-glow-violet backdrop-blur-md"
+              style={{
+                backgroundImage: "linear-gradient(135deg, rgba(124,92,252,0.55), rgba(34,211,238,0.55))",
+              }}
+              animate={isInView && !shouldReduceMotion ? { scale: [1, 1.06, 1] } : {}}
+              transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              Você
+            </m.div>
+          </div>
 
           {positions.map((pos, i) => (
             <TechNode

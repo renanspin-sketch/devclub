@@ -6,6 +6,25 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.34.0] — 2026-08-04
+
+### Contexto
+
+Usuário reportou que o núcleo ("Você") do Build "ainda está desalinhado", depois que a v0.33.0 tinha afirmado que a centralização estava "confirmada matematicamente... diferença de 0px". A verificação anterior estava certa nos números, mas errada no que media: foi feita sob `prefers-reduced-motion`, exatamente o estado em que o `animate` do Motion nunca dispara — ou seja, testou o cenário onde o bug não podia aparecer.
+
+### Corrigido
+
+- Bug real: o núcleo e o brilho atrás dele combinavam as classes de centralização do Tailwind (`-translate-x-1/2 -translate-y-1/2`) com `animate={{scale: [...]}}` do Framer Motion no mesmo elemento. O Motion assume o `transform` inline por completo assim que a animação roda, descartando o `translate` do Tailwind — o mesmo bug já corrigido nos nós orbitais do Build, mas que passou batido nesses dois elementos centrais. Corrigido separando cada um em uma `div` externa estática (só posicionamento) envolvendo uma `m.div` interna (só a animação de escala)
+
+### Verificado
+
+- Novo script Playwright mede o centro real do badge "Você" em 9 amostras ao longo de um ciclo completo de pulso (3.2s), desta vez sob movimento normal (não reduzido) — offset de (0.0, 0.0) em relação ao centro do container em todas as amostras
+- Regressão checada: hover elástico nos nós e nas linhas continua funcionando após a mudança de estrutura do DOM
+- Zero violações de acessibilidade (axe-core), zero erros/warnings de console num scroll completo da página
+- Mobile e `prefers-reduced-motion` conferidos via screenshot
+- Suíte de testes (32/32) e build de produção passando
+- Lighthouse mobile 94 / desktop 100 / accessibility, best-practices, SEO 100 (primeira leitura da rodada deu 69 no mobile por processos `chrome.exe` órfãos de execuções anteriores do Lighthouse acumulados no ambiente Windows — encerrados manualmente antes da leitura válida)
+
 ## [0.33.0] — 2026-08-04
 
 ### Contexto
