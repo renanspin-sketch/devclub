@@ -6,6 +6,28 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.35.0] — 2026-08-04
+
+### Contexto
+
+Usuário trouxe um código de referência (HTML/CSS/JS puro: tags flutuando livremente numa caixa, quicando nas bordas, estilo "protetor de tela") pedindo pra usar essa animação na seção de tecnologias do Build. O estilo da referência (badges soltos, sem centro nem conexões) conflitava com o diagrama existente (núcleo "Você" + linhas conectando cada tecnologia + ímã elástico que voltava pra uma "formação original"). Perguntado diretamente, o usuário optou por substituir o diagrama inteiro pelo estilo screensaver, abrindo mão da metáfora visual de "sistema conectado" que vinha dos ajustes anteriores.
+
+### Alterado
+
+- Removidos do Build: núcleo pulsante, anéis orbitais, linhas de conexão, partículas percorrendo as linhas e o ímã elástico que reagia à proximidade do mouse — todo o SVG do diagrama
+- As 6 tecnologias agora são badges com efeito vidro dentro de uma caixa (`overflow-hidden`), cada uma com posição e velocidade próprias, quicando nas bordas do container — física rodando a cada frame (`useAnimationFrame` do Framer Motion) escrevendo direto no `transform`/`opacity` de cada badge via ref, sem passar pelo estado do React, pelo mesmo motivo de performance do hook de frames do Boot (6 badges por frame por state re-renderizaria a árvore toda à toa). Tamanho do container medido via `ResizeObserver` (não `getBoundingClientRect` dentro do loop), pra não repetir o forced-reflow que o Lighthouse já tinha pego no Boot
+- Cor/glow do hover ficou no acento violeta→ciano já usado no resto do capítulo (a referência do usuário usava verde, cor que no site já é a identidade do Boot) — só a mecânica de flutuação veio da referência, não a paleta
+- Sob `prefers-reduced-motion`: mesmos badges num layout estático (`flex-wrap`, centralizado), sem física nenhuma — igual ao padrão já usado no resto do site
+- `role="list"` explícito nos dois `<ul>` de badges — o preflight do Tailwind zera `list-style`, e isso remove a semântica implícita de lista no Safari/VoiceOver a menos que o role seja restaurado
+
+### Verificado
+
+- Script Playwright confirma que os 6 badges nunca saem dos limites do container ao longo do tempo, e que de fato se movem (não ficam parados)
+- Layout estático sob `prefers-reduced-motion` e recorte mobile conferidos via screenshot
+- Zero violações de acessibilidade (axe-core), zero mensagens de console num scroll completo da página
+- Suíte de testes (32/32) e build de produção passando — o chunk do Build encolheu (5,67 kB → 3,12 kB gzip) por ter perdido todo o SVG do diagrama antigo
+- Lighthouse mobile 95 / desktop 100 / accessibility, best-practices, SEO 100 (20 processos `chrome.exe` órfãos de rodadas anteriores encerrados antes da leitura, mesma mitigação já documentada nas entradas anteriores)
+
 ## [0.34.0] — 2026-08-04
 
 ### Contexto
