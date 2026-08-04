@@ -6,6 +6,24 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.42.0] — 2026-08-04
+
+### Contexto
+
+Usuário pediu pra tirar do site o nome de cada capítulo.
+
+### Removido
+
+- O rótulo em mono/uppercase acima do título de cada capítulo ("Capítulo 01 / 06 — Boot", "Capítulo 02 / 06 — Build" etc.) nos 6 capítulos da Home. Cada `<section>` mantém seu `aria-label="Capítulo N: Nome"` — não é texto visível, é um landmark de navegação (leitor de tela anuncia a região ao pular entre seções), papel diferente do rótulo removido
+
+### Verificado
+
+- Busca por "Capítulo" no texto renderizado da página: zero ocorrências
+- Espaçamento conferido via screenshot nos 6 capítulos — sem título "encostado" na borda ou gap estranho onde o rótulo estava
+- Zero violações de acessibilidade (axe-core) nos 6 capítulos + 3 páginas, nos dois temas, e zero mensagens de console num scroll completo
+- Suíte de testes (32/32) e build de produção passando
+- Lighthouse mobile 94 / desktop 100 / accessibility, best-practices, SEO 100 — dentro da variação normal, sem regressão real
+
 ## [0.41.0] — 2026-08-04
 
 ### Contexto

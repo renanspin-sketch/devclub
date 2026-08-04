@@ -263,9 +263,6 @@ export function Build() {
         className="flex w-full max-w-6xl flex-col items-center gap-10 text-center md:flex-row md:text-left"
       >
         <div className="flex flex-col items-center md:w-96 md:shrink-0 md:items-start">
-          <p className="mb-6 font-mono text-xs uppercase tracking-widest text-text-muted">
-            Capítulo 02 / 06 — Build
-          </p>
           <h2 className="max-w-xl font-display text-3xl font-bold text-accent-green md:text-4xl">
             Cada tecnologia é uma peça — juntas, viram um sistema.
           </h2>

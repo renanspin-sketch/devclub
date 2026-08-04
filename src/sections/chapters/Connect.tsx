@@ -60,9 +60,6 @@ export function Connect() {
       className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden bg-canvas/80 px-6 py-24 text-center"
     >
       <m.div style={style} className="flex flex-col items-center">
-        <p className="mb-6 font-mono text-xs uppercase tracking-widest text-text-muted">
-          Capítulo 05 / 06 — Connect
-        </p>
         <h2 className="max-w-xl font-display text-3xl font-bold text-accent-green md:text-4xl">
           Você não aprende sozinho. Aprende dentro de uma rede.
         </h2>

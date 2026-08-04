@@ -136,10 +136,6 @@ export function Boot() {
         />
 
         <m.div style={{ opacity: exitOpacity }} className="relative z-10 flex flex-col items-center">
-          <p className="mb-6 font-mono text-xs uppercase tracking-widest text-text-muted">
-            Capítulo 01 / 06 — Boot
-          </p>
-
           <h1 className="grid max-w-2xl font-mono text-2xl leading-snug text-accent-green sm:text-3xl md:text-4xl">
             {/* Cópia invisível do texto completo, empilhada na mesma célula
                 de grid — reserva a altura final (2 linhas) desde o primeiro

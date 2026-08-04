@@ -56,12 +56,6 @@ export function Hire() {
 
       <m.div style={style}>
         <Container className="flex flex-col items-center gap-6">
-          <Reveal>
-            <p className="font-mono text-xs uppercase tracking-widest text-text-muted">
-              Capítulo 06 / 06 — Hire
-            </p>
-          </Reveal>
-
           <Reveal delay={0.1}>
             <h2 className="max-w-3xl font-display text-4xl font-bold text-accent-green md:text-5xl">
               Do primeiro <code className="font-mono text-accent-cyan">console.log</code>{" "}

@@ -166,11 +166,6 @@ export function Deploy() {
     >
       <m.div style={style}>
         <Container>
-          <Reveal>
-            <p className="font-mono text-xs uppercase tracking-widest text-text-muted">
-              Capítulo 03 / 06 — Deploy
-            </p>
-          </Reveal>
           <Reveal delay={0.1}>
             <h2 className="mt-3 max-w-xl font-display text-3xl font-bold text-accent-green md:text-4xl">
               Não é exercício de sala de aula. É projeto no ar.

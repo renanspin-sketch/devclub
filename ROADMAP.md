@@ -124,6 +124,7 @@ Decisão do usuário em 2026-07-24: o DevClub deixa de ser só um portfólio pes
     - [x] Build: movimento dos badges passou de "quique" em linha reta pra deriva orgânica com curvas, cada badge dá pra arrastar com o mouse/toque dentro da caixa, e título/subtítulo do capítulo passaram a ficar ao lado da caixa (não em cima) com uma linha verde fina como divisória — pedido do usuário em 2026-08-04, ver `CHANGELOG.md`
     - [x] Imagem de fundo global (código estilizado) com véu mais claro, e véu do capítulo Boot também mais claro — pedido do usuário em 2026-08-04, ver `CHANGELOG.md`
     - [x] Sistema de tema claro/escuro com botão no cabeçalho (`ThemeContext` + `ThemeToggle`), persistido, padrão sempre escuro (não segue o SO) — pedido do usuário em 2026-08-04. Boot e a caixa de vídeo do Build ficam sempre escuros por design (texto lido sobre imagem/vídeo próprio, não sobre o `canvas` da página), ver decisão e cálculos de contraste em `CHANGELOG.md`
+    - [x] Removido o rótulo "Capítulo X / 06 — Nome" (eyebrow acima do título) dos 6 capítulos — pedido do usuário em 2026-08-04. `aria-label` de cada `<section>` mantido (não é visível, é só landmark de navegação por leitor de tela)
     - [ ] Indicador de progresso lateral ("Capítulo X/6") e paleta evolutiva entre os 6 capítulos como conjunto — segue adiado, ver decisão em `CHANGELOG.md`
   - [ ] **Fase C — "Nossos Alunos"**: depoimentos fictícios, filtros por mídia/profissão anterior, paginação
   - [ ] **Fase D — Blog**: busca, post em destaque, grid de artigos, página de artigo

@@ -65,11 +65,6 @@ export function LevelUp() {
     >
       <m.div style={style}>
         <Container>
-          <Reveal>
-            <p className="font-mono text-xs uppercase tracking-widest text-text-muted">
-              Capítulo 04 / 06 — Level Up
-            </p>
-          </Reveal>
           <Reveal delay={0.1}>
             <h2 className="mt-3 max-w-xl font-display text-3xl font-bold text-accent-green md:text-4xl">
               Trilhas que se desbloqueiam conforme você avança.
