@@ -6,6 +6,25 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.38.0] — 2026-08-04
+
+### Contexto
+
+Usuário forneceu um vídeo próprio (`sistema.mp4`, ~6s, 684×378px, 413 kB — cena de dashboards holográficos azul/ciano, sem marca ou texto legível) pedindo pra usar como fundo da caixa de tags flutuantes do Build, em loop e sem som.
+
+### Adicionado
+
+- `<video autoPlay loop muted playsInline>` preenchendo a caixa (`object-cover`) atrás dos badges, com opacidade reduzida (50%) e um véu escuro (`bg-canvas/50`) por cima pra manter os badges legíveis contra uma cena bastante clara/em movimento
+- Vídeo só monta depois que o capítulo já entrou na viewport (`isInView`) — não carrega/decodifica antes da hora — e fica de fora sob `prefers-reduced-motion`, caindo de volta pro brilho estático que já existia na caixa antes desse pedido
+
+### Verificado
+
+- Estado do elemento `<video>` conferido via script: tocando, mutado, em loop, avançando ao longo do tempo (não travado no frame 0)
+- Sob `prefers-reduced-motion`, nenhum `<video>` chega a entrar no DOM
+- Zero violações de acessibilidade (axe-core) e zero mensagens de console num scroll completo da página
+- Suíte de testes (32/32) e build de produção passando — o vídeo vira um asset com hash próprio (413 kB, acima do limite de inline do Vite)
+- Lighthouse mobile 94 / desktop 100 / accessibility, best-practices, SEO 100 (30 processos `chrome.exe` órfãos encerrados antes da leitura) — dentro da variação normal já observada nas entradas anteriores, sem regressão real
+
 ## [0.37.0] — 2026-08-04
 
 ### Contexto

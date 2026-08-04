@@ -4,6 +4,7 @@ import { m, useAnimationFrame, useReducedMotion } from "framer-motion";
 
 import { useChapterTilt } from "@/hooks/useChapterTilt";
 import { useInView } from "@/hooks/useInView";
+import sistemaVideo from "@/assets/videos/sistema.mp4";
 
 const NODES = ["React", "TypeScript", "Node.js", "Tailwind CSS", "Git", "JavaScript"];
 // px por frame — mesma ordem de grandeza da referência do usuário.
@@ -134,6 +135,25 @@ export function Build() {
           ref={containerRef}
           className="relative mt-16 h-[300px] w-full overflow-hidden rounded-xl border border-white/10 bg-surface/40 sm:h-[380px]"
         >
+          {/* Vídeo de fundo só entra depois que o capítulo já foi visto
+              (`isInView`) — evita carregar/decodificar antes da hora — e
+              fica de fora sob `prefers-reduced-motion`, igual a todo o
+              resto do capítulo (a caixa cai de volta pro brilho estático
+              que já existia). */}
+          {!shouldReduceMotion && isInView && (
+            <video
+              aria-hidden="true"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              className="absolute inset-0 h-full w-full object-cover opacity-50"
+            >
+              <source src={sistemaVideo} type="video/mp4" />
+            </video>
+          )}
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-canvas/50" />
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 bg-accent-gradient opacity-[0.05] blur-3xl"
