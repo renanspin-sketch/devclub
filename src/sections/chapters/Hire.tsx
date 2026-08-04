@@ -63,7 +63,7 @@ export function Hire() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <h2 className="max-w-3xl font-display text-4xl font-bold text-text-primary md:text-5xl">
+            <h2 className="max-w-3xl font-display text-4xl font-bold text-accent-green md:text-5xl">
               Do primeiro <code className="font-mono text-accent-cyan">console.log</code>{" "}
               à{" "}
               <span className="bg-accent-gradient bg-clip-text text-transparent">

@@ -91,7 +91,7 @@ function ProjectWindow({ project }: { project: DeployProject }) {
           aria-expanded={isExpanded}
           className="relative block w-full px-6 py-6 text-left"
         >
-          <h3 className="font-display text-lg font-semibold text-text-primary">
+          <h3 className="font-display text-lg font-semibold text-accent-green">
             {project.title}
           </h3>
           <p className="mt-2 text-sm text-text-secondary">{project.tagline}</p>
@@ -172,7 +172,7 @@ export function Deploy() {
             </p>
           </Reveal>
           <Reveal delay={0.1}>
-            <h2 className="mt-3 max-w-xl font-display text-3xl font-bold text-text-primary md:text-4xl">
+            <h2 className="mt-3 max-w-xl font-display text-3xl font-bold text-accent-green md:text-4xl">
               Não é exercício de sala de aula. É projeto no ar.
             </h2>
           </Reveal>

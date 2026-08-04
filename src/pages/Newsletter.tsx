@@ -7,7 +7,7 @@ export function Newsletter() {
       <span className="text-sm font-medium uppercase tracking-widest text-accent-cyan">
         Newsletter
       </span>
-      <h1 className="mt-3 font-display text-3xl font-bold text-text-primary">
+      <h1 className="mt-3 font-display text-3xl font-bold text-accent-green">
         Edições em construção
       </h1>
       <p className="mt-4 max-w-xl text-text-secondary">

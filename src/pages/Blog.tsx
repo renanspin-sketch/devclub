@@ -7,7 +7,7 @@ export function Blog() {
       <span className="text-sm font-medium uppercase tracking-widest text-accent-cyan">
         Blog
       </span>
-      <h1 className="mt-3 font-display text-3xl font-bold text-text-primary">
+      <h1 className="mt-3 font-display text-3xl font-bold text-accent-green">
         Artigos em construção
       </h1>
       <p className="mt-4 max-w-xl text-text-secondary">

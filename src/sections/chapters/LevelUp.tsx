@@ -71,7 +71,7 @@ export function LevelUp() {
             </p>
           </Reveal>
           <Reveal delay={0.1}>
-            <h2 className="mt-3 max-w-xl font-display text-3xl font-bold text-text-primary md:text-4xl">
+            <h2 className="mt-3 max-w-xl font-display text-3xl font-bold text-accent-green md:text-4xl">
               Trilhas que se desbloqueiam conforme você avança.
             </h2>
           </Reveal>
@@ -117,7 +117,7 @@ export function LevelUp() {
                       <div className="flex items-center justify-between gap-3">
                         <h3
                           className={`font-display text-lg font-semibold ${
-                            isUnlocked ? "text-text-primary" : "text-text-secondary"
+                            isUnlocked ? "text-accent-green" : "text-text-secondary"
                           }`}
                         >
                           {track.title}

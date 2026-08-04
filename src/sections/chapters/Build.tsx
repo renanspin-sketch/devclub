@@ -123,7 +123,7 @@ export function Build() {
         <p className="mb-6 font-mono text-xs uppercase tracking-widest text-text-muted">
           Capítulo 02 / 06 — Build
         </p>
-        <h2 className="max-w-xl font-display text-3xl font-bold text-text-primary md:text-4xl">
+        <h2 className="max-w-xl font-display text-3xl font-bold text-accent-green md:text-4xl">
           Cada tecnologia é uma peça — juntas, viram um sistema.
         </h2>
         <p className="mt-4 max-w-md text-text-secondary">

@@ -6,6 +6,25 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.36.0] — 2026-08-04
+
+### Contexto
+
+Usuário pediu pra mudar todos os títulos do site para verde. Perguntado se isso incluía só os títulos principais (h1/h2) ou também os subtítulos menores dentro de cada seção (h3 — nome de cada projeto no Deploy, nome de cada skill no Level Up), o usuário confirmou que era pra incluir tudo.
+
+### Alterado
+
+- Todo `h1`, `h2` e `h3` do site (6 capítulos da Home + títulos das 4 páginas placeholder — Blog, Nossos Alunos, Newsletter, post de blog) passou de `text-text-primary` (quase branco) para `text-accent-green`, o mesmo verde já usado no Boot — antes documentado em `DESIGN-SYSTEM.md` como exclusivo daquele capítulo, agora é a cor de título do site inteiro
+- Preservados dois estados que não são "cor de título comum", e sim informação: no Level Up, o nome de uma skill ainda bloqueada continua cinza (`text-text-secondary`) — só o desbloqueado vira verde, senão perde o sinal visual de bloqueado/desbloqueado; no Hire, a headline de fechamento mantém o destaque de duas cores que já existia (`console.log` em ciano, "primeira contratação" no gradiente violeta→ciano) — só as palavras ao redor (que usavam a cor-base do título) passaram a verde
+
+### Verificado
+
+- Cor computada de cada `h1`/`h2`/`h3` da Home conferida via script (todos os 14 títulos "normais" em `rgb(74, 222, 128)` = `#4ADE80`; os 3 nomes de skill ainda bloqueados continuam em `rgb(161, 161, 170)`, como esperado)
+- Contraste `#4ADE80` sobre os fundos escuros do site (`canvas` #0A0A0F, `surface` #13131A, `surface-elevated` #1C1C26) calculado em ~9–11:1 — folgado acima do mínimo AA (4.5:1)
+- axe-core rodado em cada um dos 6 capítulos: 0 violações (uma leitura inicial no Deploy apontou falha de contraste, mas era o card com entrada animada ainda em transição no momento da leitura — sumiu ao esperar a animação terminar, não é regressão real)
+- Zero mensagens de console num scroll completo da página
+- Suíte de testes (32/32) e build de produção passando
+
 ## [0.35.0] — 2026-08-04
 
 ### Contexto
