@@ -66,7 +66,15 @@ export function Hire() {
             <h2 className="max-w-3xl font-display text-4xl font-bold text-accent-green md:text-5xl">
               Do primeiro <code className="font-mono text-accent-cyan">console.log</code>{" "}
               à{" "}
-              <span className="bg-accent-gradient bg-clip-text text-transparent">
+              {/* Gradiente por variável CSS (não `bg-accent-gradient`, que
+                  fica fixo): a ponta ciano do gradiente do tema escuro tem
+                  contraste baixo demais pra virar texto sobre um fundo
+                  claro — a variável troca pra tons mais escuros no tema
+                  claro. Ver `globals.css`. */}
+              <span
+                className="bg-clip-text text-transparent"
+                style={{ backgroundImage: "var(--gradient-text-accent)" }}
+              >
                 primeira contratação
               </span>
               .

@@ -17,25 +17,32 @@ export default {
     },
     extend: {
       colors: {
-        canvas: "#0A0A0F",
+        // Canvas/surface/border/text e os dois acentos usados como cor de
+        // texto direto (`green`, `cyan`) vêm de variáveis CSS (ver
+        // `globals.css`) pra reagir ao tema claro/escuro sem precisar
+        // trocar classe em cada componente. `violet`/`violet-light` ficam
+        // fixos — só aparecem como fundo (botões/glow), nunca como texto
+        // solto sobre o canvas, então não precisam de um par mais escuro
+        // pro tema claro.
+        canvas: "rgb(var(--color-canvas) / <alpha-value>)",
         surface: {
-          DEFAULT: "#13131A",
-          elevated: "#1C1C26",
+          DEFAULT: "rgb(var(--color-surface) / <alpha-value>)",
+          elevated: "rgb(var(--color-surface-elevated) / <alpha-value>)",
         },
         border: {
-          DEFAULT: "#27272F",
-          strong: "#3A3A46",
+          DEFAULT: "rgb(var(--color-border) / <alpha-value>)",
+          strong: "rgb(var(--color-border-strong) / <alpha-value>)",
         },
         text: {
-          primary: "#F5F5F7",
-          secondary: "#A1A1AA",
-          muted: "#7E8794",
+          primary: "rgb(var(--color-text-primary) / <alpha-value>)",
+          secondary: "rgb(var(--color-text-secondary) / <alpha-value>)",
+          muted: "rgb(var(--color-text-muted) / <alpha-value>)",
         },
         accent: {
           violet: "#7C5CFC",
           "violet-light": "#A78BFA",
-          cyan: "#22D3EE",
-          green: "#4ADE80",
+          cyan: "rgb(var(--color-accent-cyan) / <alpha-value>)",
+          green: "rgb(var(--color-accent-green) / <alpha-value>)",
         },
         state: {
           success: "#34D399",

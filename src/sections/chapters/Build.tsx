@@ -281,6 +281,13 @@ export function Build() {
 
         <div
           ref={containerRef}
+          // Sempre escuro quando o vídeo está presente: os badges são
+          // lidos sobre o vídeo (com um véu por cima), não sobre o
+          // `canvas` da página — não pode clarear junto com o tema do
+          // site. Sob `prefers-reduced-motion` não há vídeo, então a
+          // caixa vira um cartão comum e segue o tema normalmente. Ver
+          // `globals.css`.
+          data-theme={shouldReduceMotion ? undefined : "dark"}
           className="relative h-[300px] w-full min-w-0 overflow-hidden rounded-xl border border-white/10 bg-surface/40 sm:h-[380px] md:flex-1"
         >
           {/* Vídeo de fundo só entra depois que o capítulo já foi visto

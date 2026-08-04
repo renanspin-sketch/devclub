@@ -9,6 +9,22 @@
       content="DevClub — portfólio de desenvolvimento front-end."
     />
     <title>DevClub</title>
+    <script>
+      // Aplica o tema salvo antes do primeiro paint — sem isso, a página
+      // sempre nasceria escura (padrão) e só trocaria pra clara depois que
+      // o React montasse e lesse o `localStorage`, piscando a cada reload
+      // pra quem escolheu o tema claro.
+      (function () {
+        try {
+          if (localStorage.getItem("devclub-theme") === "light") {
+            document.documentElement.dataset.theme = "light";
+          }
+        } catch (e) {
+          // localStorage indisponível (modo privado etc.) — fica no escuro,
+          // que é o padrão do site.
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

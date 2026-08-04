@@ -4,6 +4,7 @@ import { LazyMotion, domAnimation } from "framer-motion";
 
 import { Layout } from "@/components/layout/Layout";
 import { Home } from "@/pages/Home";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 // Cada rota fora da Home é code-split — só a Home precisa carregar rápido
 // (é a página de entrada mais provável). Ver ARCHITECTURE.md#estratégias-de-performance.
@@ -24,47 +25,49 @@ function App() {
     // projection, que não usamos e respondiam pela maior fatia do bundle
     // (ver relatório do `npm run build:analyze`). `strict` impede o uso
     // acidental de `motion.*` (bundle completo) em vez de `m.*` no futuro.
-    <LazyMotion features={domAnimation} strict>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route
-              path="/nossos-alunos"
-              element={
-                <Suspense fallback={null}>
-                  <NossosAlunos />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/blog"
-              element={
-                <Suspense fallback={null}>
-                  <Blog />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/blog/:slug"
-              element={
-                <Suspense fallback={null}>
-                  <BlogPost />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/newsletter"
-              element={
-                <Suspense fallback={null}>
-                  <Newsletter />
-                </Suspense>
-              }
-            />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </LazyMotion>
+    <ThemeProvider>
+      <LazyMotion features={domAnimation} strict>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route index element={<Home />} />
+              <Route
+                path="/nossos-alunos"
+                element={
+                  <Suspense fallback={null}>
+                    <NossosAlunos />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/blog"
+                element={
+                  <Suspense fallback={null}>
+                    <Blog />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/blog/:slug"
+                element={
+                  <Suspense fallback={null}>
+                    <BlogPost />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/newsletter"
+                element={
+                  <Suspense fallback={null}>
+                    <Newsletter />
+                  </Suspense>
+                }
+              />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </LazyMotion>
+    </ThemeProvider>
   );
 }
 

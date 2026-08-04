@@ -6,6 +6,7 @@ import type { NavItem } from "@/types/nav";
 import { IconButton } from "@/components/ui/IconButton";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { cn } from "@/lib/cn";
+import { useTheme } from "@/context/ThemeContext";
 import logoIcon from "@/assets/icons/icone.png";
 
 import { Container } from "./Container";
@@ -78,6 +79,50 @@ function PersonIcon() {
   );
 }
 
+function SunIcon() {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4" aria-hidden="true">
+      <circle cx="10" cy="10" r="3.25" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M10 2.5v2M10 15.5v2M17.5 10h-2M4.5 10h-2M15.4 4.6l-1.4 1.4M6 14l-1.4 1.4M15.4 15.4L14 14M6 6 4.6 4.6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function MoonIcon() {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4" aria-hidden="true">
+      <path
+        d="M17.2 11.5A7.3 7.3 0 0 1 8.5 2.8a6 6 0 1 0 8.7 8.7Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** Alterna entre os temas — mostra o ícone do tema pra onde o clique leva. */
+function ThemeToggle({ className }: { className?: string }) {
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === "dark";
+  return (
+    <IconButton
+      size="sm"
+      className={className}
+      aria-label={isDark ? "Ativar tema claro" : "Ativar tema escuro"}
+      onClick={toggleTheme}
+    >
+      {isDark ? <SunIcon /> : <MoonIcon />}
+    </IconButton>
+  );
+}
+
 export function Header({ navItems = [] }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuId = useId();
@@ -137,6 +182,7 @@ export function Header({ navItems = [] }: HeaderProps) {
               </nav>
 
               <div className="flex items-center gap-4 border-l border-border pl-6">
+                <ThemeToggle />
                 <Link
                   to="/"
                   className="flex items-center gap-1.5 text-sm text-text-secondary transition duration-fast ease-standard hover:text-text-primary"
@@ -150,16 +196,18 @@ export function Header({ navItems = [] }: HeaderProps) {
               </div>
             </div>
 
-            <IconButton
-              ref={menuButtonRef}
-              className="md:hidden"
-              aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}
-              aria-expanded={isMenuOpen}
-              aria-controls={menuId}
-              onClick={() => setIsMenuOpen((open) => !open)}
-            >
-              <MenuIcon open={isMenuOpen} />
-            </IconButton>
+            <div className="flex items-center gap-1 md:hidden">
+              <ThemeToggle />
+              <IconButton
+                ref={menuButtonRef}
+                aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}
+                aria-expanded={isMenuOpen}
+                aria-controls={menuId}
+                onClick={() => setIsMenuOpen((open) => !open)}
+              >
+                <MenuIcon open={isMenuOpen} />
+              </IconButton>
+            </div>
           </>
         )}
       </Container>

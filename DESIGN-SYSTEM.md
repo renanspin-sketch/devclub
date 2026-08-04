@@ -2,11 +2,17 @@
 
 Fonte única de verdade para toda decisão visual do projeto. Cada token aqui documentado corresponde a um valor em `tailwind.config.ts` — este documento e o código nunca devem divergir.
 
-Direção visual: **dark-first premium**. Fundo quase-preto com leve matiz azulado, tipografia geométrica para headings, um par de cores de destaque (violeta → ciano) reservado para pontos de decisão do usuário (CTAs, estados ativos, foco), e uso de glow/gradiente com moderação — como pontuação, não como papel de parede.
+Direção visual: **dark-first premium**. Fundo quase-preto com leve matiz azulado, tipografia geométrica para headings, um par de cores de destaque (violeta → ciano) reservado para pontos de decisão do usuário (CTAs, estados ativos, foco), e uso de glow/gradiente com moderação — como pontuação, não como papel de parede. Escuro continua sendo o padrão e a identidade da marca — o tema claro (ver abaixo) é uma opção que o usuário liga, não o ponto de partida.
 
-## Paleta de cores
+## Tema claro/escuro
 
-### Base (superfícies)
+Site tem os dois temas, trocados por um botão no cabeçalho (`ThemeToggle` em `Header.tsx`, estado em `src/context/ThemeContext.tsx`). Padrão é sempre escuro — não segue a preferência do sistema operacional, pra não esconder a identidade visual da marca de quem usa SO em modo claro. Escolha persiste em `localStorage`; `index.html` aplica o tema salvo antes do primeiro paint (evita flash).
+
+Mecanismo: `bg-canvas`, `bg-surface`/`surface-elevated`, `border`/`border-strong`, `text-primary`/`secondary`/`muted` e os dois acentos usados como cor de texto (`accent-green`, `accent-cyan`) são variáveis CSS (`--color-*` em `globals.css`), trocadas via atributo `data-theme` em `<html>`. `accent-violet`/`violet-light`/`accent-gradient` ficam fixos — só aparecem como fundo (botão/glow), nunca como cor de texto sólida, então não precisam de par mais escuro.
+
+Duas exceções ficam **sempre escuras**, independente do tema do site: o capítulo Boot (texto lido sobre a própria sequência de imagens, não sobre o `canvas`) e a caixa de vídeo do Build (badges lidos sobre o vídeo de fundo). Ambas usam `data-theme="dark"` no próprio elemento — a cascata de variáveis CSS reaplica os valores escuros ali, não importa o tema herdado do resto da página.
+
+### Base (superfícies) — tema escuro (padrão)
 
 | Token | Valor | Uso |
 |---|---|---|
@@ -16,25 +22,36 @@ Direção visual: **dark-first premium**. Fundo quase-preto com leve matiz azula
 | `border-default` | `#27272F` | Bordas de baixo contraste |
 | `border-strong` | `#3A3A46` | Bordas de inputs em foco, divisores de ênfase |
 
+### Base (superfícies) — tema claro
+
+| Token | Valor | Uso |
+|---|---|---|
+| `bg-canvas` | `#FAFAFC` | Fundo da página |
+| `bg-surface` | `#FFFFFF` | Cards, seções elevadas |
+| `bg-surface-elevated` | `#F1F1F5` | Modais, popovers, hover de card |
+| `border-default` | `#E2E2E8` | Bordas de baixo contraste |
+| `border-strong` | `#C9C9D6` | Bordas de inputs em foco, divisores de ênfase |
+
 ### Texto
 
-| Token | Valor | Contraste sobre `bg-canvas` | Uso |
+| Token | Escuro | Claro | Uso |
 |---|---|---|---|
-| `text-primary` | `#F5F5F7` | 17.9:1 | Headings, corpo principal |
-| `text-secondary` | `#A1A1AA` | 8.4:1 | Corpo secundário, descrições |
-| `text-muted` | `#7E8794` | 5.4:1 | Metadados, timestamps, legendas |
+| `text-primary` | `#F5F5F7` (17.9:1) | `#16161D` (~18.5:1) | Headings, corpo principal |
+| `text-secondary` | `#A1A1AA` (8.4:1) | `#52525E` (~8:1) | Corpo secundário, descrições |
+| `text-muted` | `#7E8794` (5.4:1) | `#646975` (~5.7:1) | Metadados, timestamps, legendas |
 
-Todos os pares atendem WCAG AA (mínimo 4.5:1 para texto normal, 3:1 para texto grande). Validado na Fase 09 com auditoria automatizada (axe-core) — o valor original de `text-muted` (`#6B7280`) media apenas 4.08:1 sobre `bg-canvas`, abaixo do mínimo; o cálculo manual deste documento estava incorreto. Corrigido para `#7E8794`, medido e reconfirmado por ferramenta.
+Contraste calculado sobre o respectivo `bg-canvas` do tema. Todos os pares atendem WCAG AA (mínimo 4.5:1 para texto normal, 3:1 para texto grande). Validado na Fase 09 com auditoria automatizada (axe-core) — o valor original de `text-muted` (`#6B7280`) media apenas 4.08:1 sobre `bg-canvas`, abaixo do mínimo; o cálculo manual deste documento estava incorreto. Corrigido para `#7E8794`, medido e reconfirmado por ferramenta.
 
 ### Acento
 
 | Token | Valor | Uso |
 |---|---|---|
-| `accent-violet` | `#7C5CFC` | Cor primária de ação — CTAs, links, foco |
-| `accent-violet-light` | `#A78BFA` | Texto sobre fundo `accent-violet/15` (ex.: `Badge` variante `accent`) — `accent-violet` sozinho mede 3.96:1 nesse fundo, abaixo do mínimo AA; esta variante mais clara mede 6.4:1 |
-| `accent-cyan` | `#22D3EE` | Par do gradiente, destaques secundários |
-| `accent-green` | `#4ADE80` | Verde terminal — cor de todos os títulos do site (`h1`/`h2`/`h3`), origem no texto do capítulo Boot (distinto de `state-success`, que é semântico de status, não decorativo) |
-| `accent-gradient` | `linear-gradient(135deg, #7C5CFC 0%, #22D3EE 100%)` | CTAs de destaque, texto de hero, bordas de glow |
+| `accent-violet` | `#7C5CFC` (fixo nos dois temas) | Cor primária de ação — CTAs, links, foco |
+| `accent-violet-light` | `#A78BFA` (fixo nos dois temas) | Texto sobre fundo `accent-violet/15` (ex.: `Badge` variante `accent`) — `accent-violet` sozinho mede 3.96:1 nesse fundo, abaixo do mínimo AA; esta variante mais clara mede 6.4:1 |
+| `accent-cyan` | Escuro `#22D3EE` (contraste alto por natureza) · Claro `#0E7490` (~5.4:1) | Destaques secundários, links, `<code>` |
+| `accent-green` | Escuro `#4ADE80` · Claro `#158030` (~5:1) | Verde terminal — cor de todos os títulos do site (`h1`/`h2`/`h3`), origem no texto do capítulo Boot (distinto de `state-success`, que é semântico de status, não decorativo) |
+| `accent-gradient` | `linear-gradient(135deg, #7C5CFC 0%, #22D3EE 100%)` (fixo) | CTAs de destaque, bordas de glow — nunca usado como cor de texto sólida |
+| `--gradient-text-accent` (variável CSS, não token Tailwind) | Escuro igual a `accent-gradient` · Claro `linear-gradient(135deg, #5B3FD9, #0E7490)` | Único uso de violeta/ciano como texto (`bg-clip-text` da manchete de fechamento do Hire) — a ponta ciano do gradiente escuro mede ~1.8:1 sobre um fundo claro (o axe-core não avalia contraste de `background-clip`, então essa combinação não aparece como violação sozinha; conferido à mão) |
 
 ### Semânticas
 

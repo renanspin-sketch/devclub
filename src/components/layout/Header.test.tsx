@@ -4,6 +4,7 @@ import { MemoryRouter } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 
 import { Header } from "./Header";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 const navItems = [
   { label: "Sobre", href: "#sobre" },
@@ -13,12 +14,15 @@ const navItems = [
 // Header usa <Link> do react-router (logo, Área do aluno, CTA) mesmo
 // quando os itens de nav são âncoras — por isso todo render precisa de
 // um Router por perto, mesmo neste conjunto de testes que só exercita
-// links de âncora.
+// links de âncora. `ThemeProvider` porque o botão de tema (`useTheme`)
+// exige o contexto por perto.
 function renderHeader(props: Parameters<typeof Header>[0]) {
   return render(
-    <MemoryRouter>
-      <Header {...props} />
-    </MemoryRouter>,
+    <ThemeProvider>
+      <MemoryRouter>
+        <Header {...props} />
+      </MemoryRouter>
+    </ThemeProvider>,
   );
 }
 

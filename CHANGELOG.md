@@ -6,6 +6,38 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.41.0] — 2026-08-04
+
+### Contexto
+
+Usuário pediu duas coisas: deixar a imagem de fundo um pouco mais clara, e um sistema pra trocar entre tema claro/escuro, com botão no menu principal. A segunda é uma mudança grande — o site inteiro foi construído "dark-first" (`DESIGN-SYSTEM.md`), sem nenhum token pensado pra funcionar em fundo claro.
+
+### Adicionado
+
+- `src/context/ThemeContext.tsx`: `ThemeProvider` + hook `useTheme`, tema persistido em `localStorage`, aplicado antes do primeiro paint por um script inline em `index.html` (evita flash escuro→claro no reload). Padrão é sempre escuro — não segue `prefers-color-scheme` do sistema operacional, pra não esconder a identidade visual da marca de quem usa SO em modo claro por padrão
+- Botão de tema no cabeçalho (`ThemeToggle` em `Header.tsx`, ícone de sol/lua) — uma instância no cluster desktop, outra ao lado do menu hambúrguer no mobile (sempre visível, não escondido dentro do menu)
+- `bg-canvas`, `bg-surface`/`surface-elevated`, `border`/`border-strong`, `text-primary`/`secondary`/`muted` e os dois acentos usados como cor de texto (`accent-green`, `accent-cyan`) viraram variáveis CSS (`globals.css`), trocadas via `data-theme` em `<html>` — cobre a maior parte do site (header, footer, cards, corpo de texto, títulos) sem precisar tocar em cada componente
+- Paleta clara nova para esses tokens, incluindo tons mais escuros de verde/ciano específicos pra manter contraste de texto em fundo claro (o verde/ciano vibrante do tema escuro não passa em AA sobre branco) — valores e cálculos de contraste documentados em `DESIGN-SYSTEM.md`
+
+### Alterado
+
+- Imagem de fundo global (`Layout.tsx`) com véu mais claro (de `rgba(0,0,0,0.82–0.9)` pra `rgba(0,0,0,0.6–0.72)`) — pedido do usuário. Some totalmente no tema claro (é uma foto escura por natureza; não existe véu que a faça combinar com um fundo claro)
+- Manchete de fechamento do Hire ("primeira contratação", em gradiente `bg-clip-text`) passou a usar uma variável CSS de gradiente (`--gradient-text-accent`) em vez do `accent-gradient` fixo — a ponta ciano do gradiente escuro mede só ~1,8:1 de contraste sobre um fundo claro (bem abaixo do mínimo de 3:1 mesmo pra texto grande). O axe-core não avalia contraste de texto com `background-clip`, então essa combinação não teria aparecido como violação sozinha — pego só ao conferir à mão, por desconfiança do próprio mecanismo (mesmo racional de "medir, não assumir" já aplicado outras vezes nesta sessão)
+
+### Decisão de design
+
+- Boot e a caixa de vídeo do Build ficam **sempre escuros**, independente do tema do site: o texto de ambos é lido sobre uma imagem/vídeo de fundo próprio (não sobre o `canvas` da página), então não pode clarear junto com o resto — um heading verde vibrante escurecendo para o tom "seguro em fundo claro" ficaria ilegível sobre um fundo que continua escuro. Implementado com `data-theme="dark"` direto nesses elementos: a cascata de variáveis CSS reaplica os valores escuros ali, não importa o tema herdado do resto da página. Consequência aceita: o toggle não é 100% "tudo muda" — os dois momentos mais fotográficos do site mantêm sua própria identidade visual fixa, como é comum em sites com hero de vídeo/imagem
+
+### Verificado
+
+- Tema inicial sempre escuro (sem `localStorage` prévio), troca ao clicar, persiste após reload — conferido via script
+- Cor computada do H1 do Boot e do texto dos badges do Build confirmada idêntica nos dois temas (verde vibrante e quase-branco, respectivamente) — a fixação por `data-theme="dark"` funciona
+- axe-core rodado nos 6 capítulos + 3 páginas, nos dois temas (18 combinações): 0 violações em todas
+- Verificação manual adicional da manchete em gradiente do Hire (ponto cego conhecido do axe-core pra `background-clip: text`) — cálculo de contraste feito à mão pros dois temas antes e depois da correção
+- Zero mensagens de console num scroll completo da página e ao alternar o tema no meio do scroll
+- Suíte de testes (32/32, `Header.test.tsx` ajustado pra envolver `ThemeProvider`) e build de produção passando
+- Lighthouse mobile 93 / desktop 100 / accessibility, best-practices, SEO 100 — dentro da variação normal já observada nas entradas anteriores, sem regressão real
+
 ## [0.40.0] — 2026-08-04
 
 ### Contexto

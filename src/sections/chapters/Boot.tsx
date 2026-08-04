@@ -112,6 +112,10 @@ export function Boot() {
       ref={sectionRef}
       id="boot"
       aria-label="Capítulo 1: Boot"
+      // Sempre escuro: o texto aqui é lido sobre a própria sequência de
+      // imagens (com um véu escuro por cima), não sobre o `canvas` da
+      // página — não pode clarear junto com o tema do site. Ver `globals.css`.
+      data-theme="dark"
       style={{ height: shouldReduceMotion ? undefined : "260dvh" }}
       className="relative"
     >
