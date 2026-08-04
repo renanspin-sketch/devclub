@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import type { RefObject } from "react";
+import type { PointerEvent as ReactPointerEvent, RefObject } from "react";
 import { m, useAnimationFrame, useReducedMotion } from "framer-motion";
 
 import { useChapterTilt } from "@/hooks/useChapterTilt";
@@ -9,9 +9,16 @@ import sistemaVideo from "@/assets/videos/sistema.mp4";
 const NODES = ["React", "TypeScript", "Node.js", "Tailwind CSS", "Git", "JavaScript"];
 // px por frame — mesma ordem de grandeza da referência do usuário.
 const SPEED = 0.6;
+// Quanto o ângulo de cada badge pode desviar aleatoriamente por frame —
+// baixo o suficiente pra ler como deriva orgânica, não tremedeira.
+const TURN_RATE = 0.025;
 
 const TAG_CLASSES =
   "whitespace-nowrap rounded-full border border-white/15 bg-white/[0.06] px-3 py-2 font-mono text-xs text-text-primary shadow-[0_4px_20px_rgba(0,0,0,0.35)] backdrop-blur-md transition-[border-color,box-shadow,opacity] duration-300 hover:border-accent-cyan/70 hover:shadow-glow-cyan";
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
+}
 
 interface TagState {
   x: number;
@@ -20,20 +27,52 @@ interface TagState {
   vy: number;
   w: number;
   h: number;
+  angle: number;
   ready: boolean;
+  dragging: boolean;
+  grabDX: number;
+  grabDY: number;
+  lastPointerX: number;
+  lastPointerY: number;
+  lastPointerT: number;
+}
+
+function createTagState(): TagState {
+  return {
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    w: 0,
+    h: 0,
+    angle: 0,
+    ready: false,
+    dragging: false,
+    grabDX: 0,
+    grabDY: 0,
+    lastPointerX: 0,
+    lastPointerY: 0,
+    lastPointerT: 0,
+  };
 }
 
 /**
- * Flutuação livre estilo "protetor de tela" (referência trazida pelo
- * usuário): cada badge tem posição e velocidade próprias e quica nas
- * bordas do container, e uma linha liga cada um ao ponto fixo no centro da
- * caixa (pedido do usuário — o núcleo "Você" que existia antes de virar
- * flutuação livre foi removido, mas o ponto de ancoragem ficou). A física
- * roda a cada frame escrevendo direto no `transform`/`opacity` de cada
- * badge e nos atributos `x2`/`y2` de cada linha via ref, sem passar por
- * estado do React — 6 badges e 6 linhas atualizando 60x/s por state
- * re-renderizaria a árvore toda à toa (mesmo raciocínio do hook de frames
- * do Boot).
+ * Flutuação livre com deriva orgânica — em vez de quicar em linha reta
+ * com ângulo fixo (estilo protetor de tela puro), cada badge tem um
+ * ângulo que sofre um pequeno desvio aleatório a cada frame ("wander"),
+ * então o caminho lembra mais algo vivo do que uma trajetória mecânica e
+ * previsível — pedido do usuário. Uma linha liga cada badge a um ponto
+ * fixo no centro da caixa. Dá pra arrastar qualquer badge com o
+ * mouse/toque: nesse caso a física para pra ele (a posição passa a
+ * seguir o ponteiro, sempre dentro dos limites da caixa) e retoma a
+ * deriva ao soltar, na direção do arrasto se houve movimento suficiente
+ * (senão, uma direção aleatória nova).
+ *
+ * A física roda a cada frame escrevendo direto no `transform`/`opacity`
+ * de cada badge e nos atributos `x1..y2` de cada linha via ref, sem
+ * passar por estado do React — 6 badges e 6 linhas atualizando 60x/s por
+ * state re-renderizaria a árvore toda à toa (mesmo raciocínio do hook de
+ * frames do Boot).
  *
  * Tamanho do container vem de `ResizeObserver` (não de leituras de
  * `getBoundingClientRect` dentro do loop) para não repetir o
@@ -44,9 +83,7 @@ function useFloatingTags(containerRef: RefObject<HTMLDivElement>, count: number,
   const tagRefs = useRef<(HTMLLIElement | null)[]>([]);
   const lineRefs = useRef<(SVGLineElement | null)[]>([]);
   const boundsRef = useRef({ width: 0, height: 0 });
-  const states = useRef<TagState[]>(
-    Array.from({ length: count }, () => ({ x: 0, y: 0, vx: 0, vy: 0, w: 0, h: 0, ready: false })),
-  );
+  const states = useRef<TagState[]>(Array.from({ length: count }, createTagState));
 
   useEffect(() => {
     const container = containerRef.current;
@@ -78,31 +115,35 @@ function useFloatingTags(containerRef: RefObject<HTMLDivElement>, count: number,
         state.h = rect.height;
         state.x = Math.random() * Math.max(0, bounds.width - state.w);
         state.y = Math.random() * Math.max(0, bounds.height - state.h);
-        const angle = Math.random() * Math.PI * 2;
-        state.vx = Math.cos(angle) * SPEED;
-        state.vy = Math.sin(angle) * SPEED;
+        state.angle = Math.random() * Math.PI * 2;
         state.ready = true;
         el.style.opacity = "1";
         const line = lineRefs.current[i];
         if (line) line.style.opacity = "1";
       }
 
-      state.x += state.vx;
-      state.y += state.vy;
+      if (!state.dragging) {
+        state.angle += (Math.random() - 0.5) * TURN_RATE;
+        state.vx = Math.cos(state.angle) * SPEED;
+        state.vy = Math.sin(state.angle) * SPEED;
 
-      if (state.x <= 0) {
-        state.x = 0;
-        state.vx *= -1;
-      } else if (state.x + state.w >= bounds.width) {
-        state.x = bounds.width - state.w;
-        state.vx *= -1;
-      }
-      if (state.y <= 0) {
-        state.y = 0;
-        state.vy *= -1;
-      } else if (state.y + state.h >= bounds.height) {
-        state.y = bounds.height - state.h;
-        state.vy *= -1;
+        state.x += state.vx;
+        state.y += state.vy;
+
+        if (state.x <= 0) {
+          state.x = 0;
+          state.angle = Math.PI - state.angle;
+        } else if (state.x + state.w >= bounds.width) {
+          state.x = bounds.width - state.w;
+          state.angle = Math.PI - state.angle;
+        }
+        if (state.y <= 0) {
+          state.y = 0;
+          state.angle = -state.angle;
+        } else if (state.y + state.h >= bounds.height) {
+          state.y = bounds.height - state.h;
+          state.angle = -state.angle;
+        }
       }
 
       el.style.transform = `translate(${state.x}px, ${state.y}px)`;
@@ -117,6 +158,68 @@ function useFloatingTags(containerRef: RefObject<HTMLDivElement>, count: number,
     });
   });
 
+  function getDragHandlers(index: number) {
+    return {
+      onPointerDown: (event: ReactPointerEvent<HTMLLIElement>) => {
+        if (!active) return;
+        const state = states.current[index];
+        const el = tagRefs.current[index];
+        const container = containerRef.current;
+        if (!state.ready || !el || !container) return;
+        el.setPointerCapture(event.pointerId);
+        const containerRect = container.getBoundingClientRect();
+        state.dragging = true;
+        state.vx = 0;
+        state.vy = 0;
+        state.grabDX = event.clientX - containerRect.left - state.x;
+        state.grabDY = event.clientY - containerRect.top - state.y;
+        state.lastPointerX = event.clientX;
+        state.lastPointerY = event.clientY;
+        state.lastPointerT = performance.now();
+        el.style.cursor = "grabbing";
+      },
+      onPointerMove: (event: ReactPointerEvent<HTMLLIElement>) => {
+        const state = states.current[index];
+        if (!state.dragging) return;
+        const container = containerRef.current;
+        if (!container) return;
+        const containerRect = container.getBoundingClientRect();
+        const bounds = boundsRef.current;
+        state.x = clamp(
+          event.clientX - containerRect.left - state.grabDX,
+          0,
+          Math.max(0, bounds.width - state.w),
+        );
+        state.y = clamp(
+          event.clientY - containerRect.top - state.grabDY,
+          0,
+          Math.max(0, bounds.height - state.h),
+        );
+
+        const now = performance.now();
+        const dt = Math.max(1, now - state.lastPointerT);
+        state.vx = ((event.clientX - state.lastPointerX) / dt) * 16;
+        state.vy = ((event.clientY - state.lastPointerY) / dt) * 16;
+        state.lastPointerX = event.clientX;
+        state.lastPointerY = event.clientY;
+        state.lastPointerT = now;
+      },
+      onPointerUp: (event: ReactPointerEvent<HTMLLIElement>) => {
+        const state = states.current[index];
+        if (!state.dragging) return;
+        const el = tagRefs.current[index];
+        state.dragging = false;
+        el?.releasePointerCapture(event.pointerId);
+        if (el) el.style.cursor = "";
+        // Se houve arrasto perceptível, retoma na mesma direção (efeito
+        // de "soltar" o badge); um clique sem movimento só sorteia uma
+        // direção nova.
+        const flungSpeed = Math.hypot(state.vx, state.vy);
+        state.angle = flungSpeed > 0.15 ? Math.atan2(state.vy, state.vx) : Math.random() * Math.PI * 2;
+      },
+    };
+  }
+
   return {
     setTagRef: (index: number) => (el: HTMLLIElement | null) => {
       tagRefs.current[index] = el;
@@ -124,23 +227,25 @@ function useFloatingTags(containerRef: RefObject<HTMLDivElement>, count: number,
     setLineRef: (index: number) => (el: SVGLineElement | null) => {
       lineRefs.current[index] = el;
     },
+    getDragHandlers,
   };
 }
 
 /**
- * Capítulo 2 — Build. Tecnologias flutuando livremente dentro de uma
- * "caixa" com vídeo de fundo, quicando nas bordas — estilo protetor de
- * tela trazido pelo usuário como referência — cada uma ligada por uma
- * linha a um ponto fixo no centro. Sob `prefers-reduced-motion`, os mesmos
- * badges aparecem num layout estático (flex-wrap), sem vídeo, linhas ou
- * física nenhuma.
+ * Capítulo 2 — Build. Título e subtítulo ficam ao lado da caixa (em vez
+ * de em cima), separados por uma linha fina verde — pedido do usuário.
+ * Tecnologias flutuam livremente dentro da caixa, com vídeo de fundo,
+ * deriva orgânica e cada uma ligada por uma linha a um ponto fixo no
+ * centro; dá pra arrastar qualquer badge. Sob `prefers-reduced-motion`,
+ * os mesmos badges aparecem num layout estático (flex-wrap), sem vídeo,
+ * linhas, física ou arrasto.
  */
 export function Build() {
   const shouldReduceMotion = useReducedMotion();
   const { ref, isInView } = useInView<HTMLElement>();
   const { style } = useChapterTilt({ ref });
   const containerRef = useRef<HTMLDivElement>(null);
-  const { setTagRef, setLineRef } = useFloatingTags(
+  const { setTagRef, setLineRef, getDragHandlers } = useFloatingTags(
     containerRef,
     NODES.length,
     isInView && !shouldReduceMotion,
@@ -151,22 +256,32 @@ export function Build() {
       ref={ref}
       id="build"
       aria-label="Capítulo 2: Build"
-      className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden bg-canvas/80 px-6 py-24 text-center"
+      className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden bg-canvas/80 px-6 py-24"
     >
-      <m.div style={style} className="flex w-full max-w-2xl flex-col items-center">
-        <p className="mb-6 font-mono text-xs uppercase tracking-widest text-text-muted">
-          Capítulo 02 / 06 — Build
-        </p>
-        <h2 className="max-w-xl font-display text-3xl font-bold text-accent-green md:text-4xl">
-          Cada tecnologia é uma peça — juntas, viram um sistema.
-        </h2>
-        <p className="mt-4 max-w-md text-text-secondary">
-          Você não aprende ferramentas soltas. Aprende como elas se conectam.
-        </p>
+      <m.div
+        style={style}
+        className="flex w-full max-w-6xl flex-col items-center gap-10 text-center md:flex-row md:text-left"
+      >
+        <div className="flex flex-col items-center md:w-96 md:shrink-0 md:items-start">
+          <p className="mb-6 font-mono text-xs uppercase tracking-widest text-text-muted">
+            Capítulo 02 / 06 — Build
+          </p>
+          <h2 className="max-w-xl font-display text-3xl font-bold text-accent-green md:text-4xl">
+            Cada tecnologia é uma peça — juntas, viram um sistema.
+          </h2>
+          <p className="mt-4 max-w-md text-text-secondary">
+            Você não aprende ferramentas soltas. Aprende como elas se conectam.
+          </p>
+        </div>
+
+        <div
+          aria-hidden="true"
+          className="h-px w-full shrink-0 bg-accent-green/50 md:h-auto md:w-px md:self-stretch"
+        />
 
         <div
           ref={containerRef}
-          className="relative mt-16 h-[300px] w-full overflow-hidden rounded-xl border border-white/10 bg-surface/40 sm:h-[380px]"
+          className="relative h-[300px] w-full min-w-0 overflow-hidden rounded-xl border border-white/10 bg-surface/40 sm:h-[380px] md:flex-1"
         >
           {/* Vídeo de fundo só entra depois que o capítulo já foi visto
               (`isInView`) — evita carregar/decodificar antes da hora — e
@@ -239,7 +354,8 @@ export function Build() {
                 <li
                   key={label}
                   ref={setTagRef(i)}
-                  className={`absolute left-0 top-0 opacity-0 will-change-transform ${TAG_CLASSES}`}
+                  className={`absolute left-0 top-0 cursor-grab touch-none opacity-0 will-change-transform ${TAG_CLASSES}`}
+                  {...getDragHandlers(i)}
                 >
                   {label}
                 </li>

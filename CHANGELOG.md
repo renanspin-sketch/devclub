@@ -6,6 +6,35 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.40.0] — 2026-08-04
+
+### Contexto
+
+Usuário pediu três coisas no Build: (1) movimento dos badges "mais fluido, como se não estivesse seguindo uma trajetória" — o quique em linha reta estilo protetor de tela lia como mecânico; (2) dá pra arrastar qualquer badge com o mouse/clique dentro da caixa; (3) título e subtítulo do capítulo alinhados ao lado da caixa (não em cima), com uma linha fina verde como divisória.
+
+### Alterado
+
+- Movimento deixou de ser velocidade constante em linha reta (ricocheteando com ângulo espelhado nas paredes) e passou a ser uma deriva orgânica: cada badge tem um ângulo que sofre um pequeno desvio aleatório a cada frame, então o caminho curva continuamente em vez de seguir sempre a mesma reta até a próxima parede
+- Título, subtítulo e a caixa passaram de empilhados (texto centralizado em cima, caixa embaixo) para lado a lado a partir do breakpoint `md` — texto à esquerda (alinhado à esquerda), caixa à direita — com uma linha fina verde entre os dois (horizontal quando empilhado no mobile, vertical quando lado a lado). Abaixo de `md` continua empilhado e centralizado, como antes
+
+### Adicionado
+
+- Dá pra arrastar qualquer badge com o mouse ou toque: ao pressionar, a física para pra aquele badge (fica "seguro" pelo mesmo ponto em que foi clicado, dentro dos limites da caixa); ao soltar, retoma a deriva na direção do arrasto se houve movimento perceptível, ou sorteia uma direção nova se foi só um clique. A linha até o ponto central acompanha o badge em tempo real durante o arrasto, do mesmo jeito que acompanha a flutuação normal
+
+### Corrigido
+
+- Bug real encontrado durante a verificação: a caixa usava `flex-1` sem qualificar o breakpoint, pensado só pro layout lado a lado (`md:flex-row`) — mas no layout empilhado do mobile (`flex-col`, o padrão), `flex-1` faz o eixo principal virar vertical e `flex-basis: 0%` anula a altura fixa (`h-[300px]`), colapsando a caixa a ~0px e escondendo os badges inteiros. Corrigido qualificando pra `md:flex-1`
+
+### Verificado
+
+- Script de regressão linear confirma que a trajetória de um badge ao longo de ~3,3s se desvia até 46px de uma reta — claramente curva, não mais uma trajetória mecânica
+- Arrasto testado com movimento de mouse real (não teleporte): badge segue o ponteiro com erro sub-pixel (~0,1px) fora das bordas da caixa, e é clampado corretamente ao tocar uma borda
+- Bug do `flex-1` no mobile confirmado visualmente (caixa colapsada) antes da correção e confirmado corrigido depois (caixa com 300px de altura real e badges visíveis) — pego graças a testar num viewport alto o bastante pra não cortar a seção antes da hora
+- Layout lado a lado (desktop) e empilhado (mobile) conferidos via screenshot, incluindo `prefers-reduced-motion` nos dois
+- Zero violações de acessibilidade (axe-core) e zero mensagens de console num scroll completo da página
+- Suíte de testes (32/32) e build de produção passando
+- Lighthouse mobile 93 / desktop 100 / accessibility, best-practices, SEO 100 — dentro da variação normal já observada nas entradas anteriores, sem regressão real
+
 ## [0.39.0] — 2026-08-04
 
 ### Contexto
