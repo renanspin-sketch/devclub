@@ -6,6 +6,24 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.37.0] — 2026-08-04
+
+### Contexto
+
+Usuário forneceu um ícone próprio (`icone.png`, 39×42px, estilo pixel art em verde sobre fundo escuro) pedindo pra usar como favicon e ao lado da palavra "DevClub" no cabeçalho.
+
+### Adicionado
+
+- Favicon trocado de um SVG genérico (um "D" em gradiente violeta→ciano, sem relação com o ícone novo) para `icone.png`, servido como arquivo estático em `public/favicon.png`
+- Logotipo do cabeçalho (canto superior esquerdo) ganhou o mesmo ícone ao lado do texto "DevClub", importado como módulo (`src/assets/icons/icone.png`) pra entrar no bundle com hash — como o arquivo é pequeno (1,7 kB), o Vite inlina como `data:` URI em vez de gerar um arquivo separado, comportamento padrão abaixo do limite de 4 kB
+- `image-rendering: pixelated` no ícone do cabeçalho — evita o navegador borrar os pixels ao redimensionar essa imagem pequena e com estética propositalmente blocada
+
+### Verificado
+
+- `favicon.png` resolve com 200 e `content-type: image/png`
+- Zero violações de acessibilidade (axe-core) e zero mensagens de console num scroll completo da página
+- Suíte de testes (32/32, incluindo os testes existentes do `Header`) e build de produção passando
+
 ## [0.36.0] — 2026-08-04
 
 ### Contexto

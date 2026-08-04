@@ -6,6 +6,7 @@ import type { NavItem } from "@/types/nav";
 import { IconButton } from "@/components/ui/IconButton";
 import { buttonVariants } from "@/components/ui/button-variants";
 import { cn } from "@/lib/cn";
+import logoIcon from "@/assets/icons/icone.png";
 
 import { Container } from "./Container";
 
@@ -104,8 +105,16 @@ export function Header({ navItems = [] }: HeaderProps) {
         <Link
           to="/"
           onClick={() => setIsMenuOpen(false)}
-          className="font-display text-lg font-bold text-text-primary"
+          className="flex items-center gap-2 font-display text-lg font-bold text-text-primary"
         >
+          <img
+            src={logoIcon}
+            alt=""
+            aria-hidden="true"
+            width={39}
+            height={42}
+            className="h-7 w-auto [image-rendering:pixelated]"
+          />
           DevClub
         </Link>
 
