@@ -6,6 +6,33 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.44.0] — 2026-08-04
+
+### Contexto
+
+Usuário trouxe uma implementação de referência (HTML/CSS/JS puro, escrita por ele — "não copiei nenhum texto ou trecho de código do site", implementação original pra reproduzir um efeito visto em outro lugar) de um padrão de "scrollytelling" com pin: a seção fica presa na tela enquanto uma pilha de cards avança um de cada vez, ganha um check ✓ ao ser concluído, até soltar e a rolagem seguir normal. Pediu pra implementar esse efeito na seção das trilhas de aprendizagem (Level Up).
+
+### Alterado
+
+- Level Up: a lista de trilhas (antes uma coluna estática ao lado do título, todas visíveis de uma vez) virou uma pilha com pin — a seção agora tem altura extra proporcional ao número de trilhas (`100dvh` do pin + `45dvh` por trilha), e o card ativo muda conforme o progresso do scroll dentro dessa faixa
+- Adaptação pra stack do projeto em vez de porte literal do JS puro: mesma técnica de pin já usada no Boot (`useScroll` com `target` na própria `<section>` + `useSpring` pra suavizar o progresso, em vez do listener de `scroll` bruto do original), estado do card ativo em `useState` (atualizado via `useMotionValueEvent`, não a cada frame — só nas ~6 transições reais), e as transições de cada card usam `animate` do Framer Motion em vez de classes CSS trocadas via JS
+- Sob `prefers-reduced-motion`: sem pin, sem altura extra de scroll — volta a ser a lista estática de antes, com todas as trilhas visíveis de uma vez
+
+### Corrigido
+
+- Bug de contraste real, não pego pelo axe-core na primeira verificação: a referência reduz a opacidade do card inteiro pra 0,35 quando ele é marcado como concluído — no tema escuro isso ainda passa em contraste (texto claro sobre fundo escuro tem folga), mas no tema claro o texto (quase preto) a 0,35 de opacidade sobre um card quase branco mede só ~1,7:1, bem abaixo do mínimo de 4,5:1. Só apareceu ao rodar o axe-core em profundidades de scroll intermediárias (onde já existe pelo menos uma trilha "concluída") — a leitura em `progress=0` não pega, porque nenhum card chegou a esse estado ainda. Corrigido trocando "opacidade reduzida" por "cores mais neutras com opacidade total" pro texto (o card em si — fundo/borda — continua ficando mais translúcido, preservando a sensação de "esmaecido")
+- Segundo bug de contraste, mesma causa raiz: o fade de saída emprestado do Boot (`opacity` de todo o conteúdo indo a 0 nos últimos 10% do progresso) reduzia o contraste do texto no tema claro pelo mesmo motivo. Diferença do Boot: lá o texto sempre fica sobre um fundo fixo escuro (`data-theme="dark"` pinado), então o mesmo fade nunca quebra contraste. Como a referência original nem tem esse fade — foi um acréscimo próprio nesta adaptação —, a correção foi removê-lo, não tentar calibrar um piso de opacidade seguro
+
+### Verificado
+
+- Progresso do scroll, card ativo e o pin em si conferidos via script: a barra de rolagem avança 100% dentro da seção sem o conteúdo pinado se mover na tela, e cada trilha vira "ativa" exatamente na sua fatia de progresso, na ordem certa
+- Estado do check (opacidade do ícone) conferido diretamente por trilha — aparece só quando a trilha correspondente já foi passada
+- axe-core rodado em 13 profundidades de scroll diferentes dentro da seção, nos dois temas (26 leituras): 0 violações em todas, depois das duas correções acima
+- `prefers-reduced-motion`: altura da seção confirmada próxima da altura do conteúdo real (não os ~3300px extras do pin), lista estática com as 6 trilhas visíveis
+- Zero mensagens de console num scroll completo da página
+- Suíte de testes (32/32) e build de produção passando
+- Lighthouse mobile 94 / desktop 100 / accessibility, best-practices, SEO 100 — dentro da variação normal, sem regressão real
+
 ## [0.43.0] — 2026-08-04
 
 ### Contexto
