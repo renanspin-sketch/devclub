@@ -6,6 +6,40 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.30.0] — 2026-08-04
+
+### Contexto
+
+Pedido do usuário: (1) texto de abertura do Boot em verde, sem o prefixo "$"; (2) digitação acoplada ao scroll, não a um timer; (3) fundo do Boot com a sequência de imagens fornecida (`Imagem/Imagem_rolagem/`, 55 frames de um zoom cinematográfico gerado por IA — pessoa digitando num laptop → interface holográfica). Isso é essencialmente a técnica "scroll-scrubbed" pesquisada antes nas referências do usuário (`elirigobeli.com/higgsfield/*`), só que agora implementada de verdade, com conteúdo próprio.
+
+### Adicionado
+
+- `accent-green` (`#4ADE80`) — novo token de acento (tailwind + `DESIGN-SYSTEM.md`), distinto de `state-success` (que é semântico de status, não decorativo)
+- `useScrollFrameSequence` (`src/hooks/`): desenha uma sequência de imagens num `<canvas>` conforme o `scrollYProgress` avança — mesma técnica por trás de aberturas "scroll-scrubbed" de sites de produto, mas usando `<canvas>` em vez de trocar `src` de `<img>` (mais barato: a imagem já está decodificada em memória) e crucialmente sem entrar nas heurísticas de LCP do Chrome (que só consideram `<img>`, `background-image` e texto — a métrica continua medindo o texto real da página, não o fundo decorativo)
+- Boot redesenhado: a section vira uma faixa de scroll "pinada" (220dvh de altura + conteúdo interno `sticky`) — o usuário rola ~120dvh com o visual fixo na tela enquanto texto e fundo avançam juntos; ao final, a section libera e desliza normalmente pro Capítulo 2/Build assumir. Texto perde o prefixo `"$ "` e vira `accent-green`; digitação mapeada pros primeiros 55% do progresso de scroll do capítulo, o fundo usa o progresso inteiro
+- 55 frames originais (JPG, ~2,7MB) reduzidos a 28 (1 a cada 2) e convertidos pra WebP 854×480 — scroll-scrub não precisa da densidade de um vídeo de verdade, e cortar pela metade os frames foi mais efetivo que só reduzir qualidade/resolução (testado: 55 frames a 1024×576/q68 pesava 3,16 MB; 28 frames a 854×480/q60 pesa 1,17 MB, sem perda visível)
+- Sob `prefers-reduced-motion`: a section volta a ser 1 viewport só, com o texto completo instantâneo e o último frame da sequência como fundo estático (sem canvas, sem scroll-scrub)
+
+### Corrigido — regressão de performance descoberta durante a própria implementação (Lighthouse mobile: 95 → 77)
+
+Rodar Lighthouse depois de plugar a sequência de imagens (hábito mantido mesmo numa tarefa "só visual") expôs quedas reais, investigadas uma a uma:
+
+- **Carregar os 28 frames de uma vez no mount** competia por banda e decodificação bem na largada — tentei adiar pra `requestIdleCallback`, que não ajudou (no ambiente de teste do Lighthouse, o idle dispara cedo demais pra fazer diferença real). A correção efetiva foi carregar sob demanda: só o 1º frame de imediato, os demais conforme o scroll se aproxima deles (com uma folga de 3 frames à frente pra scroll rápido não mostrar frame desatualizado)
+- **Forced reflow real**: o resize do canvas lia `getBoundingClientRect()` e escrevia `canvas.width`/`height` na mesma função, no meio do mount — trocado por `ResizeObserver`, cujo callback já roda depois do layout assentar, sem forçar recálculo síncrono
+- **`useScroll` duplicado**: o Boot usava `useChapterTilt` (que cria seu próprio `useScroll` internamente) *e* um `useScroll` próprio pro scrub — duas medições de geometria da mesma section. Consolidado num só: o fade de saída (antes feito pelo `useChapterTilt`) agora é derivado do mesmo `scrollYProgress` que já dirige texto e imagem, via `useTransform` direto
+
+### Verificado
+
+- Lighthouse mobile 95 / desktop 100 / accessibility, best-practices, SEO 100 — mas as medições oscilaram bastante entre tentativas (79 a 93) até eu perceber que processos órfãos do Chrome de execuções anteriores do Lighthouse (32 acumulados numa hora) estavam competindo por CPU e distorcendo os números; depois de matá-los, uma medição limpa confirmou o resultado real
+- Sequência de screenshots ao longo de todo o range de scroll do Boot (desktop e mobile), confirmando frames e digitação avançando juntos e a transição suave pro Build
+- `prefers-reduced-motion`: bug real encontrado e corrigido — o texto ficava vazio (só o cursor), porque o efeito que preenche o texto tinha um `return` antecipado pra reduced-motion sem nunca escrever o texto completo. Corrigido escrevendo a pergunta inteira de uma vez nesse caminho
+- Zero violações de acessibilidade (axe-core), inclusive no meio do scrub (fundo mais "carregado" que o anterior, contraste conferido de verdade, não assumido)
+- Suíte de testes (32/32) e build de produção passando
+
+### Decisões
+
+- Imagens originais (`Imagem/Imagem_rolagem/*.jpg`, ~2,7MB) removidas do repositório depois de convertidas — mesmo padrão já usado pros outros assets desta fase (só os derivados otimizados entram versionados)
+
 ## [0.29.0] — 2026-07-24
 
 ### Adicionado

@@ -33,6 +33,7 @@ Todos os pares atendem WCAG AA (mínimo 4.5:1 para texto normal, 3:1 para texto 
 | `accent-violet` | `#7C5CFC` | Cor primária de ação — CTAs, links, foco |
 | `accent-violet-light` | `#A78BFA` | Texto sobre fundo `accent-violet/15` (ex.: `Badge` variante `accent`) — `accent-violet` sozinho mede 3.96:1 nesse fundo, abaixo do mínimo AA; esta variante mais clara mede 6.4:1 |
 | `accent-cyan` | `#22D3EE` | Par do gradiente, destaques secundários |
+| `accent-green` | `#4ADE80` | Verde terminal — texto do capítulo Boot (distinto de `state-success`, que é semântico de status, não decorativo) |
 | `accent-gradient` | `linear-gradient(135deg, #7C5CFC 0%, #22D3EE 100%)` | CTAs de destaque, texto de hero, bordas de glow |
 
 ### Semânticas

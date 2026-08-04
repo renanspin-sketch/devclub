@@ -35,6 +35,7 @@ export default {
           violet: "#7C5CFC",
           "violet-light": "#A78BFA",
           cyan: "#22D3EE",
+          green: "#4ADE80",
         },
         state: {
           success: "#34D399",

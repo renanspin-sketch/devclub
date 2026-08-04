@@ -73,7 +73,7 @@ Legenda: ☐ pendente · ☑ concluído
 
 ## Fase 10 — Performance
 
-- [x] Lighthouse ≥ 95 em todas as categorias — mobile 95-96, desktop 100, accessibility/best-practices/SEO 100 (2 execuções limpas consecutivas, ver CHANGELOG v0.11.0). **Atualização 2026-07-24**: a expansão de 6 capítulos + fundo global + fotos de projeto (Fase 12) derrubou o mobile pra 83 — real, não ruído (CLS do efeito de digitação do Boot, imagem de fundo desproporcional pra viewport mobile, capítulos novos carregando eager). Corrigido em duas passadas (ver CHANGELOG v0.26.0 e v0.27.0): mobile recuperou pra **95**, de volta ao patamar original, depois que as seções antigas (fonte do JS/CSS ocioso restante) foram removidas de vez
+- [x] Lighthouse ≥ 95 em todas as categorias — mobile 95, desktop 100, accessibility/best-practices/SEO 100 (2026-08-04, execução limpa após matar processos órfãos do Chrome que estavam distorcendo medições anteriores — ver decisão em CHANGELOG v0.30.0). Histórico da métrica: baseline em v0.11.0 (mobile 95-96); caiu pra 83 na v0.26.0 (Fase 12, expansão de 6 capítulos) e foi recuperada em duas passadas (v0.26.0/v0.27.0); caiu de novo temporariamente na v0.30.0 (sequência de imagens do Boot carregando tudo de uma vez) e foi corrigida com carregamento sob demanda
 - [x] Code splitting por seção — `About`/`Projects`/`Skills`/`Contact` via `React.lazy`; `Hero` fica fora (é o LCP)
 - [x] Otimização de imagens (formatos modernos, dimensões explícitas) — as 2 imagens da seção Projetos usam `loading="lazy"` + `width`/`height` explícitos. WebP/AVIF com fallback fica pendente para quando o volume de imagens justificar o pipeline
 - [x] Análise de bundle size — `rollup-plugin-visualizer` (`npm run build:analyze`) usado para medir antes/depois; JS principal caiu de 303.45 kB (98.74 kB gzip) para 253.43 kB (84.56 kB gzip) com `LazyMotion`, mais 5 chunks de seção de 0.2-3 KB cada
@@ -111,6 +111,7 @@ Decisão do usuário em 2026-07-24: o DevClub deixa de ser só um portfólio pes
     - [x] Imagem de fundo (código estilizado, gerada por IA) aplicada no site inteiro (fixa, atrás de header/conteúdo/footer), variantes mobile/desktop separadas — cada seção com fundo próprio deixa passar um pouco dessa camada
     - [x] Fotos reais (mockups de UI gerados por IA, fornecidos pelo usuário) nos 3 cards do capítulo Deploy — Painel Financeiro, App de Hábitos, Loja Cápsula
     - [x] Seções antigas (`Formacoes`, `Stack`, `Community`, `About`, `Projects`, `Contact`, `Hero`) removidas de `Home.tsx` — a página termina no Capítulo 6/Hire + `Footer`, sem duplicar conteúdo nem navegação
+    - [x] Boot redesenhado: seção "pinada" (scroll alto + conteúdo `sticky`) onde texto (verde, sem "$") e uma sequência de 28 imagens de fundo avançam por scroll em vez de timer — pedido do usuário em 2026-08-04, ver decisão em `CHANGELOG.md`
     - [ ] Indicador de progresso lateral ("Capítulo X/6") e paleta evolutiva entre os 6 capítulos como conjunto — segue adiado, ver decisão em `CHANGELOG.md`
   - [ ] **Fase C — "Nossos Alunos"**: depoimentos fictícios, filtros por mídia/profissão anterior, paginação
   - [ ] **Fase D — Blog**: busca, post em destaque, grid de artigos, página de artigo
