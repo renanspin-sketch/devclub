@@ -6,6 +6,35 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.46.0] — 2026-08-04
+
+### Contexto
+
+Sequência de ajustes no menu principal, todos no mesmo dia logo depois da v0.45.0 (que tinha criado páginas placeholder internas pra Sobre/Formações/MBA/Login): o usuário foi mandando os destinos reais de cada item, um por mensagem — `Formações` devia apontar pra seção de trilhas da própria Home; `Nossos Alunos`, `MBA` e `Login` tinham links externos reais (subdomínios que já existem fora deste projeto); `Home` devia recarregar a página; e o botão "Quero fazer parte" do cabeçalho devia ir pro WhatsApp real. No meio do caminho, também pediu pra tirar `Blog`, `Newsletter` e `Área do aluno` do menu.
+
+### Alterado
+
+- `Formações` aponta pra `/#level-up` (seção de trilhas do capítulo Level Up) em vez de uma página própria. Comportamento novo em `NavLink` (`Header.tsx`): se já estiver na Home, rola direto até a seção sem navegar; se estiver em outra página, deixa navegar pra Home normalmente e a Home (`Home.tsx`) rola até a seção sozinha assim que ela montar — os capítulos são `lazy`, então o elemento pode não existir no DOM ainda no momento da navegação, daí um polling curto via `requestAnimationFrame` em vez de assumir que já existe
+- `Nossos Alunos` → `https://stars.devclub.com.br/#historias`, `MBA` → `https://mba.devclub.com.br/`, `Login` → `https://aulas.devclub.com.br/` — três links externos reais, fornecidos pelo usuário (não são placeholder fictício como o resto do conteúdo do site). Abrem em nova aba (`target="_blank" rel="noreferrer"`)
+- `Home` deixou de ser navegação client-side (`<Link>`) e virou uma âncora simples (`<a href="/">`) — força reload de página de verdade, a pedido do usuário
+- CTA "Quero fazer parte" do cabeçalho (desktop e mobile) aponta pro WhatsApp real do usuário em vez do placeholder `to="/"` — link novo em `contactContent.whatsapp` (`src/data/contact.ts`), com uma nota no comentário distinguindo esse campo dos demais (`email`/`socialLinks`), que continuam fictícios. O CTA do Capítulo 6/Hire **não** foi alterado — é um botão de copiar e-mail, com aria-live e teste próprio, funcionalidade real e deliberada, diferente do link simples do cabeçalho
+- `Blog` e `Newsletter` saíram do menu (as páginas e rotas continuam existindo, só não linkadas no cabeçalho); `Área do aluno` saiu do cabeçalho — redundante com o novo `Login`
+
+### Removido
+
+- `src/pages/Formacoes.tsx`, `Mba.tsx` e `Login.tsx` — páginas placeholder criadas na v0.45.0 especificamente pra esses três itens de menu; ficaram órfãs (nenhum link aponta mais pra elas) assim que os destinos reais entraram, e continuar existindo sem nenhum caminho de navegação não tinha propósito. Rotas correspondentes removidas de `App.tsx`. `src/pages/Sobre.tsx` continua — é o único item sem destino real ainda
+
+### Verificado
+
+- Cada item do menu conferido via script: `href` exato, `target`/`rel` nos externos, ausência de "Área do aluno"
+- Clique em "Formações" estando na Home: rola até `#level-up` sem mudar a URL de página. Clique vindo de `/sobre`: navega pra `/#level-up` e rola até lá assim que o capítulo (lazy) monta
+- Clique em "Home": confirmado reload real de página (uma variável marcada em `window` antes do clique some depois — só sobrevive a navegação client-side)
+- Cabeçalho conferido via screenshot em 768–1280px: com 6 itens (sem `Blog`/`Newsletter`/`Área do aluno`), 768px ainda quebrava a fila em duas linhas, 900px já cabia — o corte responsivo subiu de `md` (768px) pra `lg` (1024px), o breakpoint padrão mais próximo com folga real
+- axe-core na Home, em `/sobre` e no menu mobile aberto, nos dois temas (6 leituras): 0 violações
+- Zero mensagens de console num scroll completo da página
+- Suíte de testes (32/32) e build de produção passando — chunks de `Formacoes`/`Mba`/`Login` confirmados fora do build
+- Lighthouse mobile 92 numa primeira leitura, 94 numa segunda sem nenhuma mudança de código no meio — mesma variação de medição já documentada em entradas anteriores, sem regressão real. Desktop 100 / accessibility, best-practices, SEO 100
+
 ## [0.45.0] — 2026-08-04
 
 ### Contexto

@@ -1,4 +1,5 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
+import { useReducedMotion } from "framer-motion";
 
 import { Boot } from "@/sections/chapters/Boot";
 
@@ -20,6 +21,34 @@ const Connect = lazy(() =>
 const Hire = lazy(() => import("@/sections/chapters/Hire").then((mod) => ({ default: mod.Hire })));
 
 export function Home() {
+  const shouldReduceMotion = useReducedMotion();
+
+  // Chega na Home com um hash na URL (ex.: link do menu "Formações" →
+  // "/#level-up" clicado de outra página) — rola até o capítulo assim que
+  // ele existir no DOM. Os capítulos são `lazy`, então o elemento pode não
+  // estar montado ainda no primeiro paint; tenta a cada frame por um
+  // tempo curto em vez de assumir que já existe.
+  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    if (!hash) return;
+
+    let frameId: number;
+    let attempts = 0;
+    const tryScroll = () => {
+      const target = document.getElementById(hash);
+      if (target) {
+        target.scrollIntoView({ behavior: shouldReduceMotion ? "auto" : "smooth", block: "start" });
+        return;
+      }
+      attempts += 1;
+      if (attempts < 60) frameId = requestAnimationFrame(tryScroll);
+    };
+    tryScroll();
+
+    return () => cancelAnimationFrame(frameId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <Boot />

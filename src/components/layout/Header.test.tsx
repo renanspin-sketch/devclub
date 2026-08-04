@@ -11,11 +11,11 @@ const navItems = [
   { label: "Contato", href: "#contato" },
 ];
 
-// Header usa <Link> do react-router (logo, Área do aluno, CTA) mesmo
-// quando os itens de nav são âncoras — por isso todo render precisa de
-// um Router por perto, mesmo neste conjunto de testes que só exercita
-// links de âncora. `ThemeProvider` porque o botão de tema (`useTheme`)
-// exige o contexto por perto.
+// Header usa <Link> do react-router (logo) mesmo quando os itens de nav
+// são âncoras — por isso todo render precisa de um Router por perto,
+// mesmo neste conjunto de testes que só exercita links de âncora.
+// `ThemeProvider` porque o botão de tema (`useTheme`) exige o contexto
+// por perto.
 function renderHeader(props: Parameters<typeof Header>[0]) {
   return render(
     <ThemeProvider>

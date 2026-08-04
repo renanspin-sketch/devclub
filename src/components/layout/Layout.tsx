@@ -8,15 +8,19 @@ import { useTheme } from "@/context/ThemeContext";
 import codeTexture from "@/assets/backgrounds/code-texture.webp";
 import codeTextureMobile from "@/assets/backgrounds/code-texture-mobile.webp";
 
+// `Formações` aponta pra seção de trilhas na própria Home (`#level-up`,
+// ver `Header.tsx` pro tratamento do scroll). `MBA`, `Nossos Alunos` e
+// `Login` são links reais fornecidos pelo usuário, pra subdomínios que já
+// existem fora deste projeto — não são placeholder fictício como o resto
+// do conteúdo do site. `Blog`/`Newsletter` saíram do menu a pedido do
+// usuário; as páginas e rotas continuam existindo, só não linkadas aqui.
 const navItems = [
   { label: "Home", href: "/" },
   { label: "Sobre", href: "/sobre" },
-  { label: "Formações", href: "/formacoes" },
-  { label: "MBA", href: "/mba" },
-  { label: "Blog", href: "/blog" },
-  { label: "Newsletter", href: "/newsletter" },
-  { label: "Nossos Alunos", href: "/nossos-alunos" },
-  { label: "Login", href: "/login" },
+  { label: "Formações", href: "/#level-up" },
+  { label: "MBA", href: "https://mba.devclub.com.br/" },
+  { label: "Nossos Alunos", href: "https://stars.devclub.com.br/#historias" },
+  { label: "Login", href: "https://aulas.devclub.com.br/" },
 ];
 
 /**

@@ -1,10 +1,11 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence, m, useReducedMotion } from "framer-motion";
-import type { AnchorHTMLAttributes } from "react";
+import type { AnchorHTMLAttributes, MouseEvent as ReactMouseEvent } from "react";
 import type { NavItem } from "@/types/nav";
 import { IconButton } from "@/components/ui/IconButton";
 import { buttonVariants } from "@/components/ui/button-variants";
+import { contactContent } from "@/data/contact";
 import { cn } from "@/lib/cn";
 import { useTheme } from "@/context/ThemeContext";
 import logoIcon from "@/assets/icons/icone.png";
@@ -16,28 +17,77 @@ export interface HeaderProps {
 }
 
 /**
- * `href` começando com "/" é uma rota (navegação client-side via Router);
- * qualquer outra coisa (ex.: "#contato") é uma âncora normal. Evita que
- * links de rota causem reload de página inteira.
+ * Quatro tipos de `href`, cada um tratado de um jeito:
+ * - `"/"` (Home): pedido do usuário — força reload de página (âncora
+ *   simples), não navegação client-side.
+ * - `"/#algo"` (ex.: `Formações` → `#level-up`): âncora pra uma seção da
+ *   Home. Se já estiver na Home, rola direto até lá sem navegar de novo.
+ *   Se estiver em outra página, deixa o `<Link>` navegar normalmente — o
+ *   hash fica na URL e a Home rola até lá sozinha assim que o capítulo
+ *   (lazy) montar (ver `Home.tsx`).
+ * - Rota interna comum (`/sobre` etc.): `<Link>` normal do Router.
+ * - Absoluto (`http...`): link externo de verdade (não é rota deste
+ *   site) — abre em nova aba.
  */
 function NavLink({
   href,
   className,
   children,
+  onClick,
   ...props
-}: { href: string; children: React.ReactNode } & Omit<
-  AnchorHTMLAttributes<HTMLAnchorElement>,
-  "href"
->) {
-  if (href.startsWith("/")) {
+}: {
+  href: string;
+  children: React.ReactNode;
+  onClick?: (event: ReactMouseEvent<HTMLAnchorElement>) => void;
+} & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href" | "onClick">) {
+  if (href === "/") {
     return (
-      <Link to={href} className={className} {...props}>
+      <a href="/" className={className} onClick={onClick} {...props}>
+        {children}
+      </a>
+    );
+  }
+
+  const hashIndex = href.indexOf("#");
+  if (href.startsWith("/") && hashIndex !== -1) {
+    const targetPath = href.slice(0, hashIndex) || "/";
+    const targetHash = href.slice(hashIndex + 1);
+    return (
+      <Link
+        to={href}
+        className={className}
+        onClick={(event) => {
+          onClick?.(event);
+          if (window.location.pathname === targetPath) {
+            event.preventDefault();
+            document.getElementById(targetHash)?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }}
+        {...props}
+      >
         {children}
       </Link>
     );
   }
+
+  if (href.startsWith("/")) {
+    return (
+      <Link to={href} className={className} onClick={onClick} {...props}>
+        {children}
+      </Link>
+    );
+  }
+
+  const isExternal = href.startsWith("http");
   return (
-    <a href={href} className={className} {...props}>
+    <a
+      href={href}
+      className={className}
+      onClick={onClick}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noreferrer" : undefined}
+      {...props}
+    >
       {children}
     </a>
   );
@@ -61,20 +111,6 @@ function MenuIcon({ open }: { open: boolean }) {
           strokeLinecap="round"
         />
       )}
-    </svg>
-  );
-}
-
-function PersonIcon() {
-  return (
-    <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4" aria-hidden="true">
-      <circle cx="10" cy="6.5" r="3.25" stroke="currentColor" strokeWidth="1.5" />
-      <path
-        d="M3.5 17c.9-3.6 4-5.5 6.5-5.5s5.6 1.9 6.5 5.5"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
     </svg>
   );
 }
@@ -165,11 +201,11 @@ export function Header({ navItems = [] }: HeaderProps) {
 
         {navItems.length > 0 && (
           <>
-            {/* 8 itens de menu + cluster utilitário não cabem numa linha
-                confortável antes de `xl` (1280px) — testado em 1024px
-                (`lg`) e quebrava em duas linhas. Por isso o corte fica em
-                `xl`, não no `md` usado no resto do site. */}
-            <div className="hidden items-center gap-6 xl:flex">
+            {/* 6 itens + CTA não cabem numa linha antes de `lg` (1024px)
+                — testado em 768px e quebrava em duas linhas; 900px já
+                cabia, mas `lg` é o breakpoint padrão mais próximo com
+                folga real. */}
+            <div className="hidden items-center gap-6 lg:flex">
               <nav aria-label="Navegação principal">
                 <ul className="flex items-center gap-6">
                   {navItems.map((item) => (
@@ -187,20 +223,18 @@ export function Header({ navItems = [] }: HeaderProps) {
 
               <div className="flex items-center gap-4 border-l border-border pl-6">
                 <ThemeToggle />
-                <Link
-                  to="/"
-                  className="flex items-center gap-1.5 text-sm text-text-secondary transition duration-fast ease-standard hover:text-text-primary"
+                <a
+                  href={contactContent.whatsapp}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={buttonVariants({ variant: "primary", size: "sm" })}
                 >
-                  <PersonIcon />
-                  Área do aluno
-                </Link>
-                <Link to="/" className={buttonVariants({ variant: "primary", size: "sm" })}>
                   Quero fazer parte
-                </Link>
+                </a>
               </div>
             </div>
 
-            <div className="flex items-center gap-1 xl:hidden">
+            <div className="flex items-center gap-1 lg:hidden">
               <ThemeToggle />
               <IconButton
                 ref={menuButtonRef}
@@ -229,7 +263,7 @@ export function Header({ navItems = [] }: HeaderProps) {
                 duration: shouldReduceMotion ? 0.01 : 0.25,
                 ease: [0.4, 0, 0.2, 1],
               }}
-              className="overflow-hidden border-b border-border xl:hidden"
+              className="overflow-hidden border-b border-border lg:hidden"
             >
               <Container>
                 <ul className="flex flex-col gap-1 py-4">
@@ -244,22 +278,16 @@ export function Header({ navItems = [] }: HeaderProps) {
                       </NavLink>
                     </li>
                   ))}
-                  <li className="flex flex-col gap-2 pt-3">
-                    <Link
-                      to="/"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="flex items-center gap-1.5 rounded-md px-2 py-2 text-text-secondary transition duration-fast ease-standard hover:bg-surface hover:text-text-primary"
-                    >
-                      <PersonIcon />
-                      Área do aluno
-                    </Link>
-                    <Link
-                      to="/"
+                  <li className="pt-3">
+                    <a
+                      href={contactContent.whatsapp}
+                      target="_blank"
+                      rel="noreferrer"
                       onClick={() => setIsMenuOpen(false)}
                       className={cn(buttonVariants({ variant: "primary", size: "md" }), "w-full")}
                     >
                       Quero fazer parte
-                    </Link>
+                    </a>
                   </li>
                 </ul>
               </Container>
