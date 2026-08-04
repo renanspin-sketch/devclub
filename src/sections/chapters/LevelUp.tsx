@@ -65,73 +65,77 @@ export function LevelUp() {
     >
       <m.div style={style}>
         <Container>
-          <Reveal delay={0.1}>
-            <h2 className="mt-3 max-w-xl font-display text-3xl font-bold text-accent-green md:text-4xl">
-              Trilhas que se desbloqueiam conforme você avança.
-            </h2>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <p className="mt-4 max-w-md text-text-secondary">
-              Comece pelos fundamentos. Cada trilha concluída abre caminho pra próxima
-              especialização.
-            </p>
-          </Reveal>
+          <div className="flex flex-col gap-10 md:flex-row md:items-start">
+            <div className="md:w-96 md:shrink-0">
+              <Reveal delay={0.1}>
+                <h2 className="max-w-xl font-display text-3xl font-bold text-accent-green md:text-4xl">
+                  Trilhas que se desbloqueiam conforme você avança.
+                </h2>
+              </Reveal>
+              <Reveal delay={0.2}>
+                <p className="mt-4 max-w-md text-text-secondary">
+                  Comece pelos fundamentos. Cada trilha concluída abre caminho pra próxima
+                  especialização.
+                </p>
+              </Reveal>
+            </div>
 
-          <div className="relative mx-auto mt-16 max-w-2xl">
-            <div
-              aria-hidden="true"
-              className="absolute bottom-2 left-[15px] top-2 w-px bg-border-strong"
-            />
-            <div className="space-y-6">
-              {learningTracks.map((track, index) => {
-                const isUnlocked = index < UNLOCKED_COUNT;
-                return (
-                  <Reveal
-                    key={track.slug}
-                    delay={0.05 * index}
-                    className="relative pl-12"
-                  >
-                    <span
-                      aria-hidden="true"
-                      className={`absolute left-0 top-0.5 flex h-8 w-8 items-center justify-center rounded-full border-2 ${
-                        isUnlocked
-                          ? "border-accent-cyan bg-accent-gradient text-white"
-                          : "border-border-strong bg-surface text-text-muted"
-                      }`}
+            <div className="relative max-w-2xl flex-1">
+              <div
+                aria-hidden="true"
+                className="absolute bottom-2 left-[15px] top-2 w-px bg-border-strong"
+              />
+              <div className="space-y-6">
+                {learningTracks.map((track, index) => {
+                  const isUnlocked = index < UNLOCKED_COUNT;
+                  return (
+                    <Reveal
+                      key={track.slug}
+                      delay={0.05 * index}
+                      className="relative pl-12"
                     >
-                      {isUnlocked ? <CheckIcon /> : <LockIcon />}
-                    </span>
+                      <span
+                        aria-hidden="true"
+                        className={`absolute left-0 top-0.5 flex h-8 w-8 items-center justify-center rounded-full border-2 ${
+                          isUnlocked
+                            ? "border-accent-cyan bg-accent-gradient text-white"
+                            : "border-border-strong bg-surface text-text-muted"
+                        }`}
+                      >
+                        {isUnlocked ? <CheckIcon /> : <LockIcon />}
+                      </span>
 
-                    <div
-                      className={`rounded-lg border p-4 transition-colors duration-base ease-standard ${
-                        isUnlocked
-                          ? "border-border-strong bg-surface"
-                          : "border-border bg-surface/60"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between gap-3">
-                        <h3
-                          className={`font-display text-lg font-semibold ${
-                            isUnlocked ? "text-accent-green" : "text-text-secondary"
-                          }`}
-                        >
-                          {track.title}
-                        </h3>
-                        <span
-                          className={`shrink-0 font-mono text-[11px] uppercase tracking-wide ${
-                            isUnlocked ? "text-accent-cyan" : "text-text-muted"
-                          }`}
-                        >
-                          {isUnlocked ? "Disponível" : "Próximo nível"}
-                        </span>
+                      <div
+                        className={`rounded-lg border p-4 transition-colors duration-base ease-standard ${
+                          isUnlocked
+                            ? "border-border-strong bg-surface"
+                            : "border-border bg-surface/60"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-3">
+                          <h3
+                            className={`font-display text-lg font-semibold ${
+                              isUnlocked ? "text-accent-green" : "text-text-secondary"
+                            }`}
+                          >
+                            {track.title}
+                          </h3>
+                          <span
+                            className={`shrink-0 font-mono text-[11px] uppercase tracking-wide ${
+                              isUnlocked ? "text-accent-cyan" : "text-text-muted"
+                            }`}
+                          >
+                            {isUnlocked ? "Disponível" : "Próximo nível"}
+                          </span>
+                        </div>
+                        <p className="mt-1.5 text-sm text-text-secondary">
+                          {track.description}
+                        </p>
                       </div>
-                      <p className="mt-1.5 text-sm text-text-secondary">
-                        {track.description}
-                      </p>
-                    </div>
-                  </Reveal>
-                );
-              })}
+                    </Reveal>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </Container>

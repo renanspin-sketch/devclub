@@ -6,6 +6,24 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e o
 
 ## [Não lançado]
 
+## [0.43.0] — 2026-08-04
+
+### Contexto
+
+Usuário pediu pra alinhar a seção do Level Up com título e subtítulo do lado esquerdo e as trilhas de conhecimento do lado direito — mesmo padrão de layout já usado no Build (texto ao lado de um bloco de conteúdo, em vez de empilhado em cima dele).
+
+### Alterado
+
+- Level Up: título e subtítulo (antes empilhados acima da lista, alinhados à esquerda) e a trilha vertical de skill tree (antes centralizada abaixo, `mx-auto max-w-2xl`) viraram duas colunas lado a lado a partir do breakpoint `md` — texto numa coluna de largura fixa (`md:w-96`), trilha na coluna restante (`flex-1`, ainda limitada a `max-w-2xl` pra os cartões não ficarem esticados demais). Abaixo de `md` continua empilhado, como antes
+
+### Verificado
+
+- Layout desktop (lado a lado) e mobile (empilhado) conferidos via screenshot
+- axe-core: uma leitura inicial apontou falhas de contraste em cartões do Deploy e no título do Connect, mas era o mesmo artefato de medição já documentado antes (elementos com `Reveal` fora da viewport atual, ainda no estado inicial de opacidade quando o axe varre o documento inteiro) — sumiu ao rolar um pouco mais e esperar as animações de entrada próximas terminarem, não é regressão real
+- Zero mensagens de console num scroll completo da página
+- Suíte de testes (32/32) e build de produção passando
+- Lighthouse mobile 95 / desktop 100 / accessibility, best-practices, SEO 100 — dentro da variação normal, sem regressão real
+
 ## [0.42.0] — 2026-08-04
 
 ### Contexto
